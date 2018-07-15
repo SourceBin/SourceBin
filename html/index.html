@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>SourceBin | Free Code Sharing!</title>
+
+  <!-- CSS -->
+  <style>
+    :root {
+      --nav-size: 20px;
+      --language-border: 1px solid #181a1f;
+      --language-background: #21252b;
+      --language-color: #d7dae0;
+    }
+
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      background-color: #282a2e;
+    }
+
+    #language {
+      z-index: 10;
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+
+      display: none;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    #language #content {
+      background-color: var(--language-background);
+      width: calc(70vw - 1px);
+      height: calc(70vh - 1px);
+      margin: calc(15vh - 1px) calc(15vw - 1px);
+      border: var(--language-border);
+
+      color: var(--language-color);
+      user-select: none;
+      cursor: default;
+      overflow-y: auto;
+    }
+
+    #language #content h1 {
+      font-family: 'Raleway:Bold', sans-serif;
+      font-size: 30px;
+      margin: 25px 75px;
+    }
+
+    #language #content #options .box {
+      font-family: 'Raleway', sans-serif;
+      font-size: 25px;
+      padding: 10px 75px;
+      border-top: var(--language-border);
+      cursor: pointer;
+    }
+
+    nav {
+      margin: 0;
+      padding: 0;
+
+      width: 100vw;
+      height: var(--nav-size);
+
+      line-height: var(--nav-size);
+      font-size: calc(var(--nav-size) * 0.65);
+      font-family: 'Raleway', sans-serif;
+      color: #0D0D0D;
+      background-color: #C0C0C0;
+
+      display: flex;
+      flex-direction: row;
+    }
+
+    nav .box {
+      padding: 0 15px;
+      cursor: pointer;
+      user-select: none;
+      transition-duration: 0.2s;
+    }
+
+    nav .box:hover {
+      background-color: #A7A7A7;
+    }
+
+    nav .box.disabled {
+      color: #262626;
+      cursor: not-allowed;
+    }
+
+    nav .box.disabled:hover {
+      background-color: #B4B4B4;
+    }
+
+    #editor {
+      margin: 0;
+      padding: 0;
+      position: relative;
+      width: 100vw;
+      height: calc(100vh - var(--nav-size));
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:Regular,Bold">
+</head>
+
+<body>
+  <div id="language">
+    <div id="content">
+      <h1>Select the language of your file</h1>
+      <div id="options"></div>
+    </div>
+  </div>
+
+  <nav>
+    <div class="box click">Save</div>
+    <div class="box click">Edit</div>
+    <div class="box click">Language</div>
+    <div class="box" id="lang">None</div>
+  </nav>
+  <pre id="editor"><% code=Loading... %></pre>
+
+  <!-- Scripts -->
+  <script src="./editor/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script>
+    const origin = window.location.origin;
+    let key = (window.location.pathname.match(/[a-zA-Z0-9]{8}/) || [])[0];
+    let language = (window.location.pathname.match(/\.[a-z0-9_]+/) || [])[0];
+    if (language) language = language.replace('.', '');
+
+    const editor = ace.edit('editor');
+    editor.setTheme('ace/theme/material');
+    selectLanguage(language);
+    editor.setReadOnly(<% readOnly=false %>);
+    editor.setFontSize(15);
+    if (editor.getValue() === 'Loading...') {
+      editor.setValue('', -1);
+      window.history.pushState({}, '', origin);
+    }
+
+    const options = document.getElementById('options');
+    for (const lang of <% languages %>) {
+      const language = document.createElement('div');
+      language.className = 'box click';
+      language.innerHTML = lang;
+      options.appendChild(language);
+    }
+
+    for (const element of document.getElementsByClassName('click')) {
+      element.addEventListener("click", event => {
+        const name = event.toElement.innerHTML;
+        if (name === 'Save') {
+          const xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+              const response = JSON.parse(this.response);
+              if (!response) return;
+              key = response.key;
+            }
+          };
+          xhttp.open('POST', '/', true);
+          xhttp.send(editor.getValue());
+          return languageSelector(true);
+        }
+        if (name === 'Edit') return editor.setReadOnly(false);
+        if (name === 'Language') return languageSelector(true);
+        return selectLanguage(name);
+      });
+    }
+
+    function selectLanguage(lang) {
+      if (lang) {
+        language = lang;
+        editor.session.setMode('ace/mode/' + language);
+        if (key) window.history.pushState({}, '', origin + '/' + key + '.' + lang);
+        languageSelector(false);
+      }
+      const mode = editor.session.$modeId.split('/');
+      document.getElementById('lang').innerHTML = mode[mode.length - 1];
+    }
+
+    function languageSelector(open) {
+      const language = document.getElementById('language');
+      return language.setAttribute('style', `display:${open ? 'inherit' : 'none'}`);
+    }
+  </script>
+</body>
+
+</html>
