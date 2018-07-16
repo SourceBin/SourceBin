@@ -22,26 +22,21 @@ mongoose.connect(uri, { useNewUrlParser: true })
       const method = req.method.toLowerCase();
       const headers = req.headers;
 
-      // Make custom logger class
-      console.log('='.repeat(50) + '\n');
-      if (path.match(/^(editor)\/(.+?)\.(js)/)) console.log('LOADING EDITOR FILES!');
-      console.log(parsedUrl);
-      console.log(rawPath);
-      console.log(path);
-      console.log(query);
-      console.log(method);
-      console.log(headers);
+      const editor = path.match(/^(editor)\/(.+?)\.(js)$/);
+      const log = editor || path.match('favicon.ico') ? function() {} : console.log;
 
       const decoder = new StringDecoder('utf-8');
       let buffer = '';
       req.on('data', data => buffer += decoder.write(data));
       req.on('end', async () => {
         buffer += decoder.end();
-        console.log(buffer);
-        console.log('='.repeat(50) + '\n');
+        const data = { path, query, method, headers, buffer, editor };
 
-        const data = { path, query, method, headers, buffer };
+        log('='.repeat(50) + '\n');
+        log(data);
+        log('='.repeat(50) + '\n');
 
+        if (path.toLowerCase() === 'language') return Requesthandler.handleLanguage(req, res, data);
         if (path.toLowerCase() === 'list') return Requesthandler.handleList(req, res, data);
         if (method === 'get') return Requesthandler.handleGet(req, res, data);
         if (method === 'post') return Requesthandler.handlePost(req, res, data);

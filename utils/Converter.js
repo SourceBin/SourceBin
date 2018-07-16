@@ -4,7 +4,7 @@ class Converter {
   }
 
   convert(text, variables = {}) {
-    const regex = /<% ([\\a-zA-Z0-9]+?)(=(.*?))? %>/;
+    const regex = /<% ([\\a-zA-Z0-9]+?)(=(.+?))? %>/;
     const matches = this._removeDupes(text.match(new RegExp(regex, 'g')) || []);
     for (let match of matches) {
       match = regex.exec(match);

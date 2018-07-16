@@ -56,14 +56,16 @@ class Requesthandler {
 
     this.fs = require('fs');
     // this.html = this.fs.readFileSync('./html/index.html').toString();
-    this.languages = this.fs.readdirSync('./html/editor')
+    this._languages = this.fs.readdirSync('./html/editor')
       .filter(f => f.match(/mode-(.+?)\.js/))
       .map(f => f.replace(/mode-(.+?)\.js/, '$1'))
       .sort();
 
+    this.languages = require('./json/languages.json');
+
     const { Converter } = require('./utils');
     this.Converter = new Converter({
-      languages: `[${this.languages.map(lang => `'${lang}'`)}]`
+      languages: `[${this.languages.map(lang => `'${lang.name}'`)}]`
     });
 
     this.crypto = require('crypto');
@@ -72,6 +74,21 @@ class Requesthandler {
   // NOTE: temporary testing getter
   get html() {
     return this.fs.readFileSync('./html/index.html').toString();
+  }
+
+  handleLanguage(req, res, data) {
+    const { query: { search } } = data;
+    if (!search) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Provide a search' }));
+    }
+    const language = this.findLanguage(search.toLowerCase());
+    if (!language) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Didn\'t find a language' }));
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify(language));
   }
 
   handleList(req, res, data) {
@@ -83,33 +100,42 @@ class Requesthandler {
   }
 
   handleGet(req, res, data) {
-    let key = data.path.split('/')[0];
-    if (!key.match(/[a-zA-Z0-9]{8}/)) {
-      if (data.path.match(/^(editor)\/(.+?)\.(js)/)) {
+    const { key, extension } = this.stripPath(data.path);
+    if (!key) {
+      if (data.editor) {
         const file = this.fs.readFileSync(`./html/${data.path}`);
         if (!file) {
           res.writeHead(404, { 'Content-Type': 'application/json' });
           return res.end(JSON.stringify({ error: 'No file found' }));
         }
-        res.writeHead(200);
+        res.writeHead(200, { 'Content-Type': 'application/javascript' });
         return res.end(file);
       }
       return this.returnHomepage(req, res, data);
     }
 
-    let match;
-    if (match = key.match(/^([a-zA-Z0-9]{8})(\.[a-z0-9_]+?)$/)) key = match[1];
-
     this.db.findOne({ key }).then(data => {
       if (!data) return this.returnHomepage(req, res, data);
+      const language = this.findLanguage(extension);
       res.writeHead(200, { 'Content-Type': 'text/html' });
-      return res.end(this.Converter.convert(this.html, { code: data.code, readOnly: true }));
+      return res.end(this.Converter.convert(this.html, {
+        code: data.code,
+        readOnly: true,
+        key: key ? `'${key}'` : null,
+        language: JSON.stringify(language),
+        saving: 'disabled',
+        color: key ? key.substring(0, 6) : null
+      }));
     });
   }
 
   handlePost(req, res, data) {
-    const key = this.generateKey();
     const code = data.buffer;
+    if (code.length > 100000) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Code may not be more than 100.000 characters long!' }));
+    }
+    const key = this.generateKey();
     if (typeof code !== 'string' || !code.length) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ error: 'Invalid code type, must be a string!' }));
@@ -126,6 +152,18 @@ class Requesthandler {
 
   generateKey() {
     return this.crypto.randomBytes(4).toString('hex');
+  }
+
+  stripPath(path) {
+    const match = /([a-f0-9]{8})\.?([a-zA-Z0-9]+)?/.exec(path.split('/')[0]) || [];
+    return { key: match[1], extension: match[2] };
+  }
+
+  findLanguage(search) {
+    return this.languages.find(lang => {
+      const { ace, name, extension } = lang;
+      return [ace, name.toLowerCase(), extension].includes(search);
+    });
   }
 
 }

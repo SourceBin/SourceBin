@@ -3,6 +3,16 @@
 
 <head>
   <meta charset="UTF-8">
+
+  <meta name="title" content="SourceBin">
+  <meta name="description" content="Free text/code sharing site supporting 150+ different languages!">
+
+  <meta name="og:title" content="SourceBin">
+  <meta name="og:description" content="Free text/code sharing site supporting 150+ different languages!">
+  <meta name="theme-color" content="#<% color=FF5555 %>">
+  <!-- <meta name="og:url" content=""> -->
+  <!-- <meta name="og:image" content=""> -->
+
   <title>SourceBin | Free Code Sharing!</title>
 
   <!-- CSS -->
@@ -116,8 +126,9 @@
   </div>
 
   <nav>
-    <div class="box click">Save</div>
+    <div class="box click <% saving=enabled %>" id="save">Save</div>
     <div class="box click">Edit</div>
+    <div class="box click">New</div>
     <div class="box click">Language</div>
     <div class="box" id="lang">None</div>
   </nav>
@@ -127,19 +138,17 @@
   <script src="./editor/ace.js" type="text/javascript" charset="utf-8"></script>
   <script>
     const origin = window.location.origin;
-    let key = (window.location.pathname.match(/[a-zA-Z0-9]{8}/) || [])[0];
-    let language = (window.location.pathname.match(/\.[a-z0-9_]+/) || [])[0];
-    if (language) language = language.replace('.', '');
+    let _key = <% key=undefined %>;
+    let language = <% language=undefined %>;
 
     const editor = ace.edit('editor');
     editor.setTheme('ace/theme/material');
-    selectLanguage(language);
     editor.setReadOnly(<% readOnly=false %>);
     editor.setFontSize(15);
-    if (editor.getValue() === 'Loading...') {
-      editor.setValue('', -1);
-      window.history.pushState({}, '', origin);
-    }
+    if (editor.getValue() === 'Loading...') editor.setValue('', -1);
+
+    setURL();
+    setLanguage();
 
     const options = document.getElementById('options');
     for (const lang of <% languages %>) {
@@ -151,40 +160,68 @@
 
     for (const element of document.getElementsByClassName('click')) {
       element.addEventListener("click", event => {
-        const name = event.toElement.innerHTML;
+        const element = event.toElement;
+        const disabled = element.classList.contains('disabled');
+        if (disabled) return;
+        const name = element.innerHTML;
         if (name === 'Save') {
-          const xhttp = new XMLHttpRequest();
-          xhttp.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
-              const response = JSON.parse(this.response);
-              if (!response) return;
-              key = response.key;
-            }
-          };
-          xhttp.open('POST', '/', true);
-          xhttp.send(editor.getValue());
-          return languageSelector(true);
+          disableSave();
+          editor.setReadOnly(true);
+          languageSelector(true);
+          return _request('post', '/', editor.getValue())
+            .then(response => {
+              if (response) _key = response.key;
+            });
         }
         if (name === 'Edit') return editor.setReadOnly(false);
+        if (name === 'New') return window.location.href = origin;
         if (name === 'Language') return languageSelector(true);
-        return selectLanguage(name);
+        return _request('get', `/language?search=${encodeURIComponent(name)}`).then(response => {
+          if (!response) return;
+          setLanguage(response);
+          setURL();
+          return languageSelector(false);
+        });
       });
     }
 
-    function selectLanguage(lang) {
-      if (lang) {
-        language = lang;
-        editor.session.setMode('ace/mode/' + language);
-        if (key) window.history.pushState({}, '', origin + '/' + key + '.' + lang);
-        languageSelector(false);
+    function setURL() {
+      let url = origin;
+      if (_key) {
+        url += '/' + _key;
+        if (language) url += '.' + language.extension;
       }
-      const mode = editor.session.$modeId.split('/');
-      document.getElementById('lang').innerHTML = mode[mode.length - 1];
+      return window.history.pushState({}, '', url);
+    }
+
+    function setLanguage(lang) {
+      if (lang) language = lang;
+      if (!language) return;
+      editor.session.setMode(`ace/mode/${language.ace}`);
+      return document.getElementById('lang').innerHTML = language.name;
     }
 
     function languageSelector(open) {
       const language = document.getElementById('language');
       return language.setAttribute('style', `display:${open ? 'inherit' : 'none'}`);
+    }
+
+    function disableSave() {
+      const save = document.getElementById('save');
+      return save.className = save.className.replace('enabled', 'disabled');
+    }
+
+    function _request(method, url, body = null) {
+      return new Promise(resolve => {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState === 4 && this.status === 200) {
+            resolve(JSON.parse(this.response));
+          }
+        };
+        xhttp.open(method.toUpperCase(), url, true);
+        xhttp.send(body);
+      });
     }
   </script>
 </body>
