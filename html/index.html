@@ -160,7 +160,7 @@
 
     for (const element of document.getElementsByClassName('click')) {
       element.addEventListener("click", event => {
-        const element = event.toElement;
+        const element = event.target;
         const disabled = element.classList.contains('disabled');
         if (disabled) return;
         const name = element.innerHTML;
