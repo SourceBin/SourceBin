@@ -362,7 +362,7 @@
   {
     "ace": "latex",
     "name": "LaTeX",
-    "extension": "text"
+    "extension": "latex"
   },
   {
     "ace": "less",

@@ -38,7 +38,7 @@ mongoose.connect(uri, { useNewUrlParser: true })
         buffer += decoder.end();
         const data = { ip, path, query, method, headers, buffer, editor };
 
-        log(`\x1b[31m${ip} \x1b[0m> \x1b[32m${method} ${path || '/'} \x1b[0m`);
+        log(`${ip} > ${method} ${path || '/'} ${Object.keys(query).length ? JSON.stringify(query) : ''}`);
 
         if (path.toLowerCase() === 'language') return Requesthandler.handleLanguage(req, res, data);
         else if (path.toLowerCase() === 'list') return Requesthandler.handleList(req, res, data);

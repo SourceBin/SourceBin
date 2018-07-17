@@ -29,6 +29,7 @@
       margin: 0;
       padding: 0;
       background-color: #282a2e;
+      color: white;
     }
 
     #language {
@@ -51,20 +52,39 @@
       color: var(--language-color);
       user-select: none;
       cursor: default;
-      overflow-y: auto;
+      overflow: hidden;
     }
 
-    #language #content h1 {
+    #language #content #head {
+      height: 40px;
+      line-height: 40px;
+      display: block;
       font-family: 'Raleway:Bold', sans-serif;
       font-size: 30px;
-      margin: 25px 75px;
+      padding: 20px 50px;
+      border-bottom: var(--language-border);
+    }
+
+    #language #content #head input {
+      margin: 13px 0;
+      float: right;
+      outline: none;
+      border: none;
+      border-bottom: 1px solid var(--language-color);
+      color: var(--language-color);
+      background: transparent;
+    }
+
+    #language #content #options {
+      height: calc(70vh - 81px);
+      overflow-y: auto;
     }
 
     #language #content #options .box {
       font-family: 'Raleway', sans-serif;
-      font-size: 25px;
-      padding: 10px 75px;
-      border-top: var(--language-border);
+      font-size: 20px;
+      padding: 10px 50px;
+      border-bottom: var(--language-border);
       cursor: pointer;
     }
 
@@ -120,7 +140,10 @@
 <body>
   <div id="language">
     <div id="content">
-      <h1>Select the language of your file</h1>
+      <div id="head">
+        Select a language
+        <input type="text" id="search" placeholder="Search" />
+      </div>
       <div id="options"></div>
     </div>
   </div>
@@ -140,26 +163,20 @@
     const origin = window.location.origin;
     let _key = <% key=undefined %>;
     let language = <% language=undefined %>;
+    const languages = <% languages %>;
 
     const editor = ace.edit('editor');
     editor.setTheme('ace/theme/material');
     editor.setReadOnly(<% readOnly=false %>);
     editor.setFontSize(15);
+    editor.focus();
     if (editor.getValue() === 'Loading...') editor.setValue('', -1);
 
     setURL();
     setLanguage();
 
-    const options = document.getElementById('options');
-    for (const lang of <% languages %>) {
-      const language = document.createElement('div');
-      language.className = 'box click';
-      language.innerHTML = lang;
-      options.appendChild(language);
-    }
-
     for (const element of document.getElementsByClassName('click')) {
-      element.addEventListener("click", event => {
+      element.addEventListener('click', event => {
         const element = event.target;
         const disabled = element.classList.contains('disabled');
         if (disabled) return;
@@ -176,12 +193,6 @@
         if (name === 'Edit') return editor.setReadOnly(false);
         if (name === 'New') return window.location.href = origin;
         if (name === 'Language') return languageSelector(true);
-        return _request('get', `/language?search=${encodeURIComponent(name)}`).then(response => {
-          if (!response) return;
-          setLanguage(response);
-          setURL();
-          return languageSelector(false);
-        });
       });
     }
 
@@ -201,9 +212,37 @@
       return document.getElementById('lang').innerHTML = language.name;
     }
 
+    const input = document.getElementById('search');
+    input.addEventListener('input', () => addLanguages());
+
+    function addLanguages() {
+      const search = input.value.toLowerCase();
+      const options = document.getElementById('options');
+      options.innerHTML = '';
+      const language = languages.filter(lang => lang.toLowerCase().includes(search));
+      for (const lang of language) {
+        const language = document.createElement('div');
+        language.className = 'box';
+        language.innerHTML = lang;
+        options.appendChild(language);
+        language.addEventListener('click', event => {
+          const name = event.target.innerHTML;
+          return _request('get', `/language?search=${encodeURIComponent(name)}`).then(response => {
+            if (!response) return;
+            setLanguage(response);
+            setURL();
+            return languageSelector(false);
+          });
+        });
+      }
+    }
+
     function languageSelector(open) {
+      addLanguages();
       const language = document.getElementById('language');
-      return language.setAttribute('style', `display:${open ? 'inherit' : 'none'}`);
+      language.setAttribute('style', `display:${open ? 'inherit' : 'none'}`);
+      const input = document.getElementById('search');
+      return input.focus();
     }
 
     function disableSave() {
