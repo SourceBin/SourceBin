@@ -11,6 +11,7 @@ const uri = `mongodb+srv://${username}:${password}@${host}.mongodb.net/${databas
 mongoose.connect(uri, { useNewUrlParser: true })
   .then(() => {
     const Requesthandler = new(require('./Requesthandler.js'))();
+    const RateLimiter = new(require('./utils').RateLimiter)(500);
 
     const server = http.createServer((req, res) => {
       const parsedUrl = url.parse(req.url, true);
@@ -22,6 +23,11 @@ mongoose.connect(uri, { useNewUrlParser: true })
       const method = req.method.toLowerCase();
       const headers = req.headers;
 
+      const ip = (req.headers['x-forwarded-for'] || '').split(',').shift() ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+
       const editor = path.match(/^(editor)\/(.+?)\.(js)$/);
       const log = editor || path.match('favicon.ico') ? function() {} : console.log;
 
@@ -30,16 +36,22 @@ mongoose.connect(uri, { useNewUrlParser: true })
       req.on('data', data => buffer += decoder.write(data));
       req.on('end', async () => {
         buffer += decoder.end();
-        const data = { path, query, method, headers, buffer, editor };
+        const data = { ip, path, query, method, headers, buffer, editor };
 
-        log('='.repeat(50) + '\n');
-        log(data);
-        log('='.repeat(50) + '\n');
+        log(`\x1b[31m${ip} \x1b[0m> \x1b[32m${method} ${path || '/'} \x1b[0m`);
 
         if (path.toLowerCase() === 'language') return Requesthandler.handleLanguage(req, res, data);
-        if (path.toLowerCase() === 'list') return Requesthandler.handleList(req, res, data);
-        if (method === 'get') return Requesthandler.handleGet(req, res, data);
-        if (method === 'post') return Requesthandler.handlePost(req, res, data);
+        else if (path.toLowerCase() === 'list') return Requesthandler.handleList(req, res, data);
+        else {
+          if (!editor && RateLimiter.active(ip)) {
+            res.writeHead(429, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ error: 'Too many requests, try again later' }));
+          } else if (!editor) RateLimiter.add(ip);
+
+          if (method === 'get') Requesthandler.handleGet(req, res, data);
+          else if (method === 'post') Requesthandler.handlePost(req, res, data);
+          else return Requesthandler.returnHomepage(req, res, data);
+        }
       });
     });
     server.listen(3000, () => console.log('HTTP server is running! \n\n'));

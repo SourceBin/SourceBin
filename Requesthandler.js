@@ -56,11 +56,6 @@ class Requesthandler {
 
     this.fs = require('fs');
     // this.html = this.fs.readFileSync('./html/index.html').toString();
-    this._languages = this.fs.readdirSync('./html/editor')
-      .filter(f => f.match(/mode-(.+?)\.js/))
-      .map(f => f.replace(/mode-(.+?)\.js/, '$1'))
-      .sort();
-
     this.languages = require('./json/languages.json');
 
     const { Converter } = require('./utils');
