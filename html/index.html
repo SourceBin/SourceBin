@@ -126,6 +126,7 @@
     }
 
     #editor {
+      display: none;
       margin: 0;
       padding: 0;
       position: relative;
@@ -171,6 +172,9 @@
     editor.setFontSize(15);
     editor.focus();
     if (editor.getValue() === 'Loading...') editor.setValue('', -1);
+    window.addEventListener('load', () => {
+      document.getElementById('editor').setAttribute('style', `display:inherit`);
+    });
 
     setURL();
     setLanguage();
