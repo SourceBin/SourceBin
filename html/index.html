@@ -61,6 +61,7 @@
       border: none;
       outline: none;
       float: right;
+      cursor: pointer;
       background-color: var(--language-color);
       height: calc(100vh / 30);
       width: calc(100vw / 25);
@@ -171,8 +172,7 @@
     <div class="box click <% saving=enabled %>" id="save">Save</div>
     <div class="box click">Edit</div>
     <div class="box click">New</div>
-    <div class="box click">Language</div>
-    <div class="box" id="lang">None</div>
+    <div class="box click" id="lang">Language - None</div>
   </nav>
   <pre id="editor"><% code=Loading... %></pre>
 
@@ -203,19 +203,32 @@
         const disabled = element.classList.contains('disabled');
         if (disabled) return;
         const name = element.innerHTML;
-        if (name === 'Save') {
-          disableSave();
-          editor.setReadOnly(true);
-          languageSelector(true, false);
-          return _request('post', '/', editor.getValue())
-            .then(response => {
-              if (response) _key = response.key;
-            });
-        }
+        if (name === 'Save') return save();
         if (name === 'Edit') return editor.setReadOnly(false);
         if (name === 'New') return window.location.href = origin;
-        if (name === 'Language') return languageSelector(true, true);
+        if (name.startsWith('Language')) return languageSelector(true);
       });
+    }
+
+    document.addEventListener('keydown', event => {
+      if (event.keyCode === 83 && (navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey)) {
+        event.preventDefault();
+        return save();
+      } else if (event.keyCode === 27) {
+        event.preventDefault();
+        return languageSelector(false);
+      }
+    });
+
+    function save() {
+      disableSave();
+      editor.setReadOnly(true);
+      languageSelector(true);
+      return _request('post', '/', editor.getValue())
+        .then(response => {
+          if (response) _key = response.key;
+          return setURL();
+        });
     }
 
     function setURL() {
@@ -231,7 +244,7 @@
       if (lang) language = lang;
       if (!language) return;
       editor.session.setMode(`ace/mode/${language.ace}`);
-      return document.getElementById('lang').innerHTML = language.name;
+      return document.getElementById('lang').innerHTML = `Language - ${language.name}`;
     }
 
     const input = document.getElementById('search');
@@ -259,12 +272,10 @@
       }
     }
 
-    function languageSelector(open, close) {
+    function languageSelector(open) {
       const language = document.getElementById('language');
       language.setAttribute('style', `display:${open ? 'inherit' : 'none'}`);
       if (open) {
-        const button = document.getElementById('closebutton');
-        button.setAttribute('style', `display:${close ? 'inherit': 'none'}`);
         addLanguages();
         const input = document.getElementById('search');
         return input.focus();

@@ -29,7 +29,8 @@ mongoose.connect(uri, { useNewUrlParser: true })
         req.connection.socket.remoteAddress;
 
       const editor = path.match(/^(editor)\/(.+?)\.(js)$/);
-      const log = editor || path.match('favicon.ico') ? function() {} : console.log;
+      const favicon = path.match('favicon.ico');
+      const log = editor || favicon ? function() {} : console.log;
 
       const decoder = new StringDecoder('utf-8');
       let buffer = '';
@@ -43,10 +44,10 @@ mongoose.connect(uri, { useNewUrlParser: true })
         if (path.toLowerCase() === 'language') return Requesthandler.handleLanguage(req, res, data);
         else if (path.toLowerCase() === 'list') return Requesthandler.handleList(req, res, data);
         else {
-          if (!editor && RateLimiter.active(ip)) {
+          if (!editor && !favicon && RateLimiter.active(ip)) {
             res.writeHead(429, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Too many requests, try again later' }));
-          } else if (!editor) RateLimiter.add(ip);
+          } else if (!editor && !favicon) RateLimiter.add(ip);
 
           if (method === 'get') Requesthandler.handleGet(req, res, data);
           else if (method === 'post') Requesthandler.handlePost(req, res, data);
