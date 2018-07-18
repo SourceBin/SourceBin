@@ -55,6 +55,23 @@
       overflow: hidden;
     }
 
+    #language #content button {
+      margin: 0;
+      padding: 0;
+      border: none;
+      outline: none;
+      float: right;
+      background-color: var(--language-color);
+      height: calc(100vh / 30);
+      width: calc(100vw / 25);
+      transition-duration: 0.15s;
+    }
+
+    #language #content button:hover {
+      background-color: #f44336;
+      color: var(--language-color);
+    }
+
     #language #content #head {
       height: 40px;
       line-height: 40px;
@@ -66,7 +83,7 @@
     }
 
     #language #content #head input {
-      margin: 13px 0;
+      margin: 13px 50px;
       float: right;
       outline: none;
       border: none;
@@ -141,6 +158,7 @@
 <body>
   <div id="language">
     <div id="content">
+      <button id="closebutton" onclick="languageSelector(false);">X</button>
       <div id="head">
         Select a language
         <input type="text" id="search" placeholder="Search" />
@@ -170,10 +188,10 @@
     editor.setTheme('ace/theme/material');
     editor.setReadOnly(<% readOnly=false %>);
     editor.setFontSize(15);
-    editor.focus();
     if (editor.getValue() === 'Loading...') editor.setValue('', -1);
     window.addEventListener('load', () => {
-      document.getElementById('editor').setAttribute('style', `display:inherit`);
+      document.getElementById('editor').setAttribute('style', 'display:inherit');
+      editor.focus();
     });
 
     setURL();
@@ -188,7 +206,7 @@
         if (name === 'Save') {
           disableSave();
           editor.setReadOnly(true);
-          languageSelector(true);
+          languageSelector(true, false);
           return _request('post', '/', editor.getValue())
             .then(response => {
               if (response) _key = response.key;
@@ -196,7 +214,7 @@
         }
         if (name === 'Edit') return editor.setReadOnly(false);
         if (name === 'New') return window.location.href = origin;
-        if (name === 'Language') return languageSelector(true);
+        if (name === 'Language') return languageSelector(true, true);
       });
     }
 
@@ -241,12 +259,18 @@
       }
     }
 
-    function languageSelector(open) {
-      addLanguages();
+    function languageSelector(open, close) {
       const language = document.getElementById('language');
       language.setAttribute('style', `display:${open ? 'inherit' : 'none'}`);
-      const input = document.getElementById('search');
-      return input.focus();
+      if (open) {
+        const button = document.getElementById('closebutton');
+        button.setAttribute('style', `display:${close ? 'inherit': 'none'}`);
+        addLanguages();
+        const input = document.getElementById('search');
+        return input.focus();
+      } else {
+        return editor.focus();
+      }
     }
 
     function disableSave() {
