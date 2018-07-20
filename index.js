@@ -1,7 +1,24 @@
+/**
+ * Distributed under the ISC license:
+ *
+ * Copyright 2018 SebastiaanYN
+ * Permission to use, copy, modify, and/or distribute this software for any purpose
+ * with or without fee is hereby granted, provided that the above copyright notice
+ * and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+ * OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+ * THIS SOFTWARE.
+ *
+ */
+
 const http = require('http');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
-const crypto = require('crypto');
 
 const mongoose = require('mongoose');
 const config = require('./config.json');
@@ -28,30 +45,30 @@ mongoose.connect(uri, { useNewUrlParser: true })
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
 
-      const editor = path.match(/^(editor)\/(.+?)\.(js)$/);
+      const javascript = path.match(/^(bin)\/(.+?)\/(.+?)\.(js)$/);
       const favicon = path.match('favicon.ico');
-      const log = editor || favicon ? function() {} : console.log;
 
       const decoder = new StringDecoder('utf-8');
       let buffer = '';
       req.on('data', data => buffer += decoder.write(data));
-      req.on('end', async () => {
+      req.on('end', () => {
         buffer += decoder.end();
-        const data = { ip, path, query, method, headers, buffer, editor };
+        const data = { ip, path, query, method, headers, buffer, javascript };
 
-        log(`${ip} > ${method} ${path || '/'} ${Object.keys(query).length ? JSON.stringify(query) : ''}`);
+        if (!javascript && !favicon)
+          console.log(`${ip} > ${method} ${path || '/'} ${Object.keys(query).length ? JSON.stringify(query) : ''}`);
 
-        if (path.toLowerCase() === 'language') return Requesthandler.handleLanguage(req, res, data);
-        else if (path.toLowerCase() === 'list') return Requesthandler.handleList(req, res, data);
+        if (path.toLowerCase().startsWith('language')) return Requesthandler.handleLanguage(res, data);
+        else if (path.toLowerCase().startsWith('list')) return Requesthandler.handleList(res, data);
         else {
-          if (!editor && !favicon && RateLimiter.active(ip)) {
+          if (method === 'post' && RateLimiter.active(ip)) {
             res.writeHead(429, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Too many requests, try again later' }));
-          } else if (!editor && !favicon) RateLimiter.add(ip);
+          } else if (method === 'post') RateLimiter.add(ip);
 
-          if (method === 'get') Requesthandler.handleGet(req, res, data);
-          else if (method === 'post') Requesthandler.handlePost(req, res, data);
-          else return Requesthandler.returnHomepage(req, res, data);
+          if (method === 'get') Requesthandler.handleGet(res, data);
+          else if (method === 'post') Requesthandler.handlePost(res, data);
+          else return Requesthandler.homepage(res, data);
         }
       });
     });
