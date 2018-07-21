@@ -19,9 +19,9 @@
   <style>
     :root {
       --nav-size: 20px;
-      --language-border: 1px solid #181a1f;
-      --language-background: #21252b;
-      --language-color: #d7dae0;
+      --border: 1px solid #181a1f;
+      --background: #21252b;
+      --color: #d7dae0;
     }
 
     body,
@@ -30,6 +30,48 @@
       padding: 0;
       background-color: #282a2e;
       color: white;
+    }
+
+    #linkbox {
+      z-index: 10;
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+
+      display: none;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    #linkbox #content {
+      width: 500px;
+      height: 200px;
+      background-color: var(--background);
+      border: var(--border);
+      margin: calc(50vh - 102px) calc(50vw - 252px);
+      font-family: 'Raleway:Bold', sans-serif;
+      border-radius: 10px;
+    }
+
+    #linkbox #content h1 {
+      margin: 0;
+      padding: 40px 0;
+      text-align: center;
+      user-select: none;
+      cursor: default;
+    }
+
+    #linkbox #content textarea {
+      border: var(--border);
+      outline: none;
+      resize: none;
+      display: block;
+      margin: 0 auto;
+      width: 400px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      color: var(--background);
+      border-radius: 10px;
     }
 
     #language {
@@ -43,13 +85,13 @@
     }
 
     #language #content {
-      background-color: var(--language-background);
+      background-color: var(--background);
       width: calc(70vw - 1px);
       height: calc(70vh - 1px);
       margin: calc(15vh - 1px) calc(15vw - 1px);
-      border: var(--language-border);
+      border: var(--border);
 
-      color: var(--language-color);
+      color: var(--color);
       user-select: none;
       cursor: default;
       overflow: hidden;
@@ -62,7 +104,7 @@
       outline: none;
       float: right;
       cursor: pointer;
-      background-color: var(--language-color);
+      background-color: var(--color);
       height: calc(100vh / 30);
       width: calc(100vw / 25);
       transition-duration: 0.15s;
@@ -70,7 +112,7 @@
 
     #language #content button:hover {
       background-color: #f44336;
-      color: var(--language-color);
+      color: var(--color);
     }
 
     #language #content #head {
@@ -80,7 +122,7 @@
       font-family: 'Raleway:Bold', sans-serif;
       font-size: 30px;
       padding: 20px 50px;
-      border-bottom: var(--language-border);
+      border-bottom: var(--border);
     }
 
     #language #content #head input {
@@ -88,8 +130,8 @@
       float: right;
       outline: none;
       border: none;
-      border-bottom: 1px solid var(--language-color);
-      color: var(--language-color);
+      border-bottom: 1px solid var(--color);
+      color: var(--color);
       background: transparent;
     }
 
@@ -102,7 +144,7 @@
       font-family: 'Raleway', sans-serif;
       font-size: 20px;
       padding: 10px 50px;
-      border-bottom: var(--language-border);
+      border-bottom: var(--border);
       cursor: pointer;
     }
 
@@ -157,6 +199,13 @@
 </head>
 
 <body>
+  <div id="linkbox">
+    <div id="content">
+      <h1>Copy the link to share the bin!</h1>
+      <textarea readonly id="link"></textarea>
+    </div>
+  </div>
+
   <div id="language">
     <div id="content">
       <button id="closebutton" onclick="bin.LanguageSelector.hide();">X</button>
@@ -198,6 +247,13 @@
       return bin.focus();
     });
 
+    document.getElementById('language').addEventListener('click', event => {
+      if (event.target === document.getElementById('language')) return bin.LanguageSelector.hide();
+    });
+    document.getElementById('linkbox').addEventListener('click', event => {
+      if (event.target === document.getElementById('linkbox')) return document.getElementById('linkbox').setAttribute('style', 'display:none');
+    });
+
     for (const element of document.getElementsByClassName('click')) {
       element.addEventListener('click', event => {
         const element = event.target;
@@ -211,12 +267,14 @@
     }
 
     document.addEventListener('keydown', event => {
-      if (event.keyCode === 83 && (navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey)) {
-        event.preventDefault();
-        return bin.save();
+      const ctrl = navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey;
+      if (event.keyCode === 83 && ctrl) {
+        bin.save();
+        return event.preventDefault();
       } else if (event.keyCode === 27) {
-        event.preventDefault();
-        return bin.LanguageSelector.hide();
+        bin.LanguageSelector.hide();
+        bin.LinkBox.hide();
+        return event.preventDefault();
       }
     });
 
