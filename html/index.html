@@ -165,23 +165,33 @@
       flex-direction: row;
     }
 
-    nav .box {
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    nav ul li.box {
+      float: left;
+      display: block;
       padding: 0 15px;
       cursor: pointer;
       user-select: none;
       transition-duration: 0.2s;
     }
 
-    nav .box:hover {
+    nav ul li.box:hover {
       background-color: #A7A7A7;
     }
 
-    nav .box.disabled {
+    nav ul li.box.disabled {
       color: #262626;
       cursor: not-allowed;
     }
 
-    nav .box.disabled:hover {
+    nav ul li.box.disabled:hover {
       background-color: #B4B4B4;
     }
 
@@ -218,10 +228,13 @@
   </div>
 
   <nav>
-    <div class="box click" id="save">Save</div>
-    <div class="box click">Edit</div>
-    <div class="box click">New</div>
-    <div class="box click" id="lang">Language - None</div>
+    <ul>
+      <li class="box click" id="save">Save</li>
+      <li class="box click">Edit</li>
+      <li class="box click">New</li>
+      <li class="box click" id="lang">Language - None</li>
+      <li class="box click">Theme - None</li>
+    </ul>
   </nav>
   <pre id="editor"><% code=Loading... %></pre>
 
