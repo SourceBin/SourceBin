@@ -17,16 +17,14 @@ class Database {
     /**
      * Find all database entries with this query
      * @param {Object} query The query to look for
-     * @returns {Array<Object>}
-     * @async
+     * @returns {Promise<Array<Object>>}
      */
     this.find = promisify(model.find.bind(model));
 
     /**
      * Find one database entry matching the query
      * @param {Object} query The query to look for
-     * @returns {Object}
-     * @async
+     * @returns {Promise<Object>}
      */
     this.findOne = promisify(model.findOne.bind(model));
   }
@@ -66,29 +64,6 @@ class Requesthandler {
     return this.fs.readFileSync('./html/index.html').toString();
   }
 
-  handleLanguage(res, data) {
-    const { query: { search } } = data;
-    if (!search) {
-      res.writeHead(400, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'Provide a search' }));
-    }
-    const language = this.Methods.findLanguage(search.toLowerCase());
-    if (!language) {
-      res.writeHead(404, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'Didn\'t find a language' }));
-    }
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    return res.end(JSON.stringify(language));
-  }
-
-  handleList(res, data) {
-    this.db.find().then(data => {
-      const keys = data.map(item => item.key);
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify(keys));
-    });
-  }
-
   handleGet(res, data) {
     const { key, extension } = this.Methods.stripPath(data.path);
     if (!key) {
@@ -107,7 +82,7 @@ class Requesthandler {
 
     this.db.findOne({ key }).then(data => {
       if (!data) return this.homepage(res, data);
-      const language = this.Methods.findLanguage(extension);
+      const language = this.Methods.findLanguage(extension, 'extension');
       res.writeHead(200, { 'Content-Type': 'text/html' });
       return res.end(this.Converter.convert(this.html, {
         code: data.code,
@@ -134,6 +109,29 @@ class Requesthandler {
     const model = this.db.createModel({ key, code });
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify({ key }));
+  }
+
+  handleLanguage(res, data) {
+    const { query: { search } } = data;
+    if (!search) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Provide a search' }));
+    }
+    const language = this.Methods.findLanguage(search, 'name');
+    if (!language) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Didn\'t find a language' }));
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify(language));
+  }
+
+  handleList(res, data) {
+    this.db.find().then(data => {
+      const keys = data.map(item => item.key);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify(keys));
+    });
   }
 
   homepage(res, data) {
