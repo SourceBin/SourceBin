@@ -1,0 +1,154 @@
+[
+  {
+    "ace": "ambiance",
+    "name": "Ambiance"
+  },
+  {
+    "ace": "chaos",
+    "name": "Chaos"
+  },
+  {
+    "ace": "chrome",
+    "name": "Chrome"
+  },
+  {
+    "ace": "clouds",
+    "name": "Clouds"
+  },
+  {
+    "ace": "clouds_midnight",
+    "name": "Clouds Midnight"
+  },
+  {
+    "ace": "cobalt",
+    "name": "Cobalt"
+  },
+  {
+    "ace": "crimson_editor",
+    "name": "Crimson Editor"
+  },
+  {
+    "ace": "dawn",
+    "name": "Dawn"
+  },
+  {
+    "ace": "dracula",
+    "name": "Dracula"
+  },
+  {
+    "ace": "dreamweaver",
+    "name": "Dreamweaver"
+  },
+  {
+    "ace": "eclipse",
+    "name": "Eclipse"
+  },
+  {
+    "ace": "github",
+    "name": "Github"
+  },
+  {
+    "ace": "gob",
+    "name": "Gob"
+  },
+  {
+    "ace": "gruvbox",
+    "name": "Gruvbox"
+  },
+  {
+    "ace": "idle_fingers",
+    "name": "Idle Fingers"
+  },
+  {
+    "ace": "iplastic",
+    "name": "iPlastic"
+  },
+  {
+    "ace": "katzenmilch",
+    "name": "Katzenmilch"
+  },
+  {
+    "ace": "kr_theme",
+    "name": "KR Theme"
+  },
+  {
+    "ace": "kuroir",
+    "name": "Kuroir"
+  },
+  {
+    "ace": "material",
+    "name": "Material"
+  },
+  {
+    "ace": "merbivore",
+    "name": "Merbivore"
+  },
+  {
+    "ace": "merbivore_soft",
+    "name": "Merbivore Soft"
+  },
+  {
+    "ace": "mono_industrial",
+    "name": "Mono Industrial"
+  },
+  {
+    "ace": "monokai",
+    "name": "Monokai"
+  },
+  {
+    "ace": "pastel_on_dark",
+    "name": "Pastel on Dark"
+  },
+  {
+    "ace": "solarized_dark",
+    "name": "Solarized Dark"
+  },
+  {
+    "ace": "solarized_light",
+    "name": "Solarized Light"
+  },
+  {
+    "ace": "sqlserver",
+    "name": "SQLServer"
+  },
+  {
+    "ace": "terminal",
+    "name": "Terminal"
+  },
+  {
+    "ace": "textmate",
+    "name": "Textmate"
+  },
+  {
+    "ace": "tomorrow",
+    "name": "Tomorrow"
+  },
+  {
+    "ace": "tomorrow_night",
+    "name": "Tomorrow Night"
+  },
+  {
+    "ace": "tomorrow_night_blue",
+    "name": "Tomorrow Night Blue"
+  },
+  {
+    "ace": "tomorrow_night_bright",
+    "name": "Tomorrow Night Bright"
+  },
+  {
+    "ace": "tomorrow_night_eighties",
+    "name": "Tomorrow Night Eighties"
+  },
+  {
+    "ace": "twilight",
+    "name": "Twilight"
+  },
+  {
+    "ace": "vibrant_ink",
+    "name": "Vibrant Ink"
+  },
+  {
+    "ace": "xcode",
+    "name": "XCode"
+  }
+]

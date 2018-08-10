@@ -1,0 +1,74 @@
+.selector {
+  z-index: 10;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.selector .container {
+  background-color: var(--background);
+  width: 70vw;
+  height: 70vh;
+  margin: 15vh 15vw;
+  border: var(--border);
+  color: var(--color);
+  user-select: none;
+  cursor: default;
+}
+
+.selector .container button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  float: right;
+  cursor: pointer;
+  background-color: var(--color);
+  height: 3.5vh;
+  width: 4vw;
+  transition-duration: 0.15s;
+}
+
+.selector .container button:hover {
+  background-color: #f44336;
+  color: var(--color);
+}
+
+.selector .container .head {
+  height: 40px;
+  line-height: 40px;
+  display: block;
+  font-family: 'Raleway:Bold', sans-serif;
+  font-size: 30px;
+  padding: 20px 50px;
+  border-bottom: var(--border);
+}
+
+.selector .container .head input {
+  margin: 13px 50px;
+  float: right;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid var(--color);
+  color: var(--color);
+  background: transparent;
+}
+
+.selector .container .options {
+  height: calc(70vh - 80px);
+  overflow-y: auto;
+}
+
+.selector .container .options .box {
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  padding: 10px 50px;
+  border-bottom: var(--border);
+  cursor: pointer;
+}

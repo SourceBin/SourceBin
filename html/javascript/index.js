@@ -1,4 +1,4 @@
-function Bin(options, languages) {
+function Bin(options) {
   const disabled = new Set();
   this.isDisabled = name => disabled.has(name);
 
@@ -11,7 +11,6 @@ function Bin(options, languages) {
   editor.setReadOnly(readOnly);
   editor.setFontSize(15);
   if (editor.getValue() === 'Loading...') editor.setValue('', -1);
-  this.LanguageSelector = new LanguageSelector(this);
   this.LinkBox = new LinkBox(this);
 
   this.focus = () => editor.focus();
@@ -30,11 +29,19 @@ function Bin(options, languages) {
     document.getElementById('lang').innerHTML = `Language - ${language.name}`;
     return editor.session.setMode(`ace/mode/${language.ace}`);
   };
+  this.setTheme = (theme = {}) => {
+    if (!theme.ace || !theme.name) theme = { ace: localStorage.getItem('theme-ace'), name: localStorage.getItem('theme-name') };
+    if (!theme.ace || !theme.name) theme = { ace: 'material', name: 'Material' };
+    localStorage.setItem('theme-ace', theme.ace);
+    localStorage.setItem('theme-name', theme.name);
+    document.getElementById('theme').innerHTML = `Theme - ${theme.name}`;
+    return editor.setTheme(`ace/theme/${theme.ace}`);
+  };
   this.save = () => {
     if (this.isDisabled('Save')) return;
     this.disableSave();
     editor.setReadOnly(true);
-    this.LanguageSelector.show(true);
+    LanguageSelector.show(); // TODO: Display linkbox after select
     return _request('post', '/', editor.getValue())
       .then(response => {
         if (response) key = response.key;
@@ -50,7 +57,8 @@ function Bin(options, languages) {
 
   this.setURL();
   this.setLanguage();
-  if (!options.saving) this.disableSave();
+  this.setTheme();
+  if (!options.allowSave) this.disableSave();
 }
 
 function LinkBox(bin) {
@@ -64,48 +72,6 @@ function LinkBox(bin) {
   };
   this.hide = () => {
     box.setAttribute('style', 'display:none');
-    return bin.focus();
-  };
-}
-
-function LanguageSelector(bin) {
-  let showLink = false;
-
-  const input = document.getElementById('search');
-  const addLanguages = () => {
-    const search = input.value.toLowerCase();
-    const options = document.getElementById('options');
-    options.innerHTML = '';
-    const language = languages.filter(lang => lang.toLowerCase().includes(search));
-    for (const lang of language) {
-      const language = document.createElement('div');
-      language.className = 'box';
-      language.innerHTML = lang;
-      options.appendChild(language);
-      language.addEventListener('click', event => {
-        const name = event.target.innerHTML;
-        return _request('get', `/language?search=${encodeURIComponent(name)}`).then(response => {
-          if (!response) return;
-          bin.setLanguage(response);
-          bin.setURL();
-          this.hide();
-          if (showLink) bin.LinkBox.show();
-          return;
-        });
-      });
-    }
-  };
-  input.addEventListener('input', addLanguages);
-
-  this.show = link => {
-    showLink = link ? true : false;
-    document.getElementById('language').setAttribute('style', 'display:inherit');
-    addLanguages();
-    return input.focus();
-  };
-
-  this.hide = () => {
-    document.getElementById('language').setAttribute('style', 'display:none');
     return bin.focus();
   };
 }

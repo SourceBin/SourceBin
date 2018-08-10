@@ -46,6 +46,7 @@ mongoose.connect(uri, { useNewUrlParser: true })
         req.connection.socket.remoteAddress;
 
       const javascript = path.match(/^(bin)\/(.+?)\/(.+?)\.(js)$/);
+      const css = path.match(/^(bin)\/(.+?)\/(.+?)\.(css)$/);
       const favicon = path.match('favicon.ico');
 
       const decoder = new StringDecoder('utf-8');
@@ -53,12 +54,13 @@ mongoose.connect(uri, { useNewUrlParser: true })
       req.on('data', data => buffer += decoder.write(data));
       req.on('end', () => {
         buffer += decoder.end();
-        const data = { ip, path, query, method, headers, buffer, javascript };
+        const data = { ip, path, query, method, headers, buffer, javascript, css };
 
-        if (!javascript && !favicon)
+        if (!javascript && !css && !favicon)
           console.log(`${ip} > ${method} ${path || '/'} ${Object.keys(query).length ? JSON.stringify(query) : ''}`);
 
         if (path.toLowerCase().startsWith('language')) return Requesthandler.handleLanguage(res, data);
+        else if (path.toLowerCase().startsWith('theme')) return Requesthandler.handleTheme(res, data);
         else if (path.toLowerCase().startsWith('list')) return Requesthandler.handleList(res, data);
         else {
           if (method === 'post' && RateLimiter.active(ip)) {

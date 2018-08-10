@@ -50,10 +50,12 @@ class Requesthandler {
     this.fs = require('fs');
     // this.html = this.fs.readFileSync('./html/index.html').toString();
     this.languages = require('./json/languages.json');
+    this.themes = require('./json/themes.json');
 
     const { Methods, Converter } = require('./utils');
     this.Converter = new Converter({
-      languages: `[${this.languages.map(lang => `'${lang.name}'`)}]`
+      languages: `[${this.languages.map(lang => `'${lang.name}'`)}]`,
+      themes: `[${this.themes.map(theme => `'${theme.name}'`)}]`
     });
 
     this.Methods = Methods;
@@ -67,14 +69,15 @@ class Requesthandler {
   handleGet(res, data) {
     const { key, extension } = this.Methods.stripPath(data.path);
     if (!key) {
-      if (data.javascript) {
+      if (data.javascript || data.css) {
         const path = `./html${data.path.replace('bin', '')}`;
         if (!this.fs.existsSync(path)) {
           res.writeHead(404, { 'Content-Type': 'application/json' });
           return res.end(JSON.stringify({ error: 'No file found' }));
         }
         const file = this.fs.readFileSync(path);
-        res.writeHead(200, { 'Content-Type': 'application/javascript' });
+        const type = data.javascript ? 'application/javascript' : 'text/css';
+        res.writeHead(200, { 'Content-Type': type });
         return res.end(file);
       }
       return this.homepage(res, data);
@@ -89,7 +92,7 @@ class Requesthandler {
         readOnly: true,
         key: key ? `'${key}'` : null,
         language: JSON.stringify(language),
-        saving: 'false',
+        allowSave: 'false',
         color: key ? key.substring(0, 6) : null
       }));
     });
@@ -124,6 +127,21 @@ class Requesthandler {
     }
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify(language));
+  }
+
+  handleTheme(res, data) {
+    const { query: { search } } = data;
+    if (!search) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Provide a search' }));
+    }
+    const theme = this.Methods.findTheme(search, 'name');
+    if (!theme) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Didn\'t find a theme' }));
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify(theme));
   }
 
   handleList(res, data) {

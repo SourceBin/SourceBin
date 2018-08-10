@@ -1,23 +1,21 @@
 function Selector(title, content, callback) {
   this.show = () => {
-    this.selector.setAttribute('style', 'display:inherit');
-    this.fill();
-    return this.search.focus();
+    selector.setAttribute('style', 'display:inherit');
+    fill();
+    return search.focus();
   };
-
   this.hide = () => {
-    this.selector.setAttribute('style', 'display:none');
+    selector.setAttribute('style', 'display:none');
     return bin.focus();
   };
-
-  this.fill = () => {
+  const fill = () => {
     options.innerHTML = '';
     const items = content.filter(i => i.toLowerCase().includes(search.value.toLowerCase()));
     return items.forEach(i => {
       const item = document.createElement('div');
       item.setAttribute('class', 'box');
       item.innerHTML = i;
-      item.addEventListener('click', callback);
+      item.addEventListener('click', callback.bind(this));
       options.appendChild(item);
     });
   };
@@ -41,7 +39,7 @@ function Selector(title, content, callback) {
   head.innerHTML = title;
 
   const search = document.createElement('input');
-  search.addEventListener('input', this.fill);
+  search.addEventListener('input', fill);
   search.setAttribute('class', 'search');
   search.setAttribute('type', 'text');
   search.setAttribute('placeholder', 'Search');
@@ -55,7 +53,4 @@ function Selector(title, content, callback) {
   container.appendChild(options);
   selector.appendChild(container);
   document.body.appendChild(selector);
-
-  this.selector = selector;
-  this.search = search;
 }

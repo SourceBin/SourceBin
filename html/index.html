@@ -19,8 +19,8 @@
   <style>
     :root {
       --nav-size: 20px;
-      --border: 1px solid #181a1f;
-      --background: #21252b;
+      --border: 1px solid #23272A;
+      --background: #2C2F33;
       --color: #d7dae0;
     }
 
@@ -29,7 +29,7 @@
       margin: 0;
       padding: 0;
       background-color: #282a2e;
-      color: white;
+      color: var(--color);
     }
 
     #linkbox {
@@ -72,80 +72,6 @@
       text-align: center;
       color: var(--background);
       border-radius: 10px;
-    }
-
-    #language {
-      z-index: 10;
-      position: absolute;
-      width: 100vw;
-      height: 100vh;
-
-      display: none;
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    #language #content {
-      background-color: var(--background);
-      width: calc(70vw - 1px);
-      height: calc(70vh - 1px);
-      margin: calc(15vh - 1px) calc(15vw - 1px);
-      border: var(--border);
-
-      color: var(--color);
-      user-select: none;
-      cursor: default;
-      overflow: hidden;
-    }
-
-    #language #content button {
-      margin: 0;
-      padding: 0;
-      border: none;
-      outline: none;
-      float: right;
-      cursor: pointer;
-      background-color: var(--color);
-      height: calc(100vh / 30);
-      width: calc(100vw / 25);
-      transition-duration: 0.15s;
-    }
-
-    #language #content button:hover {
-      background-color: #f44336;
-      color: var(--color);
-    }
-
-    #language #content #head {
-      height: 40px;
-      line-height: 40px;
-      display: block;
-      font-family: 'Raleway:Bold', sans-serif;
-      font-size: 30px;
-      padding: 20px 50px;
-      border-bottom: var(--border);
-    }
-
-    #language #content #head input {
-      margin: 13px 50px;
-      float: right;
-      outline: none;
-      border: none;
-      border-bottom: 1px solid var(--color);
-      color: var(--color);
-      background: transparent;
-    }
-
-    #language #content #options {
-      height: calc(70vh - 81px);
-      overflow-y: auto;
-    }
-
-    #language #content #options .box {
-      font-family: 'Raleway', sans-serif;
-      font-size: 20px;
-      padding: 10px 50px;
-      border-bottom: var(--border);
-      cursor: pointer;
     }
 
     nav {
@@ -205,6 +131,7 @@
     }
   </style>
 
+  <link rel="stylesheet" href="./bin/css/selector.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:Regular,Bold">
 </head>
 
@@ -216,24 +143,13 @@
     </div>
   </div>
 
-  <div id="language">
-    <div id="content">
-      <button id="closebutton" onclick="bin.LanguageSelector.hide();">X</button>
-      <div id="head">
-        Select a language
-        <input type="text" id="search" placeholder="Search" />
-      </div>
-      <div id="options"></div>
-    </div>
-  </div>
-
   <nav>
     <ul>
       <li class="box click" id="save">Save</li>
       <li class="box click">Edit</li>
       <li class="box click">New</li>
       <li class="box click" id="lang">Language - None</li>
-      <li class="box click">Theme - None</li>
+      <li class="box click" id="theme">Theme - None</li>
     </ul>
   </nav>
   <pre id="editor"><% code=Loading... %></pre>
@@ -246,24 +162,42 @@
     const key = <% key=undefined %>;
     const language = <% language=undefined %>;
     const readOnly = <% readOnly=false %>;
-    const saving = <% saving=true %>;
+    const allowSave = <% allowSave=true %>;
     const languages = <% languages %>;
+    const themes = <% themes %>;
 
     const bin = new Bin({
       key,
       language,
       readOnly,
-      saving
-    }, languages);
+      allowSave
+    });
+
+    const languageSelector = new Selector('Select a language', languages, function(event) {
+      const name = event.target.innerHTML;
+      return _request('get', `/language?search=${encodeURIComponent(name)}`).then(response => {
+        if (!response) return;
+        bin.setLanguage(response);
+        bin.setURL();
+        this.hide();
+        // bin.LinkBox.show();
+      });
+    });
+
+    const themeSelector = new Selector('Select a theme', themes, function(event) {
+      const name = event.target.innerHTML;
+      return _request('get', `/theme?search=${encodeURIComponent(name)}`).then(response => {
+        if (!response) return;
+        bin.setTheme(response);
+        this.hide();
+      });
+    });
 
     window.addEventListener('load', () => {
       document.getElementById('editor').setAttribute('style', 'display:inherit');
       return bin.focus();
     });
 
-    document.getElementById('language').addEventListener('click', event => {
-      if (event.target === document.getElementById('language')) return bin.LanguageSelector.hide();
-    });
     document.getElementById('linkbox').addEventListener('click', event => {
       if (event.target === document.getElementById('linkbox')) return document.getElementById('linkbox').setAttribute('style', 'display:none');
     });
@@ -276,17 +210,18 @@
         if (name === 'Save') return bin.save();
         if (name === 'Edit') return bin.setReadOnly(false);
         if (name === 'New') return window.location.href = origin;
-        if (name.startsWith('Language')) return bin.LanguageSelector.show();
+        if (name.startsWith('Language')) return languageSelector.show();
+        if (name.startsWith('Theme')) return themeSelector.show();
       });
     }
 
     document.addEventListener('keydown', event => {
-      const ctrl = navigator.platform.match('Mac') ? event.metaKey : event.ctrlKey;
+      const ctrl = event.metaKey || event.ctrlKey;
       if (event.keyCode === 83 && ctrl) {
         bin.save();
         return event.preventDefault();
       } else if (event.keyCode === 27) {
-        bin.LanguageSelector.hide();
+        languageSelector.hide();
         bin.LinkBox.hide();
         return event.preventDefault();
       }

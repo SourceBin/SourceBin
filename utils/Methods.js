@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const languages = require('../json/languages.json');
+const themes = require('../json/themes.json');
 
 class Methods {
 
@@ -23,7 +24,7 @@ class Methods {
 
   /**
    * Find a language by search
-   * @param {String} search What to search for
+   * @param {String} search The search query
    * @param {String} [type] What type to search for, can be `ace`, `name` or `extension`
    * @returns {Object}
    */
@@ -31,6 +32,19 @@ class Methods {
     return languages.find(lang => {
       if (type) return lang[type.toLowerCase()].toLowerCase() === search.toLowerCase();
       else return [lang.ace, lang.name.toLowerCase(), lang.extension].includes(search.toLowerCase());
+    });
+  }
+
+  /**
+   * Find a theme by search
+   * @param {String} search The search query
+   * @param {String} [type] What type to search for, can be `ace` or `name`
+   * @returns {Object}
+   */
+  static findTheme(search, type) {
+    return themes.find(theme => {
+      if (type) return theme[type.toLowerCase()].toLowerCase() === search.toLowerCase();
+      else return [theme.ace, theme.name.toLowerCase()].includes(search.toLowerCase());
     });
   }
 }
