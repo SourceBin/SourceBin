@@ -41,7 +41,7 @@ function Bin(options) {
     if (this.isDisabled('Save')) return;
     this.disableSave();
     editor.setReadOnly(true);
-    LanguageSelector.show(); // TODO: Display linkbox after select
+    languageSelector.show(); // TODO: Display linkbox after select
     return _request('post', '/', editor.getValue())
       .then(response => {
         if (response) key = response.key;

@@ -26,9 +26,10 @@ class Methods {
    * Find a language by search
    * @param {String} search The search query
    * @param {String} [type] What type to search for, can be `ace`, `name` or `extension`
-   * @returns {Object}
+   * @returns {?Object}
    */
   static findLanguage(search, type) {
+    if (!search) return null;
     return languages.find(lang => {
       if (type) return lang[type.toLowerCase()].toLowerCase() === search.toLowerCase();
       else return [lang.ace, lang.name.toLowerCase(), lang.extension].includes(search.toLowerCase());
