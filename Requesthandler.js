@@ -46,18 +46,15 @@ class Requesthandler {
 
   constructor(model) {
     this.db = new Database(model);
-
     this.fs = require('fs');
     // this.html = this.fs.readFileSync('./html/index.html').toString();
     this.languages = require('./json/languages.json');
     this.themes = require('./json/themes.json');
-
     const { Methods, Converter } = require('./utils');
     this.Converter = new Converter({
-      languages: `[${this.languages.map(lang => `'${lang.name}'`)}]`,
-      themes: `[${this.themes.map(theme => `'${theme.name}'`)}]`
+      languages: `[${Object.keys(this.languages).map(lang => `"${lang}"`)}]`,
+      themes: `[${this.themes.map(theme => `"${theme.name}"`)}]`
     });
-
     this.Methods = Methods;
   }
 
@@ -93,7 +90,7 @@ class Requesthandler {
         key: key ? `'${key}'` : null,
         language: JSON.stringify(language),
         allowSave: 'false',
-        color: key ? key.substring(0, 6) : null
+        color: language && language.color ? language.color : null
       }));
     });
   }

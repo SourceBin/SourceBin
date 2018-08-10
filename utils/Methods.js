@@ -18,21 +18,25 @@ class Methods {
    * @returns {Object}
    */
   static stripPath(path) {
-    const match = /([a-f0-9]{8})\.?([a-zA-Z0-9]+)?/.exec(path.split('/')[0]) || [];
+    const match = /([a-f0-9]{8})(\.[a-zA-Z0-9]+)?/.exec(path.split('/')[0]) || [];
     return { key: match[1], extension: match[2] };
   }
 
   /**
    * Find a language by search
    * @param {String} search The search query
-   * @param {String} [type] What type to search for, can be `ace`, `name` or `extension`
+   * @param {String} type What type to search for, must be `name` or `extension`
    * @returns {?Object}
    */
   static findLanguage(search, type) {
     if (!search) return null;
-    return languages.find(lang => {
-      if (type) return lang[type.toLowerCase()].toLowerCase() === search.toLowerCase();
-      else return [lang.ace, lang.name.toLowerCase(), lang.extension].includes(search.toLowerCase());
+    type = type.toLowerCase();
+    if (type === 'name') return Object.values(languages).find(language => {
+      return language.name.toLowerCase() === search.toLowerCase();
+    });
+    if (type === 'extension') return Object.values(languages).find(language => {
+      if (!language.extensions) return null;
+      return language.extensions.includes(search.toLowerCase());
     });
   }
 

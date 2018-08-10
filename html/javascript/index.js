@@ -19,7 +19,7 @@ function Bin(options) {
     let url = window.location.origin;
     if (key) {
       url += '/' + key;
-      if (language) url += '.' + language.extension;
+      if (language) url += language.extensions[0];
     }
     return window.history.pushState(null, null, url);
   };
@@ -27,7 +27,7 @@ function Bin(options) {
     if (lang) language = lang;
     if (!language) return;
     document.getElementById('lang').innerHTML = `Language - ${language.name}`;
-    return editor.session.setMode(`ace/mode/${language.ace}`);
+    return editor.session.setMode(`ace/mode/${language.ace_mode}`);
   };
   this.setTheme = (theme = {}) => {
     if (!theme.ace || !theme.name) theme = { ace: localStorage.getItem('theme-ace'), name: localStorage.getItem('theme-name') };
