@@ -30,10 +30,9 @@ function Bin(options) {
     return editor.session.setMode(`ace/mode/${language.ace_mode}`);
   };
   this.setTheme = (theme = {}) => {
-    if (!theme.ace || !theme.name) theme = { ace: localStorage.getItem('theme-ace'), name: localStorage.getItem('theme-name') };
+    if (!theme.ace || !theme.name) theme = JSON.parse(localStorage.getItem('theme')) || {};
     if (!theme.ace || !theme.name) theme = { ace: 'material', name: 'Material' };
-    localStorage.setItem('theme-ace', theme.ace);
-    localStorage.setItem('theme-name', theme.name);
+    localStorage.setItem('theme', JSON.stringify(theme));
     document.getElementById('theme').innerHTML = `Theme - ${theme.name}`;
     return editor.setTheme(`ace/theme/${theme.ace}`);
   };
