@@ -97,15 +97,18 @@ class Requesthandler {
 
   handlePost(res, data) {
     const code = data.buffer;
-    if (code.length > 100000) {
-      res.writeHead(401, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'Code may not be more than 100.000 characters long!' }));
-    }
-    const key = this.Methods.generateKey();
-    if (typeof code !== 'string' || !code.length) {
+    if (typeof code !== 'string') {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ error: 'Invalid code type, must be a string!' }));
+    } else if (!code.length) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Can\'t save an empty string' }));
+    } else if (code.length > 100000) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Code may not be more than 100.000 characters long!' }));
     }
+
+    const key = this.Methods.generateKey();
     const model = this.db.createModel({ key, code });
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify({ key }));

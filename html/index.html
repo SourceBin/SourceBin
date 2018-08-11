@@ -16,122 +16,10 @@
   <title>SourceBin | Free Code Sharing!</title>
 
   <!-- CSS -->
-  <style>
-    :root {
-      --nav-size: 20px;
-      --border: 1px solid #23272A;
-      --background: #2C2F33;
-      --color: #d7dae0;
-    }
-
-    body,
-    html {
-      margin: 0;
-      padding: 0;
-      background-color: #282a2e;
-      color: var(--color);
-    }
-
-    #linkbox {
-      z-index: 10;
-      position: absolute;
-      width: 100vw;
-      height: 100vh;
-
-      display: none;
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    #linkbox #content {
-      width: 500px;
-      height: 200px;
-      background-color: var(--background);
-      border: var(--border);
-      margin: calc(50vh - 102px) calc(50vw - 252px);
-      font-family: 'Raleway:Bold', sans-serif;
-      border-radius: 10px;
-    }
-
-    #linkbox #content h1 {
-      margin: 0;
-      padding: 40px 0;
-      text-align: center;
-      user-select: none;
-      cursor: default;
-    }
-
-    #linkbox #content textarea {
-      border: var(--border);
-      outline: none;
-      resize: none;
-      display: block;
-      margin: 0 auto;
-      width: 400px;
-      height: 30px;
-      line-height: 30px;
-      text-align: center;
-      color: var(--background);
-      border-radius: 10px;
-    }
-
-    nav {
-      margin: 0;
-      padding: 0;
-
-      width: 100vw;
-      height: var(--nav-size);
-
-      line-height: var(--nav-size);
-      font-size: calc(var(--nav-size) * 0.65);
-      font-family: 'Raleway', sans-serif;
-      color: #0D0D0D;
-      background-color: #C0C0C0;
-
-      display: flex;
-      flex-direction: row;
-    }
-
-    nav ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    nav ul li.box {
-      float: left;
-      display: block;
-      padding: 0 15px;
-      cursor: pointer;
-      user-select: none;
-      transition-duration: 0.2s;
-    }
-
-    nav ul li.box:hover {
-      background-color: #A7A7A7;
-    }
-
-    nav ul li.box.disabled {
-      color: #262626;
-      cursor: not-allowed;
-    }
-
-    nav ul li.box.disabled:hover {
-      background-color: #B4B4B4;
-    }
-
-    #editor {
-      display: none;
-      margin: 0;
-      padding: 0;
-      position: relative;
-      width: 100vw;
-      height: calc(100vh - var(--nav-size));
-    }
-  </style>
-
+  <link rel="stylesheet" href="./bin/css/master.css">
   <link rel="stylesheet" href="./bin/css/selector.css">
+  <link rel="stylesheet" href="./bin/css/popup.css">
+
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:Regular,Bold">
 </head>
 
@@ -158,6 +46,7 @@
   <script src="./bin/editor/ace.js" type="text/javascript" charset="utf-8"></script>
   <script src="./bin/javascript/index.js" type="text/javascript" charset="utf-8"></script>
   <script src="./bin/javascript/selector.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./bin/javascript/popup.js" type="text/javascript" charset="utf-8"></script>
   <script>
     const key = <% key=undefined %>;
     const language = <% language=undefined %>;
@@ -231,8 +120,12 @@
       return new Promise(resolve => {
         const xhttp = new XMLHttpRequest();
         xhttp.addEventListener('readystatechange', () => {
-          if (xhttp.readyState === 4 && xhttp.status === 200) {
-            resolve(JSON.parse(xhttp.response));
+          if (xhttp.readyState !== 4) return;
+          const response = JSON.parse(xhttp.response);
+          if (xhttp.status === 200) resolve(response);
+          else {
+            const error = response.error ? response.error : response;
+            return new Popup(`(⊙.☉)7 ${error}`, null, null, true, 10000);
           }
         });
         xhttp.open(method.toUpperCase(), url, true);
