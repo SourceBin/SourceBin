@@ -39,13 +39,13 @@ function Bin(options) {
   };
   this.save = () => {
     if (this.isDisabled('Save')) return;
-    this.disableSave();
-    editor.setReadOnly(true);
-    languageSelector.show(); // TODO: Display linkbox after select
     return _request('post', '/', editor.getValue())
       .then(response => {
         if (response) key = response.key;
-        return this.setURL();
+        this.setURL();
+        this.disableSave();
+        editor.setReadOnly(true);
+        languageSelector.show(); // TODO: Display linkbox after select
       });
   };
   this.disableSave = () => {
