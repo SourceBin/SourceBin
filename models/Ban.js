@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
 const Model = new mongoose.Schema({
-  key: String,
-  code: String,
+  ip: String,
   created: { type: Date, default: new Date() },
 });
-module.exports = mongoose.model('code', Model);
+module.exports = mongoose.model('ban', Model);

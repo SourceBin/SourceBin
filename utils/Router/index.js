@@ -16,16 +16,19 @@ class Router {
     this.routes = new Map();
 
     for (const method of methods) {
-      this[method] = function(path, callback) {
+      this[method] = function(path, ...callbacks) {
         if (!path) throw new Error('path required');
         if (typeof path !== 'string' && !(path instanceof RegExp)) {
           throw new Error('path must be a string or RegExp');
         }
         if (typeof path === 'string') path = path.replace(/^\/+|\/+$/g, '');
-        if (typeof callback !== 'function') throw new Error('callback function required');
+        if (!callbacks) throw new Error('callback function required');
+        for (const callback of callbacks) {
+          if (typeof callback !== 'function') throw new Error('callback must be a function');
+        }
 
         const routes = this.routes.get(method) || [];
-        routes.push({ path, callback });
+        routes.push({ path, callbacks });
         return this.routes.set(method, routes);
       }
     }
@@ -83,7 +86,14 @@ class Router {
     req.on('data', data => buffer += decoder.write(data));
     req.on('end', () => {
       buffer += decoder.end();
-      return route.callback(res, { ip, method, path, query, headers, buffer, matches });
+      const data = { ip, method, path, query, headers, buffer, matches };
+      let callback = 0;
+
+      function next() {
+        if (callback >= route.callbacks.length) return;
+        route.callbacks[callback++](res, data, next);
+      }
+      next();
     });
   }
 
@@ -103,19 +113,25 @@ class Router {
 module.exports = Router;
 
 // const router = new Router();
+// const RateLimiter = require('../RateLimiter.js');
+// const limiter = new RateLimiter(5, 5000);
 //
 // router.validateIp((req, res, ip) => {
 //   if (!/^(([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])(\.(?!$)|$)){4}$/.test(ip) && ip !== '::1') {
-//     return res.json({ error: 'Your IP doesn\'t look like a real IP' });
+//     return res.json(400, { error: 'Your IP doesn\'t look like a real IP' });
 //   }
 // });
 //
-// router.get('static', (res, data) => {
-//   return res.json(data);
+// router.get('static', limiter.middleware, (res, data, next) => {
+//   res.setHeader('test', true);
+//   next();
+// }, (res, data, next) => {
+//   res.json(200, data);
+//   next();
 // });
 //
 // router.get(/^([a-f0-9]{8})(\.[a-zA-Z0-9]+)?$/, (res, data) => {
-//   return res.json(data);
+//   return res.json(200, data);
 // });
 //
 // router.listen(3000, () => console.log('HTTP server listening on port 3000'));

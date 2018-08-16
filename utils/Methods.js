@@ -10,17 +10,7 @@ class Methods {
    * @returns {String}
    */
   static generateKey() {
-    return crypto.randomBytes(4).toString('hex');
-  }
-
-  /**
-   * Strip a path to get the key and extension out of it
-   * @param {String} path The path to strip
-   * @returns {Object}
-   */
-  static stripPath(path) {
-    const match = /([a-f0-9]{8})(\.[a-zA-Z0-9]+)?/.exec(path.split('/')[0]) || [];
-    return { key: match[1], extension: match[2] };
+    return crypto.randomBytes(5).toString('hex');
   }
 
   /**

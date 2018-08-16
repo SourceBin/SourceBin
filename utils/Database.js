@@ -2,7 +2,7 @@ const { promisify } = require('./Methods.js');
 
 class Database {
   constructor(model) {
-    if (!model) model = require('../model.js');
+    if (!model) throw new Error('model is required');
     this.model = model;
 
     /**
@@ -21,11 +21,11 @@ class Database {
   }
 
   /**
-   * Create a new model
-   * @param {Object} data The data to pass into the model
+   * Create a new document
+   * @param {Object} data The data to pass into the document
    * @returns {Object}
    */
-  createModel(data) {
+  createDocument(data) {
     const model = new this.model(data);
     return model.save();
   }
