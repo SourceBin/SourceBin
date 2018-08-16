@@ -38,7 +38,7 @@ function Bin(options) {
   };
   this.save = () => {
     if (this.isDisabled('Save')) return;
-    return _request('post', '/', editor.getValue())
+    return _request('post', '/bin', editor.getValue())
       .then(response => {
         if (response) key = response.key;
         this.setURL();

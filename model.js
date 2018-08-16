@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const CodeModel = new mongoose.Schema({
+const Model = new mongoose.Schema({
   key: String,
   code: String,
   created: { type: Date, default: new Date() },
 });
-module.exports = mongoose.model('code', CodeModel);
+module.exports = mongoose.model('code', Model);

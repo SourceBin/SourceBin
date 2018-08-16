@@ -1,160 +1,75 @@
-function promisify(func) {
-  return (...args) => {
-    return new Promise((resolve, reject) => {
-      func(...args, (err, ...params) => {
-        if (err) reject(err);
-        else resolve(...params);
-      })
-    });
-  }
-}
+const fs = require('fs');
+const { Converter, Database, Methods } = require('./utils');
 
-class Database {
-  constructor(model) {
-    if (!model) model = require('./model.js');
-    this.model = model;
+const languages = require('./json/languages.json');
+const themes = require('./json/themes.json');
+const converter = new Converter({
+  languages: `[${Object.keys(languages).map(lang => `"${lang}"`)}]`,
+  themes: `[${themes.map(theme => `"${theme.name}"`)}]`
+});
+const convert = converter.convert.bind(converter);
 
-    /**
-     * Find all database entries with this query
-     * @param {Object} query The query to look for
-     * @returns {Promise<Array<Object>>}
-     */
-    this.find = promisify(model.find.bind(model));
+const db = new Database();
 
-    /**
-     * Find one database entry matching the query
-     * @param {Object} query The query to look for
-     * @returns {Promise<Object>}
-     */
-    this.findOne = promisify(model.findOne.bind(model));
-  }
+function init(router) {
+  const homepage = fs.readFileSync('./html/index.html').toString();
 
-  /**
-   * Create a new model
-   * @param {Object} data The data to pass into the model
-   * @returns {Object} The model
-   */
-  createModel(data) {
-    const model = new this.model(data);
-    model.save();
-    return model;
-  }
-}
+  router.get('/', (res, data) => {
+    return res.html(200, convert(homepage));
+  });
 
-
-class Requesthandler {
-
-  constructor(model) {
-    this.db = new Database(model);
-    this.fs = require('fs');
-    // this.html = this.fs.readFileSync('./html/index.html').toString();
-    this.languages = require('./json/languages.json');
-    this.themes = require('./json/themes.json');
-    const { Methods, Converter } = require('./utils');
-    this.Converter = new Converter({
-      languages: `[${Object.keys(this.languages).map(lang => `"${lang}"`)}]`,
-      themes: `[${this.themes.map(theme => `"${theme.name}"`)}]`
-    });
-    this.Methods = Methods;
-  }
-
-  // NOTE: temporary testing getter
-  get html() {
-    return this.fs.readFileSync('./html/index.html').toString();
-  }
-
-  handleGet(res, data) {
-    const { key, extension } = this.Methods.stripPath(data.path);
-    if (!key) {
-      if (data.javascript || data.css) {
-        const path = `./html${data.path.replace('bin', '')}`;
-        if (!this.fs.existsSync(path)) {
-          res.writeHead(404, { 'Content-Type': 'application/json' });
-          return res.end(JSON.stringify({ error: 'No file found' }));
-        }
-        const file = this.fs.readFileSync(path);
-        const type = data.javascript ? 'application/javascript' : 'text/css';
-        res.writeHead(200, { 'Content-Type': type });
-        return res.end(file);
-      }
-      return this.homepage(res, data);
-    }
-
-    this.db.findOne({ key }).then(data => {
-      if (!data) return this.homepage(res, data);
-      const language = this.Methods.findLanguage(extension, 'extension');
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      return res.end(this.Converter.convert(this.html, {
-        code: data.code,
+  router.get(/^([a-f0-9]{8})(\.[a-zA-Z0-9]+)?$/, (res, data) => {
+    db.findOne({ key: data.matches[1] }).then(bin => {
+      if (!bin) return res.html(200, convert(homepage));
+      const language = Methods.findLanguage(data.matches[2], 'extension');
+      return res.html(200, convert(homepage, {
+        code: bin.code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
         readOnly: true,
-        key: key ? `'${key}'` : null,
+        key: data.matches[1] ? `'${data.matches[1]}'` : null,
         language: JSON.stringify(language),
         allowSave: 'false',
         color: language && language.color ? language.color : null
       }));
     });
-  }
+  });
 
-  handlePost(res, data) {
-    const code = data.buffer;
-    if (typeof code !== 'string') {
-      res.writeHead(400, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'Invalid code type, must be a string!' }));
-    } else if (!code.length) {
-      res.writeHead(400, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'Can\'t save an empty string' }));
-    } else if (code.length > 100000) {
-      res.writeHead(400, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'Code may not be more than 100.000 characters long!' }));
-    }
+  router.post('/bin', (res, { buffer }) => {
+    if (typeof buffer !== 'string') return res.json(400, { error: 'Expected a string' });
+    else if (!buffer.length) return res.json(400, { error: 'Can\'t save an empty string' });
+    else if (buffer.length > 100000) return res.json(400, { error: 'String is too long, max 100.000' });
+    const key = Methods.generateKey();
+    db.createModel({ key, code: buffer });
+    return res.json(200, { key });
+  });
 
-    const key = this.Methods.generateKey();
-    const model = this.db.createModel({ key, code });
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    return res.end(JSON.stringify({ key }));
-  }
-
-  handleLanguage(res, data) {
-    const { query: { search } } = data;
-    if (!search) {
-      res.writeHead(400, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'Provide a search' }));
-    }
-    const language = this.Methods.findLanguage(search, 'name');
-    if (!language) {
-      res.writeHead(404, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'Didn\'t find a language' }));
-    }
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    return res.end(JSON.stringify(language));
-  }
-
-  handleTheme(res, data) {
-    const { query: { search } } = data;
-    if (!search) {
-      res.writeHead(400, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'Provide a search' }));
-    }
-    const theme = this.Methods.findTheme(search, 'name');
-    if (!theme) {
-      res.writeHead(404, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'Didn\'t find a theme' }));
-    }
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    return res.end(JSON.stringify(theme));
-  }
-
-  handleList(res, data) {
-    this.db.find().then(data => {
-      const keys = data.map(item => item.key);
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify(keys));
+  router.get(/^assets\/(.+?\.(js|css))$/, (res, data) => {
+    fs.readFile(`./html/${data.matches[1]}`, (err, content) => {
+      if (err) return res.json(404, { error: 'File not found' });
+      else return res[data.matches[2]](200, content);
     });
-  }
+  });
 
-  homepage(res, data) {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    return res.end(this.Converter.convert(this.html));
-  }
+  router.get('/language', (res, data) => {
+    const { query: { search } } = data;
+    if (!search) return res.json(400, { error: 'Expected a search' });
+    const language = Methods.findLanguage(search, 'name');
+    if (!language) return res.json(404, { error: 'No language found' });
+    return res.json(200, language);
+  });
+
+  router.get('/theme', (res, data) => {
+    const { query: { search } } = data;
+    if (!search) return res.json(400, { error: 'Expected a search' });
+    const theme = Methods.findTheme(search, 'name');
+    if (!theme) return res.json(404, { error: 'No theme found' });
+    return res.json(200, theme);
+  });
+
+  router.get('/list', (res, data) => {
+    db.find().then(bins => {
+      const keys = bins.map(bin => bin.key);
+      return res.json(200, keys);
+    });
+  });
 }
-module.exports = Requesthandler;
+module.exports = { init };

@@ -11,9 +11,6 @@ class Converter {
       let replacement = variables[match[1]];
       if (!replacement) replacement = match[3];
       if (!replacement) replacement = this.variables[match[1]];
-      if (typeof replacement === 'string' && replacement.match(/[&<>]/)) {
-        replacement = replacement.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt');
-      }
       const string = new RegExp(match[0], 'g');
       text = text.replace(match[0], replacement);
     }

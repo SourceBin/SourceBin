@@ -3039,7 +3039,7 @@
       ".kts"
     ],
     "tm_scope": "source.kotlin",
-    "ace_mode": "text",
+    "ace_mode": "kotlin",
     "codemirror_mode": "clike",
     "codemirror_mime_type": "text/x-kotlin",
     "language_id": 189,
