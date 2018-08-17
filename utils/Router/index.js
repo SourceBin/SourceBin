@@ -43,7 +43,7 @@ class Router {
    * @example
    * Router.validateIp((req, res, ip) => {
    *   if (blockedIps.includes(ip)) {
-   *     return res.json({ error: 'Your IP is banned!' });
+   *     return res.json(403, { error: 'Your IP is banned!' });
    *   }
    * });
    */
@@ -51,13 +51,13 @@ class Router {
     this.ipValidator = callback;
   }
 
-  server($this, req, res) {
+  async server($this, req, res) {
     const ip = (req.headers['x-forwarded-for'] || '').split(',').shift() ||
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
       req.connection.socket.remoteAddress;
     if (this.ipValidator) {
-      this.ipValidator(req, res, ip);
+      await this.ipValidator(req, res, ip);
       if (res.finished) return;
     }
 
@@ -88,6 +88,7 @@ class Router {
       buffer += decoder.end();
       const data = { ip, method, path, query, headers, buffer, matches };
       let callback = 0;
+      console.log(`${path ? '' : '\n'}${ip} | ${method} | ${path || '/'} ${query ? `| ${JSON.stringify(query)}` : ''}`);
 
       function next() {
         if (callback >= route.callbacks.length) return;

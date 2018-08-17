@@ -12,29 +12,34 @@ const convert = converter.convert.bind(converter);
 const bins = new Database(require('./models/Bin.js'));
 const bans = new Database(require('./models/Ban.js'));
 
-let blacklist;
-bans.find().then(bans => {
-  blacklist = bans.map(ban => ban.ip);
-});
-
 const { RateLimiter } = require('./utils');
 const limiters = {};
-limiters.mainLimiter = new RateLimiter(5, 1000 * 60 * 60, ip => {
-  bans.createDocument({ ip });
-  blacklist.push(ip);
+const banned = new Set();
+limiters.mainLimiter = new RateLimiter(100, 1000 * 60 * 60, async ip => {
+  if (banned.has(ip)) return;
+  else {
+    banned.add(ip);
+    await bans.createDocument({ ip });
+    banned.delete(ip);
+  }
 });
 limiters.main = key => limiters.mainLimiter.rateLimit(key);
 limiters.loadPage = new RateLimiter(450, 1000 * 60 * 15, limiters.main);
 limiters.createBin = new RateLimiter(15, 1000 * 60 * 15, limiters.main);
-limiters.loadAssets = new RateLimiter(1200, 1000 * 60 * 15, limiters.main);
+limiters.loadAssets = new RateLimiter(10000, 1000 * 60 * 15, limiters.main);
 limiters.languageTheme = new RateLimiter(900, 1000 * 60 * 15, limiters.main);
 limiters.list = new RateLimiter(200, 1000 * 60 * 15, limiters.main);
 
 function init(router) {
   const homepage = fs.readFileSync('./html/index.html').toString();
 
-  router.validateIp((req, res, ip) => {
-    if (blacklist.includes(ip)) return res.json(403, { error: 'IP address rejected' });
+  router.validateIp(async (req, res, ip) => {
+    try {
+      const ban = await bans.findOne({ ip });
+      if (ban) return res.json(403, { error: 'IP adress rejected' });
+    } catch (err) {
+      return res.json(500, { error: 'Unknown error' });
+    };
   });
 
   router.get('/', limiters.loadPage.middleware, (res, data) => {
@@ -65,7 +70,7 @@ function init(router) {
     return res.json(200, { key });
   });
 
-  router.get(/^assets\/(.+?\.(js|css))$/, limiters.createBin.middleware, (res, data) => {
+  router.get(/^assets\/(.+?\.(js|css))$/, limiters.loadAssets.middleware, (res, data) => {
     fs.readFile(`./html/${data.matches[1]}`, (err, content) => {
       if (err) return res.json(404, { error: 'File not found' });
       else return res[data.matches[2]](200, content);

@@ -23,11 +23,12 @@ class Database {
   /**
    * Create a new document
    * @param {Object} data The data to pass into the document
-   * @returns {Object}
+   * @returns {Promise<Object>s}
    */
-  createDocument(data) {
+  async createDocument(data) {
     const model = new this.model(data);
-    return model.save();
+    await model.save();
+    return model;
   }
 }
 module.exports = Database;
