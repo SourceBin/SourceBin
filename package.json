@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "mongoose": "^5.2.3"
+    "mongoose": "^5.2.9"
   },
   "scripts": {
     "start": "node index.js",
