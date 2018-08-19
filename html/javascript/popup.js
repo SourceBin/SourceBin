@@ -18,3 +18,24 @@ function Popup(text, textColor, backgroundColor, hideOnClick, duration) {
   this.show();
   if (duration) setTimeout(this.remove, duration);
 }
+
+(() => {
+  const style = document.createElement('style');
+  style.innerHTML = `.popup {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    z-index: 100;
+    width: auto;
+    height: auto;
+    max-width: 500px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: #23272A;
+    background-color: #FF5050;
+    user-select: none;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+  }`;
+  document.head.appendChild(style);
+})();

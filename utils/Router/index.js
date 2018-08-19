@@ -64,8 +64,7 @@ class Router {
     const method = req.method.toLowerCase();
     const routes = $this.routes.get(method);
     if (!routes) {
-      res.writeHead(405, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: `The request method ${method.toUpperCase()} is not accepted` }));
+      return res.json(405, { error: `The request method ${method.toUpperCase()} is not accepted` });
     }
 
     const parsedUrl = url.parse(req.url, true);
@@ -76,8 +75,7 @@ class Router {
       else return matches = path.match(routePath);
     });
     if (!route) {
-      res.writeHead(404, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: `The requested URL /${path} was not found` }));
+      return res.json(404, { error: `The requested URL /${path} was not found` });
     }
     const query = parsedUrl.query;
     const headers = req.headers;

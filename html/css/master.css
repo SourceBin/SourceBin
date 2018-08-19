@@ -14,7 +14,7 @@ html {
 }
 
 #linkbox {
-  z-index: 10;
+  z-index: 2;
   position: absolute;
   width: 100vw;
   height: 100vh;

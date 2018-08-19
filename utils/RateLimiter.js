@@ -32,7 +32,7 @@ class RateLimiter {
 
     setInterval(() => {
       for (const [key, dates] of this.hits) {
-        const filtered = dates.filter(date => data < new Date());
+        const filtered = dates.filter(date => date < new Date());
         if (filtered) this.hits.set(key, filtered);
         else this.hits.delete(key);
       }

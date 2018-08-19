@@ -21,6 +21,7 @@ function Bin(options) {
       url += '/' + key;
       if (language) url += language.extensions[0];
     }
+    this.LinkBox.set(url);
     return window.history.pushState(null, null, url);
   };
   this.setLanguage = lang => {
@@ -44,7 +45,8 @@ function Bin(options) {
         this.setURL();
         this.disableSave();
         editor.setReadOnly(true);
-        languageSelector.show(); // TODO: Display linkbox after select
+        this.LinkBox.show();
+        if (!language) languageSelector.show();
       });
   };
   this.disableSave = () => {
@@ -63,12 +65,9 @@ function Bin(options) {
 function LinkBox(bin) {
   const box = document.getElementById('linkbox');
   const textarea = document.getElementById('link');
+  textarea.addEventListener('click', event => textarea.select());
   this.set = string => textarea.innerHTML = string;
-  this.show = () => {
-    this.set(window.location.href);
-    box.setAttribute('style', 'display:inherit');
-    return setTimeout(() => textarea.select(), 100);
-  };
+  this.show = () => box.setAttribute('style', 'display:inherit');
   this.hide = () => {
     box.setAttribute('style', 'display:none');
     return bin.focus();
