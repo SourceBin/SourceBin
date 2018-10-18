@@ -1,11 +1,15 @@
 function Selector(title, content, callback) {
+  let isShown = false;
+
   this.show = () => {
+    isShown = true;
     selector.setAttribute('style', 'display:inherit');
     fill();
     return search.focus();
   };
 
   this.hide = () => {
+    isShown = false;
     selector.setAttribute('style', 'display:none');
     return bin.focus();
   };
@@ -55,6 +59,14 @@ function Selector(title, content, callback) {
   container.appendChild(options);
   selector.appendChild(container);
   document.body.appendChild(selector);
+
+  document.addEventListener('keydown', event => {
+    if (event.keyCode === 13 && isShown) {
+      const element = options.firstElementChild;
+      if (!element) return;
+      return element.click();
+    }
+  });
 }
 
 (() => {

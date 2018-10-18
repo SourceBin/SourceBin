@@ -85,8 +85,14 @@ class Router {
     req.on('end', () => {
       buffer += decoder.end();
       const data = { ip, method, path, query, headers, buffer, matches };
+
+      console.log(`${ip.padEnd(35)} | ` +
+        `${method.padEnd(4)} | ` +
+        `${(path || '/').padEnd(40)} | ` +
+        `${query ? JSON.stringify(query) : '{}'}`
+      );
+
       let callback = 0;
-      console.log(`${path ? '' : '\n'}${ip} | ${method} | ${path || '/'} ${query ? `| ${JSON.stringify(query)}` : ''}`);
 
       function next() {
         if (callback >= route.callbacks.length) return;
@@ -110,27 +116,3 @@ class Router {
 
 }
 module.exports = Router;
-
-// const router = new Router();
-// const RateLimiter = require('../RateLimiter.js');
-// const limiter = new RateLimiter(5, 5000);
-//
-// router.validateIp((req, res, ip) => {
-//   if (!/^(([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])(\.(?!$)|$)){4}$/.test(ip) && ip !== '::1') {
-//     return res.json(400, { error: 'Your IP doesn\'t look like a real IP' });
-//   }
-// });
-//
-// router.get('static', limiter.middleware, (res, data, next) => {
-//   res.setHeader('test', true);
-//   next();
-// }, (res, data, next) => {
-//   res.json(200, data);
-//   next();
-// });
-//
-// router.get(/^([a-f0-9]{8})(\.[a-zA-Z0-9]+)?$/, (res, data) => {
-//   return res.json(200, data);
-// });
-//
-// router.listen(3000, () => console.log('HTTP server listening on port 3000'));
