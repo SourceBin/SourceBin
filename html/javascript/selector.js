@@ -4,10 +4,12 @@ function Selector(title, content, callback) {
     fill();
     return search.focus();
   };
+
   this.hide = () => {
     selector.setAttribute('style', 'display:none');
     return bin.focus();
   };
+
   const fill = () => {
     options.innerHTML = '';
     const items = content.filter(i => i.toLowerCase().includes(search.value.toLowerCase()));

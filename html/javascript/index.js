@@ -4,17 +4,15 @@ function Bin(options) {
 
   let key = options.key;
   let language = options.language;
-  const readOnly = options.readOnly;
 
   const editor = ace.edit('editor');
   editor.setTheme('ace/theme/material');
-  editor.setReadOnly(readOnly);
   editor.setFontSize(15);
   if (editor.getValue() === 'Loading...') editor.setValue('', -1);
   this.LinkBox = new LinkBox(this);
 
   this.focus = () => editor.focus();
-  this.setReadOnly = boolean => editor.setReadOnly(boolean);
+
   this.setURL = () => {
     let url = window.location.origin;
     if (key) {
@@ -24,12 +22,14 @@ function Bin(options) {
     this.LinkBox.set(url);
     return window.history.pushState(null, null, url);
   };
+
   this.setLanguage = lang => {
     if (lang) language = lang;
     if (!language) return;
     document.getElementById('lang').innerHTML = `Language - ${language.name}`;
     return editor.session.setMode(`ace/mode/${language.ace_mode}`);
   };
+
   this.setTheme = (theme = {}) => {
     if (!theme.ace || !theme.name) theme = JSON.parse(localStorage.getItem('theme')) || {};
     if (!theme.ace || !theme.name) theme = { ace: 'material', name: 'Material' };
@@ -37,18 +37,21 @@ function Bin(options) {
     document.getElementById('theme').innerHTML = `Theme - ${theme.name}`;
     return editor.setTheme(`ace/theme/${theme.ace}`);
   };
+
   this.save = () => {
-    if (this.isDisabled('Save')) return;
+    if (this.isDisabled('Save')) {
+      return new Popup('You can not re-save already saved bins!', null, null, true, 10000);
+    }
     return _request('post', '/bin', editor.getValue())
       .then(response => {
         if (response) key = response.key;
         this.setURL();
         this.disableSave();
-        editor.setReadOnly(true);
         this.LinkBox.show();
         if (!language) languageSelector.show();
       });
   };
+
   this.disableSave = () => {
     const save = document.getElementById('save');
     const className = save.className;
@@ -59,6 +62,7 @@ function Bin(options) {
   this.setURL();
   this.setLanguage();
   this.setTheme();
+
   if (!options.allowSave) this.disableSave();
 }
 

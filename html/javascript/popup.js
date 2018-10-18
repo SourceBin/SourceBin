@@ -2,9 +2,11 @@ function Popup(text, textColor, backgroundColor, hideOnClick, duration) {
   this.show = () => {
     return popup.style.display = 'block';
   };
+
   this.hide = () => {
     return popup.style.display = 'none';
   };
+
   this.remove = () => {
     return popup.parentElement.removeChild(popup);
   };

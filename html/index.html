@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
 
   <meta name="title" content="SourceBin">
-  <meta name="description" content="Free text/code sharing site supporting 150+ different languages!">
+  <meta name="description" content="Free text/code sharing site supporting 450+ different languages!">
 
   <meta name="og:title" content="SourceBin">
-  <meta name="og:description" content="Free text/code sharing site supporting 150+ different languages!">
+  <meta name="og:description" content="Free text/code sharing site supporting 450+ different languages!">
   <meta name="theme-color" content="<% color=#FF5555 %>">
   <!-- <meta name="og:url" content=""> -->
   <!-- <meta name="og:image" content=""> -->
@@ -31,7 +31,6 @@
   <nav>
     <ul>
       <li class="box click" id="save">Save</li>
-      <li class="box click">Edit</li>
       <li class="box click">New</li>
       <li class="box click" id="lang">Language - None</li>
       <li class="box click" id="theme">Theme - None</li>
@@ -46,8 +45,7 @@
   <script src="./assets/javascript/popup.js" type="text/javascript" charset="utf-8"></script>
   <script>
     const key = <% key=undefined %>;
-    const language = <% language=undefined %>;
-    const readOnly = <% readOnly=false %>;
+    const language = <% language=undefined %> || JSON.parse(localStorage.getItem('language'));
     const allowSave = <% allowSave=true %>;
     const languages = <% languages %>;
     const themes = <% themes %>;
@@ -55,7 +53,6 @@
     const bin = new Bin({
       key,
       language,
-      readOnly,
       allowSave
     });
 
@@ -63,6 +60,7 @@
       const name = event.target.innerHTML;
       return _request('get', `/language?search=${encodeURIComponent(name)}`).then(response => {
         if (!response) return;
+        localStorage.setItem('language', JSON.stringify(response));
         bin.setLanguage(response);
         bin.setURL();
         this.hide();
@@ -93,7 +91,6 @@
         const name = element.innerHTML;
         if (bin.isDisabled(name)) return;
         if (name === 'Save') return bin.save();
-        if (name === 'Edit') return bin.setReadOnly(false);
         if (name === 'New') return window.location.href = origin;
         if (name.startsWith('Language')) return languageSelector.show();
         if (name.startsWith('Theme')) return themeSelector.show();
@@ -107,6 +104,7 @@
         return event.preventDefault();
       } else if (event.keyCode === 27) {
         languageSelector.hide();
+        themeSelector.hide();
         bin.LinkBox.hide();
         return event.preventDefault();
       }
@@ -128,6 +126,7 @@
         xhttp.send(body);
       });
     }
+
   </script>
 </body>
 
