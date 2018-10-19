@@ -8,7 +8,9 @@ function Bin(options) {
   const editor = ace.edit('editor');
   editor.setTheme('ace/theme/material');
   editor.setFontSize(15);
-  if (editor.getValue() === 'Loading...') editor.setValue('', -1);
+  if (editor.getValue() === 'Loading...') {
+    editor.setValue('', -1);
+  }
   this.LinkBox = new LinkBox(this);
 
   this.focus = () => editor.focus();

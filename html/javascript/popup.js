@@ -15,10 +15,15 @@ function Popup(text, textColor, backgroundColor, hideOnClick, duration) {
   popup.setAttribute('class', 'popup');
   popup.setAttribute('style', `background-color: ${backgroundColor}; color: ${textColor}`);
   popup.innerHTML = text;
-  if (hideOnClick) popup.addEventListener('click', this.hide);
+
+  if (hideOnClick) {
+    popup.addEventListener('click', this.hide);
+  }
   document.body.appendChild(popup);
   this.show();
-  if (duration) setTimeout(this.remove, duration);
+  if (duration) {
+    setTimeout(this.remove, duration);
+  }
 }
 
 (() => {

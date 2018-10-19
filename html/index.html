@@ -22,7 +22,7 @@
 
 <body>
   <div id="linkbox">
-    <div id="content">
+    <div>
       <h1>Copy the link to share the bin!</h1>
       <textarea readonly id="link"></textarea>
     </div>
@@ -34,8 +34,10 @@
       <li class="box click">New</li>
       <li class="box click" id="lang">Language - None</li>
       <li class="box click" id="theme">Theme - None</li>
+      <li class="box" style="float:right">SourceBin</li>
     </ul>
   </nav>
+
   <pre id="editor"><% code=Loading... %></pre>
 
   <!-- Scripts -->
@@ -70,7 +72,9 @@
     const themeSelector = new Selector('Select a theme', themes, function(event) {
       const name = event.target.innerHTML;
       return _request('get', `/theme?search=${encodeURIComponent(name)}`).then(response => {
-        if (!response) return;
+        if (!response) {
+          return;
+        }
         bin.setTheme(response);
         this.hide();
       });
@@ -82,13 +86,16 @@
     });
 
     document.getElementById('linkbox').addEventListener('click', event => {
-      if (event.target === document.getElementById('linkbox')) return document.getElementById('linkbox').setAttribute('style', 'display:none');
+      if (event.target === document.getElementById('linkbox')) {
+        return document.getElementById('linkbox').setAttribute('style', 'display:none');
+      }
     });
 
     for (const element of document.getElementsByClassName('click')) {
       element.addEventListener('click', event => {
         const element = event.target;
         const name = element.innerHTML;
+
         if (bin.isDisabled(name)) return;
         if (name === 'Save') return bin.save();
         if (name === 'New') return window.location.href = origin;
