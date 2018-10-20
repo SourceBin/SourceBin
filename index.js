@@ -18,8 +18,7 @@
 
 const { Router } = require('./utils');
 const router = new Router();
-const Requesthandler = require('./Requesthandler.js');
-Requesthandler.init(router);
+require('./requesthandlers')(router);
 
 const mongoose = require('mongoose');
 const { database } = require('./config.json');

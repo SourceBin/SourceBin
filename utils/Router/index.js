@@ -51,7 +51,7 @@ class Router {
     this.ipValidator = callback;
   }
 
-  async server($this, req, res) {
+  async server(req, res) {
     const ip = (req.headers['x-forwarded-for'] || '').split(',').shift() ||
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
@@ -62,7 +62,7 @@ class Router {
     }
 
     const method = req.method.toLowerCase();
-    const routes = $this.routes.get(method);
+    const routes = this.routes.get(method);
     if (!routes) {
       return res.json(405, { error: `The request method ${method.toUpperCase()} is not accepted` });
     }
@@ -110,7 +110,7 @@ class Router {
    */
   listen(port, callback) {
     http.createServer((...params) => {
-      this.server(this, ...params);
+      this.server(...params);
     }).listen(port, callback);
   }
 
