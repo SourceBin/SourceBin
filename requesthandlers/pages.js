@@ -25,7 +25,7 @@ module.exports = (router, limiters, { bins }) => {
       const language = Methods.findLanguage(data.matches[2], 'extension');
 
       return res.html(200, convert(homepage, {
-        code: bin.code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+        code: Methods.escapeHtml(bin.code),
         key: data.matches[1] ? `'${data.matches[1]}'` : null,
         language: JSON.stringify(language),
         allowSave: 'false',

@@ -45,40 +45,6 @@ class Methods {
   }
 
   /**
-   * Compress input to gzip
-   * @param {String|Buffer} input Input to compress
-   * @param {Object} options Options for the compressing algorithm
-   * @returns {Promise<Buffer>}
-   */
-  static gzip(input, options) {
-    if (typeof input !== 'string' && !(input instanceof Buffer)) {
-      throw new Error('input must be a string or buffer');
-    } else return new Promise((resolve, reject) => {
-      zlib.gzip(input, options, (err, result) => {
-        if (err) reject(err);
-        resolve(result);
-      });
-    });
-  }
-
-  /**
-   * Decompress input to gzip
-   * @param {String|Buffer} input Input to decompress
-   * @param {Object} options Options for the decompressing algorithm
-   * @returns {Promise<Buffer>}
-   */
-  static gunzip(input, options) {
-    if (typeof input !== 'string' && !(input instanceof Buffer)) {
-      throw new Error('input must be a string or buffer');
-    } else return new Promise((resolve, reject) => {
-      zlib.gunzip(input, options, (err, result) => {
-        if (err) reject(err);
-        resolve(result);
-      });
-    });
-  }
-
-  /**
    * Promisify a callback function
    * Must be in format `(err, ...data)`
    * @param {Function} fn The function to promisify
@@ -93,6 +59,19 @@ class Methods {
         });
       });
     }
+  }
+
+  /**
+   * Escape any html characters that could cause issues
+   * @param {String} string The string to escape
+   * @returns {String}
+   */
+  static escapeHtml(string) {
+    return string
+      .replace(/&/g, '&amp;')
+      .replace(/\\/g, '&#39;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
 }
 module.exports = Methods;
