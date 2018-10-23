@@ -99,25 +99,25 @@ color: #75715E\
 .ace-material .ace_indent-guide {\
 background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWPQ0FD0ZXBzd/wPAAjVAoxeSgNeAAAAAElFTkSuQmCC) right repeat-y\
 }\
-.ace_keyword.ace_operator {\
+.ace-material .ace_keyword.ace_operator {\
 color: #82AAFF !important\
 }\
-.ace_variable.ace_language{\
+.ace-material .ace_variable.ace_language{\
 color: #F07178 !important\
 }\
-.ace_constant.ace_language {\
+.ace-material .ace_constant.ace_language {\
 color: #F07178 !important\
 }\
-.ace_entity.ace_name.ace_function {\
+.ace-material .ace_entity.ace_name.ace_function {\
 color: #89DDF3 !important\
 }\
-.ace_paren {\
+.ace-material .ace_paren {\
 color: #73d1c8\
 }\
-.ace_storage.ace_type {\
+.ace-material .ace_storage.ace_type {\
 color: #C792EA !important\
 }\
-.ace_identifier {\
+.ace-material .ace_identifier {\
 color: rgba(255,255,255, .9)\
 }";
 
