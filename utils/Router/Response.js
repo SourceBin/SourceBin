@@ -1,4 +1,3 @@
-const { gzip } = require('../Methods.js');
 const { ServerResponse } = require('http');
 
 /**
@@ -46,6 +45,16 @@ ServerResponse.prototype.json = function(statusCode, json, stringify = true) {
   return this.end(stringify ? JSON.stringify(json) : json);
 };
 
+/**
+ * Return a png
+ * @param {Number} statusCode The 3-digit HTTP status code
+ * @param {String|Buffer} image The image to send
+ * @returns {ServerResponse}
+ */
+ServerResponse.prototype.png = function(statusCode, image) {
+  this.writeHead(statusCode, { 'Content-Type': 'image/png' });
+  return this.end(image);
+}
 
 /**
  * Redirect the request to a different url

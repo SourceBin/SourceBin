@@ -3,6 +3,13 @@ const { Methods } = require('../utils');
 
 module.exports = (router, limiters) => {
 
+  router.get('/logo.png', limiters.loadAssets, (res, data) => {
+    fs.readFile('./html/logo.png', (err, content) => {
+      if (err) return res.json(500, { error: 'Unkown error' });
+      return res.png(200, content);
+    });
+  });
+
   router.get(/^assets\/(.+?\.(js|css))$/, limiters.loadAssets, (res, data) => {
     fs.readFile(`./html/${data.matches[1]}`, (err, content) => {
       if (err) return res.json(404, { error: 'File not found' });
