@@ -16,7 +16,7 @@
   <title>SourceBin | Free Code Sharing!</title>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="./assets/css/master.css">
+  <link rel="stylesheet" href="./assets/homepage/css/master.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:Regular,Bold">
 </head>
 
@@ -34,7 +34,9 @@
       <li class="box click">New</li>
       <li class="box click" id="lang">Language - None</li>
       <li class="box click" id="theme">Theme - None</li>
+
       <li class="box" style="float:right">SourceBin</li>
+      <li class="box click" style="float:right">Profile</li>
     </ul>
   </nav>
 
@@ -42,9 +44,9 @@
 
   <!-- Scripts -->
   <script src="./assets/editor/ace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="./assets/javascript/index.js" type="text/javascript" charset="utf-8"></script>
-  <script src="./assets/javascript/selector.js" type="text/javascript" charset="utf-8"></script>
-  <script src="./assets/javascript/popup.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./assets/homepage/javascript/index.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./assets/homepage/javascript/selector.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./assets/homepage/javascript/popup.js" type="text/javascript" charset="utf-8"></script>
   <script>
     const key = <% key=undefined %>;
     const language = <% language=undefined %> || JSON.parse(localStorage.getItem('language'));
@@ -101,6 +103,7 @@
         if (name === 'New') return window.location.href = origin;
         if (name.startsWith('Language')) return languageSelector.show();
         if (name.startsWith('Theme')) return themeSelector.show();
+        if (name === 'Profile') return window.open('/profile', '_self');
       });
     }
 

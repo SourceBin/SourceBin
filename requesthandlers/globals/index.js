@@ -21,6 +21,7 @@ const main = key => mainLimiter.rateLimit(key);
 
 limiters.loadPage = new RateLimiter(500, 1000 * 60 * 15, main);
 limiters.createBin = new RateLimiter(45, 1000 * 60 * 15, main);
+limiters.deleteBin = new RateLimiter(200, 1000 * 60 * 15, main);
 limiters.loadAssets = new RateLimiter(10000, 1000 * 60 * 15, main);
 limiters.languageTheme = new RateLimiter(1500, 1000 * 60 * 15, main);
 limiters.list = new RateLimiter(200, 1000 * 60 * 15, main);

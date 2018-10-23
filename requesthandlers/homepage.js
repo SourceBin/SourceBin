@@ -11,7 +11,7 @@ const converter = new Converter({
 const convert = converter.convert.bind(converter);
 
 module.exports = (router, limiters, { bins }) => {
-  const homepage = fs.readFileSync('./html/index.html').toString();
+  const homepage = fs.readFileSync('./html/homepage/index.html').toString();
 
   // Homepage
   router.get('/', limiters.loadPage, (res, data) => {

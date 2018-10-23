@@ -45,3 +45,15 @@ ServerResponse.prototype.json = function(statusCode, json, stringify = true) {
   this.writeHead(statusCode, { 'Content-Type': 'application/json' });
   return this.end(stringify ? JSON.stringify(json) : json);
 };
+
+
+/**
+ * Redirect the request to a different url
+ * @param  {Number} statusCode The status code to use, recommended `302`
+ * @param  {String} url The url to route to
+ * @returns {ServerResponse}
+ */
+ServerResponse.prototype.redirect = function(statusCode, url) {
+  this.writeHead(302, { Location: url });
+  return this.end();
+};

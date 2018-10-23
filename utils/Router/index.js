@@ -9,6 +9,13 @@ require('./Response.js');
 class Router {
 
   constructor() {
+
+    /**
+     * All global callbacks
+     * @type {Array<Function>}
+     */
+    this.globals = new Array();
+
     /**
      * All the routes for the app
      * @type {Map<String, Array<Object>}
@@ -35,68 +42,98 @@ class Router {
   }
 
   /**
-   * Validate the IP before continuing the request, used to block incoming
+   * Add a global callback that gets executed first for every request
+   * @param {...Function} callbacks The callbacks to add
+   */
+  use(...callbacks) {
+    this.globals.push(...callbacks);
+  }
+
+  /**
+   * Validate the request before continuing, used to block incoming
    * requests from banned IPs
    * @param {Function} callback The callback to execute on every request
    * If the response is completed (`response.end()` has been called) execution
    * will be cancelled
    * @example
-   * Router.validateIp((req, res, ip) => {
-   *   if (blockedIps.includes(ip)) {
+   * Router.validateReq((req, res, data) => {
+   *   if (blockedIps.includes(data.ip)) {
    *     return res.json(403, { error: 'Your IP is banned!' });
    *   }
    * });
    */
-  validateIp(callback) {
+  validateReq(callback) {
     this.ipValidator = callback;
   }
 
-  async server(req, res) {
-    const ip = (req.headers['x-forwarded-for'] || '').split(',').shift() ||
+  async server($this, req, res) {
+    const data = {};
+
+    data.cookies = {};
+    if (req.headers.cookie) {
+      req.headers.cookie.split(';')
+        .map(cookie => cookie.trim().split('='))
+        .forEach(cookie => data.cookies[cookie[0]] = cookie[1]);
+    }
+
+    data.ip = (req.headers['x-forwarded-for'] || '').split(',').shift() ||
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
       req.connection.socket.remoteAddress;
     if (this.ipValidator) {
-      await this.ipValidator(req, res, ip);
+      await this.ipValidator(req, res, data);
       if (res.finished) return;
     }
 
-    const method = req.method.toLowerCase();
-    const routes = this.routes.get(method);
+    data.method = req.method.toLowerCase();
+    const routes = this.routes.get(data.method);
     if (!routes) {
-      return res.json(405, { error: `The request method ${method.toUpperCase()} is not accepted` });
+      return res.json(405, { error: `The request method ${data.method.toUpperCase()} is not accepted` });
     }
 
     const parsedUrl = url.parse(req.url, true);
-    const path = parsedUrl.pathname.replace(/^\/+|\/+$/g, '');
-    let matches = null;
-    const route = routes.find(({ path: routePath }) => {
-      if (typeof routePath === 'string') return path === routePath;
-      else return matches = path.match(routePath);
+    data.path = parsedUrl.pathname.replace(/^\/+|\/+$/g, '');
+    data.matches = null;
+    const route = routes.find(({ path }) => {
+      if (typeof path === 'string') return data.path === path;
+      else return data.matches = data.path.match(path);
     });
     if (!route) {
-      return res.json(404, { error: `The requested URL /${path} was not found` });
+      return res.json(404, { error: `The requested URL /${data.path} was not found` });
     }
-    const query = parsedUrl.query;
-    const headers = req.headers;
+    data.query = parsedUrl.query;
+    data.headers = req.headers;
     const decoder = new StringDecoder('utf-8');
-    let buffer = '';
-    req.on('data', data => buffer += decoder.write(data));
+    data.buffer = '';
+    req.on('data', chunk => data.buffer += decoder.write(chunk));
     req.on('end', () => {
-      buffer += decoder.end();
-      const data = { ip, method, path, query, headers, buffer, matches };
+      data.buffer += decoder.end();
 
-      console.log(`${ip.padEnd(35)} | ` +
-        `${method.padEnd(4)} | ` +
-        `${(path || '/').padEnd(40)} | ` +
-        `${query ? JSON.stringify(query) : '{}'}`
+      console.log(`${data.ip.padEnd(35)} | ` +
+        `${data.method.padEnd(6)} | ` +
+        `${(data.path || '/').padEnd(40)} | ` +
+        `${data.query ? JSON.stringify(data.query) : '{}'}`
       );
 
+      let globals = 0;
       let callback = 0;
 
       function next() {
-        if (callback >= route.callbacks.length) return;
-        route.callbacks[callback++](res, data, next);
+        let fn;
+        if (globals < $this.globals.length) {
+          fn = $this.globals[globals++];
+        } else if (callback < route.callbacks.length) {
+          fn = route.callbacks[callback++];
+        }
+
+        if (fn) {
+          try {
+            fn(res, data, next);
+          } catch (err) {
+            console.error(err);
+            return res.json(500, { error: 'An unknown error occured!' });
+          }
+        }
       }
       next();
     });
@@ -110,7 +147,7 @@ class Router {
    */
   listen(port, callback) {
     http.createServer((...params) => {
-      this.server(...params);
+      this.server(this, ...params);
     }).listen(port, callback);
   }
 

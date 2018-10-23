@@ -22,7 +22,7 @@ function Bin(options) {
       if (language) url += language.extensions[0];
     }
     this.LinkBox.set(url);
-    return window.history.pushState(null, null, url);
+    return window.history.replaceState(null, null, url);
   };
 
   this.setLanguage = lang => {

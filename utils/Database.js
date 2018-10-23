@@ -18,12 +18,19 @@ class Database {
      * @returns {Promise<Object>}
      */
     this.findOne = promisify(model.findOne.bind(model));
+
+    /**
+     * Find one database entry matching the query and delete it
+     * @param {Object} query The query to look for
+     * @returns {Promise<Object>}
+     */
+    this.findOneAndDelete = promisify(model.findOneAndDelete.bind(model));
   }
 
   /**
    * Create a new document
    * @param {Object} data The data to pass into the document
-   * @returns {Promise<Object>s}
+   * @returns {Promise<Object>}
    */
   async createDocument(data) {
     const model = new this.model(data);
