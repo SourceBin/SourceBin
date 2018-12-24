@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const zlib = require('zlib');
 const request = require('request');
 const languages = require('../json/languages.json');
 const themes = require('../json/themes.json');
@@ -70,7 +69,6 @@ class Methods {
   static escapeHtml(string) {
     return string
       .replace(/&/g, '&amp;')
-      .replace(/\\/g, '&#39;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
   }
@@ -93,12 +91,12 @@ class Methods {
 
   /**
    * Create a cookie
-   * @param  {String} name Name of the cookie
-   * @param  {String} value Value of the cookie
+   * @param {String} name Name of the cookie
+   * @param {String} value Value of the cookie
    * @param {Object} [options] The options for the cookie
-   * @param  {Date|String} [options.expires] When the cookie should expire, default to 10 years in the future
-   * @param  {String} [options.path='/'] The path to set the cookie on
-   * @param  {Boolean} [options.httpOnly=false] Whether the cookie should be http only
+   * @param {Date|String} [options.expires] When the cookie should expire, default to 10 years in the future
+   * @param {String} [options.path='/'] The path to set the cookie on
+   * @param {Boolean} [options.httpOnly=false] Whether the cookie should be http only
    * @param {String} [options.sameSite] The same site option, must be `strict` or `lax`
    * @returns {String}
    */
