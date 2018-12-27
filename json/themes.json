@@ -32,6 +32,10 @@
     "name": "Dawn"
   },
   {
+	"ace": "discord",
+	"name": "Discord"
+  },
+  {
     "ace": "dracula",
     "name": "Dracula"
   },
