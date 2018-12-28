@@ -12,7 +12,7 @@ class Converter {
       if (!replacement) replacement = match[3];
       if (!replacement) replacement = this.variables[match[1]];
       const string = new RegExp(match[0], 'g');
-      text = text.replace(match[0], replacement);
+      text = text.replace(string, replacement);
     }
     return text;
   }
@@ -25,7 +25,7 @@ class Converter {
       let replacement = variables[match[1]];
       if (!replacement) replacement = match[3];
       const string = new RegExp(match[0], 'g');
-      text = text.replace(match[0], replacement);
+      text = text.replace(string, replacement);
     }
     return text;
   }

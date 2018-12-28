@@ -1,7 +1,6 @@
 const { request, createCookie } = require('./Methods.js');
 const config = require('../config.json');
 const url = require('url');
-const fs = require('fs');
 
 const oauth2 = url.parse(config.oauth2.uri, true);
 const client_id = oauth2.query.client_id;
@@ -9,7 +8,7 @@ const redirect_uri = oauth2.query.redirect_uri;
 const scope = oauth2.query.scope;
 
 const client_secret = config.oauth2.client_secret;
-const redirectPath = url.parse(redirect_uri).pathname;
+// const redirectPath = url.parse(redirect_uri).pathname;
 const API_ENDPOINT = 'https://discordapp.com/api/v6';
 
 class Discord {

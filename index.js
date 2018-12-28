@@ -16,6 +16,8 @@
  *
  */
 
+console.log('Server starting');
+
 const { Router } = require('./utils');
 const router = new Router();
 require('./requesthandlers')(router);
