@@ -1,4 +1,11 @@
-const { Discord: { getUser, refreshToken, setTokens } } = require('../utils');
+const {
+  Cache: { CacheMap, CacheSet },
+  Discord: { getUser, refreshToken, setTokens }
+} = require('../utils');
+
+const discordCache = new CacheMap(1000 * 60);
+const noCheckCache = new CacheSet(1000 * 60);
+const bannedCache = new CacheSet(1000 * 60 * 30);
 
 module.exports = (router, _, { bans }) => {
   router.validateReq(async (_, res, data) => {
@@ -16,18 +23,39 @@ module.exports = (router, _, { bans }) => {
     let auth = data.ip;
     data.user = {};
     if (data.cookies.access_token) {
-      const user = await getUser(data.cookies.access_token);
-      if (user.code !== 0) {
+      if (discordCache.has(data.cookies.access_token)) {
+        const user = discordCache.get(data.cookies.access_token);
+
         data.user = user;
         auth = user.id;
+      } else {
+        const user = await getUser(data.cookies.access_token);
+
+        if (user.code !== 0) {
+          discordCache.set(data.cookies.access_token, user);
+
+          data.user = user;
+          auth = user.id;
+        }
       }
     }
 
-    try {
-      const ban = await bans.findOne({ ip: auth });
-      if (ban) return res.json(403, { error: 'IP adress rejected' });
-    } catch (err) {
-      return res.json(500, { error: 'Unknown error' });
-    };
+    // Check for bans
+    if (bannedCache.has(auth)) {
+      return res.json(403, { error: 'IP adress rejected' });
+    }
+
+    if (!noCheckCache.has(auth)) {
+      try {
+        const ban = await bans.findOne({ ip: auth });
+
+        if (ban) {
+          bannedCache.add(auth);
+          return res.json(403, { error: 'IP adress rejected' });
+        } else noCheckCache.add(auth);
+      } catch (err) {
+        return res.json(500, { error: 'Unknown error' });
+      };
+    }
   });
 }

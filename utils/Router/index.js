@@ -63,7 +63,7 @@ class Router {
    * });
    */
   validateReq(callback) {
-    this.ipValidator = callback;
+    this.reqValidator = callback;
   }
 
   async server($this, req, res) {
@@ -82,8 +82,8 @@ class Router {
       req.socket.remoteAddress ||
       req.connection.socket.remoteAddress).trim();
 
-    if (this.ipValidator) {
-      await this.ipValidator(req, res, data);
+    if (this.reqValidator) {
+      await this.reqValidator(req, res, data);
       if (res.finished) return;
     }
 
