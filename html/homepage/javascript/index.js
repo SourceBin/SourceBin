@@ -6,7 +6,6 @@ function Bin(options) {
   let language = options.language;
 
   const editor = ace.edit('editor');
-  editor.setTheme('ace/theme/material');
   editor.setFontSize(15);
   if (editor.getValue() === 'Loading...') {
     editor.setValue('', -1);
@@ -19,7 +18,7 @@ function Bin(options) {
     let url = window.location.origin;
     if (key) {
       url += '/' + key;
-      if (language) url += language.extensions[0];
+      if (language) url += language.extension;
     }
     this.LinkBox.set(url);
     return window.history.replaceState(null, null, url);
@@ -71,7 +70,7 @@ function Bin(options) {
 function LinkBox(bin) {
   const box = document.getElementById('linkbox');
   const textarea = document.getElementById('link');
-  textarea.addEventListener('click', event => textarea.select());
+  textarea.addEventListener('click', () => textarea.select());
   this.set = string => textarea.innerHTML = string;
   this.show = () => box.setAttribute('style', 'display:inherit');
   this.hide = () => {

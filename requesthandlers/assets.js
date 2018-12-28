@@ -24,7 +24,11 @@ module.exports = (router, limiters) => {
     const language = Methods.findLanguage(search, 'name');
     if (!language) return res.json(404, { error: 'No language found' });
 
-    return res.json(200, language);
+    return res.json(200, {
+      name: language.name,
+      ace_mode: language.ace_mode,
+      extension: language.extensions[0]
+    });
   });
 
   router.get('/theme', limiters.languageTheme, (res, data) => {

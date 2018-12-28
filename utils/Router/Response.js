@@ -63,6 +63,6 @@ ServerResponse.prototype.png = function(statusCode, image) {
  * @returns {ServerResponse}
  */
 ServerResponse.prototype.redirect = function(statusCode, url) {
-  this.writeHead(302, { Location: url });
+  this.writeHead(statusCode, { Location: url });
   return this.end();
 };
