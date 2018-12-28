@@ -76,10 +76,12 @@ class Router {
         .forEach(cookie => data.cookies[cookie[0]] = cookie[1]);
     }
 
-    data.ip = (req.headers['x-forwarded-for'] || '').split(',').shift() ||
+    data.ip = (req.headers['x-real-ip'] ||
+      (req.headers['x-forwarded-for'] || '').split(',').pop() ||
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
-      req.connection.socket.remoteAddress;
+      req.connection.socket.remoteAddress).trim();
+
     if (this.ipValidator) {
       await this.ipValidator(req, res, data);
       if (res.finished) return;
