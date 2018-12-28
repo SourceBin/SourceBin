@@ -17,7 +17,7 @@ module.exports = router => {
     return res.redirect(302, '/');
   });
 
-  router.get('/logout', async (res, data) => {
+  router.get('/logout', async (res) => {
     const cookies = [
       createCookie('access_token', '', { expires: new Date(0) }),
       createCookie('refresh_token', '', { expires: new Date(0) })

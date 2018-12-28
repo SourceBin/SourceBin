@@ -1,7 +1,7 @@
 const { Discord: { getUser, refreshToken, setTokens } } = require('../utils');
 
 module.exports = (router, _, { bans }) => {
-  router.validateReq(async (req, res, data) => {
+  router.validateReq(async (_, res, data) => {
 
     // Refresh access token when expired
     if (!data.cookies.access_token && data.cookies.refresh_token) {

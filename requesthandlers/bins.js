@@ -19,7 +19,7 @@ module.exports = (router, limiters, { bins }) => {
     else return res.json(400, { error: 'Bin does not exist, or you have no permission to delete it' });
   });
 
-  router.get('/list', limiters.list, (res, data) => {
+  router.get('/list', limiters.list, (res) => {
     bins.find().then(bins => {
       const keys = bins.map(bin => bin.key);
       return res.json(200, keys);
