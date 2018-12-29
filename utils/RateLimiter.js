@@ -66,7 +66,7 @@ class RateLimiter {
     const $this = this;
 
     function limit(res, data, next) {
-      const limit = $this.rateLimit(data.ip);
+      const limit = $this.rateLimit(data.auth);
       if (limit) return res.json(429, { error: 'Ratelimit exceeded' });
       else return next();
     }

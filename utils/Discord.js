@@ -59,7 +59,7 @@ class Discord {
   static setTokens(res, tokens) {
     const cookies = [
       createCookie('access_token', tokens.access_token, {
-        expires: new Date(new Date().getTime() + tokens.expires_in * 1000),
+        expires: new Date(Date.now() + tokens.expires_in * 1000),
         httpOnly: true,
         sameSite: 'strict'
       }),
@@ -68,7 +68,7 @@ class Discord {
         sameSite: 'strict'
       })
     ];
-    res.setHeader('Set-Cookie', cookies);
+    res.setHeader('Set-Cookie', [...res.getHeader('Set-Cookie') || [], ...cookies]);
   }
 
   /**

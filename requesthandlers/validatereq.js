@@ -20,14 +20,14 @@ module.exports = (router, _, { bans }) => {
     }
 
     // Get the user object from discord
-    let auth = data.ip;
+    data.auth = data.ip;
     data.user = {};
     if (data.cookies.access_token) {
       if (discordCache.has(data.cookies.access_token)) {
         const user = discordCache.get(data.cookies.access_token);
 
         data.user = user;
-        auth = user.id;
+        data.auth = user.id;
       } else {
         const user = await getUser(data.cookies.access_token);
 
@@ -35,24 +35,24 @@ module.exports = (router, _, { bans }) => {
           discordCache.set(data.cookies.access_token, user);
 
           data.user = user;
-          auth = user.id;
+          data.auth = user.id;
         }
       }
     }
 
     // Check for bans
-    if (bannedCache.has(auth)) {
+    if (bannedCache.has(data.auth)) {
       return res.json(403, { error: 'IP adress rejected' });
     }
 
-    if (!noCheckCache.has(auth)) {
+    if (!noCheckCache.has(data.auth)) {
       try {
-        const ban = await bans.findOne({ ip: auth });
+        const ban = await bans.findOne({ ip: data.auth });
 
         if (ban) {
-          bannedCache.add(auth);
+          bannedCache.add(data.auth);
           return res.json(403, { error: 'IP adress rejected' });
-        } else noCheckCache.add(auth);
+        } else noCheckCache.add(data.auth);
       } catch (err) {
         return res.json(500, { error: 'Unknown error' });
       };
