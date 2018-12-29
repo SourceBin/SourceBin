@@ -27,7 +27,11 @@ module.exports = (router, limiters, { bins }) => {
       return res.html(200, convert(homepage, {
         code: Methods.escapeHtml(bin.code),
         key: data.matches[1] ? `'${data.matches[1]}'` : null,
-        language: JSON.stringify(language),
+        language: JSON.stringify({
+          name: language.name,
+          ace_mode: language.ace_mode,
+          extension: language.extensions[0]
+        }),
         allowSave: 'false',
         color: language && language.color ? language.color : null
       }));
