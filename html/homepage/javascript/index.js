@@ -64,7 +64,7 @@ function Bin(options) {
         navigator.permissions.query({ name: 'clipboard-write' }).then(result => {
           if (result.state == 'granted' || result.state === 'prompt') {
             navigator.clipboard.writeText(getURL()).then(() => {
-              new Popup('URL copied to clipboard', '#FFF', '#22dc22', true, 10000);
+              new Popup('Copied Link to Clipboard', 'rgba(255, 255, 255, .87)', '#424242', true, 10000);
             }, () => {
               manualCopy();
             });

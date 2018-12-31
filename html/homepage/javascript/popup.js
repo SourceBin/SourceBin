@@ -42,7 +42,8 @@ function Popup(text, textColor, backgroundColor, hideOnClick, duration) {
     background-color: #FF5050;
     user-select: none;
     cursor: pointer;
-    font-family: Arial, sans-serif;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
   }`;
   document.head.appendChild(style);
 })();
