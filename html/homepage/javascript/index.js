@@ -14,12 +14,17 @@ function Bin(options) {
 
   this.focus = () => editor.focus();
 
-  this.setURL = () => {
+  function getURL() {
     let url = window.location.origin;
     if (key) {
       url += '/' + key;
       if (language) url += language.extension;
     }
+    return url;
+  }
+
+  this.setURL = () => {
+    const url = getURL();
     this.LinkBox.set(url);
     return window.history.replaceState(null, null, url);
   };
@@ -43,13 +48,30 @@ function Bin(options) {
     if (this.isDisabled('Save')) {
       return new Popup('You can not re-save already saved bins!', null, null, true, 10000);
     }
+
     return _request('post', '/bin', editor.getValue())
       .then(response => {
         if (response) key = response.key;
+
         this.setURL();
         this.disableSave();
-        this.LinkBox.show();
-        if (!language) languageSelector.show();
+
+        function manualCopy() {
+          this.LinkBox.show();
+          if (!language) languageSelector.show();
+        }
+
+        navigator.permissions.query({ name: 'clipboard-write' }).then(result => {
+          if (result.state == 'granted' || result.state === 'prompt') {
+            navigator.clipboard.writeText(getURL()).then(() => {
+              new Popup('URL copied to clipboard', '#FFF', '#22dc22', true, 10000);
+            }, () => {
+              manualCopy();
+            });
+          } else {
+            manualCopy();
+          }
+        });
       });
   };
 

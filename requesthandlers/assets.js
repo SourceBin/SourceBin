@@ -3,7 +3,7 @@ const { Methods } = require('../utils');
 
 module.exports = (router, limiters) => {
 
-  router.get('/logo.png', limiters.loadAssets, (res) => {
+  router.get('/logo.png', limiters.loadAssets, res => {
     fs.readFile('./html/logo.png', (err, content) => {
       if (err) return res.json(500, { error: 'Unkown error' });
       return res.png(200, content);

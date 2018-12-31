@@ -14,7 +14,7 @@ module.exports = (router, limiters, { bins }) => {
   const homepage = fs.readFileSync('./html/homepage/index.html').toString();
 
   // Homepage
-  router.get('/', limiters.loadPage, (res) => {
+  router.get('/', limiters.loadPage, res => {
     return res.html(200, convert(homepage));
   });
 
