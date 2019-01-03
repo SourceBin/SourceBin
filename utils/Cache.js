@@ -5,11 +5,11 @@ class CacheMap extends Map {
 
   /**
    * Create a new CacheMap object
-   * @param {Number} interval The time between clearing the cache (in milliseconds)
+   * @param {Number} interval The time between clearing the cache (in milliseconds), if 0 or less cache will never clear
    */
-  constructor(interval) {
+  constructor(interval = 0) {
     super();
-    setInterval(() => this.clear(), interval);
+    if (interval > 0) setInterval(() => this.clear(), interval);
   }
 }
 
@@ -20,11 +20,11 @@ class CacheSet extends Set {
 
   /**
    * Create a new CacheSet object
-   * @param {Number} interval The time between clearing the cache (in milliseconds)
+   * @param {Number} interval The time between clearing the cache (in milliseconds), if 0 or less cache will never clear
    */
-  constructor(interval) {
+  constructor(interval = 0) {
     super();
-    setInterval(() => this.clear(), interval);
+    if (interval > 0) setInterval(() => this.clear(), interval);
   }
 }
 
