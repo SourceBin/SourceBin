@@ -27,7 +27,7 @@ module.exports = (router, limiters) => {
     return res.json(200, {
       name: language.name,
       ace_mode: language.ace_mode,
-      extension: language.extensions[0]
+      extension: (language.extensions || [])[0]
     });
   });
 

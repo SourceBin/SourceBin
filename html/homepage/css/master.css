@@ -1,67 +1,24 @@
 :root {
   --nav-size: 20px;
-  --border: 1px solid #23272A;
-  --background: #2C2F33;
-  --color: #d7dae0;
 }
 
-body,
-html {
+html,
+body {
   margin: 0;
   padding: 0;
   background-color: #282a2e;
-  color: var(--color);
-}
-
-#linkbox {
-  z-index: 2;
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  display: none;
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-#linkbox div {
-  width: 500px;
-  height: 200px;
-  background-color: var(--background);
-  border: var(--border);
-  margin: calc(50vh - 102px) calc(50vw - 252px);
-  font-family: 'Raleway:Bold', sans-serif;
-  border-radius: 10px;
-}
-
-#linkbox div h1 {
-  margin: 0;
-  padding: 40px 0;
-  text-align: center;
-  user-select: none;
-  cursor: default;
-}
-
-#linkbox div textarea {
-  border: var(--border);
-  outline: none;
-  resize: none;
-  display: block;
-  margin: 0 auto;
-  width: 400px;
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  color: var(--background);
-  border-radius: 10px;
 }
 
 nav {
   margin: 0;
   padding: 0;
   width: 100vw;
-  height: var(--nav-size);
+
   line-height: var(--nav-size);
-  font-size: calc(var(--nav-size) * 0.65);
   font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+
   color: #0D0D0D;
   background-color: #C0C0C0;
   display: flex;
@@ -82,6 +39,10 @@ nav ul li.box {
   padding: 0 15px;
   user-select: none;
   transition-duration: 0.2s;
+}
+
+nav ul li.box.right {
+  float: right;
 }
 
 nav ul li.click {

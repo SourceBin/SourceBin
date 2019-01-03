@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="shortcut icon" type="image/png" href="./logo.png" />
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SourceBin</title>
+  <meta name="title" content="SourceBin">
+  <meta name="description" content="Free text/code sharing site supporting 450+ different languages!">
+  <meta name="theme-color" content="#FF5555">
+
+  <% if (!bin) { %>
+  <meta name="og:title" content="SourceBin">
+  <meta name="og:description" content="Free text/code sharing site supporting 450+ different languages!">
+  <meta name="og:image" content="https://sourceb.in/logo.png">
+  <% } %>
+
+  <link rel="stylesheet" href="./assets/homepage/css/master.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,500,700">
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <%- `<li class="box click ${bin ? 'disabled' : ''}" id="save">Save</li>` %>
+      <li class="box click" id="new">New</li>
+      <li class="box click" id="language">Language - None</li>
+      <li class="box click" id="theme">Theme - None</li>
+
+      <li class="box right">SourceBin</li>
+      <li class="box click right" id="profile">Profile</li>
+    </ul>
+  </nav>
+
+  <pre id="editor"><%= bin ? bin.code : '' %></pre>
+
+  <script src="./assets/homepage/source.js"></script>
+  <script>
+    (async () => {
+      const key = <%- bin ? `'${bin.key}'` : 'null' %>;
+      const language = <%- language ? JSON.stringify({
+        name: language.name,
+        ace_mode: language.ace_mode,
+        extension: language.extensions[0]
+      }) : `JSON.parse(localStorage.getItem('language'))` %>;
+      const languages = <%- JSON.stringify(Object.keys(languages)) %>;
+      const themes = <%- JSON.stringify(themes.map(theme => theme.name)) %>;
+
+      source({
+        key,
+        language,
+        theme: JSON.parse(localStorage.getItem('theme')),
+        languages,
+        themes
+      });
+
+      await source.require('./assets/homepage/js/index.js');
+    })();
+
+  </script>
+</body>
+
+</html>

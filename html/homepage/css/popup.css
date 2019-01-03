@@ -8,9 +8,10 @@
   max-width: 500px;
   padding: 10px 15px;
   border-radius: 5px;
-  color: #23272A;
-  background-color: #FF5050;
+  color: rgba(255, 255, 255, .9);
+  background-color: #424242;
   user-select: none;
   cursor: pointer;
-  font-family: Arial, sans-serif;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
 }
