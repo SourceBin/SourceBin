@@ -27,7 +27,7 @@ class Engine {
         },
         '=': (append, code) => {
           append(code, function escapeHtml(str) {
-            return str
+            return String(str)
               .replace(/&/g, '&amp;')
               .replace(/</g, '&lt;')
               .replace(/>/g, '&gt;')
@@ -37,11 +37,6 @@ class Engine {
         },
         '-': (append, code) => {
           append(code);
-        },
-        '_': (append, code) => {
-          append(code, function trim(str) {
-            return str.trim();
-          });
         }
       },
       ...options.flags
@@ -59,21 +54,27 @@ class Engine {
    * Render a HTML string
    * @param {String} input The HTML to render
    * @param {Object} [variables] The variables to pass to the function to be used inside the HTML
-   * @param {Boolean} [async=false] Whether to use an async function to allow async/await
+   * @param {Object} [options={}] Options for the compiler
+   * @param {Boolean} [options.async] Whether the function should be async
+   * @param {Boolean} [options.debug] Whether to enable debug mode to provide useful information on errors
+   *
    * @returns {String} The rendered HTML
    */
-  render(input, variables, async = false) {
-    return this.compile(input, Object.keys(variables), async)(...Object.values(variables));
+  render(input, variables, options = {}) {
+    return this.compile(input, Object.keys(variables), options)(...Object.values(variables));
   }
 
   /**
    * Compile HTML into an executable function
    * @param {String} input The HTML to compile
    * @param {Array} [variableNames] The names of the variables that should be passed to the function
-   * @param {Boolean} [async=false] Whether to use an async function to allow async/await
+   * @param {Object} [options={}] Options for the compiler
+   * @param {Boolean} [options.async] Whether the function should be async
+   * @param {Boolean} [options.debug] Whether to enable debug mode to provide useful information on errors
+   *
    * @returns {Function} The compiled function
    */
-  compile(input, variableNames, async = false) {
+  compile(input, variableNames, options = {}) {
     let hash;
     if (this.cache) {
       hash = crypto.createHash('sha1').update(input).digest('base64');
@@ -104,6 +105,8 @@ class Engine {
       append(input.slice(cursor, match.index), true);
       cursor = match.index + full.length;
 
+      if (options.debug) output += `__line__ = ${input.substr(0, cursor).split('\n').length};`;
+
       // Check for a flag
       if (flag) {
         code = code.replace(/; *$/, '');
@@ -133,7 +136,19 @@ class Engine {
 
     // Finish up the code and create a function
     output += `return ${array}.join("");`;
-    const func = new(async ?AsyncFunction: Function)(variableNames || '', output).bind(functions);
+
+    if (options.debug) {
+      output = `
+        let __line__ = 1;
+        let __lines__ = \`${input.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`
+        try{
+          ${output}
+        } catch(e) {
+          console.error(\`Error on line \${__line__} | \${__lines__.split(/\\r?\\n/)[__line__-1]}\\n\${e.stack}\`);
+        }`;
+    }
+
+    const func = new(options.async ? AsyncFunction : Function)(variableNames || '', output).bind(functions);
 
     // Add the function to cache and return it
     if (this.cache) this.cache.set(hash, func);
