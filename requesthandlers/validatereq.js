@@ -4,7 +4,7 @@ const {
 } = require('../utils');
 
 const discordCache = new CacheMap(1000 * 60);
-const noCheckCache = new CacheSet(1000 * 60);
+const noCheckCache = new CacheSet(1000);
 const bannedCache = new CacheSet(1000 * 60 * 30);
 
 module.exports = (router, _, { bans }) => {

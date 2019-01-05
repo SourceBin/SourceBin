@@ -14,7 +14,8 @@
 
 .selector .container {
   float: right;
-  width: 600px;
+  width: 100vw;
+  max-width: 600px;
   height: calc(100vh - var(--nav-size));
   margin-top: var(--nav-size);
 
@@ -92,4 +93,15 @@
 
 .selector .container .content p.hover {
   background-color: #5c626a;
+}
+
+@media only screen and (max-width: 600px) {
+  .selector .container .title h1 {
+    font-size: 20px;
+    margin: 0 10px;
+  }
+
+  .selector .container .title input {
+    margin: 0 10px;
+  }
 }
