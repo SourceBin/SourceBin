@@ -35,7 +35,14 @@
   });
 
   source('save', async () => {
-    const response = await source.request('post', '/bin', source.editor.getValue());
+    let response;
+    try {
+      response = await source.request('post', '/bin', source.editor.getValue());
+    } catch (e) {
+      source.popup(e.error);
+      source.$.id('save').removeClass('disabled');
+    }
+
     if (!response) return;
     source.update('key', response.key);
 
@@ -88,9 +95,22 @@
     e.preventDefault();
   });
 
+  if (source.key) {
+    editor.session.on('change', function() {
+      editor.session.off('change', arguments.callee);
+
+      $save.removeClass('disabled');
+      source.update('key', null);
+      source.setUrl();
+    });
+  }
+
   $.id('new').on('click', () => {
-    // TODO: Empty bin but stay on this page
-    window.location.href = origin;
+    editor.setValue('');
+    $save.removeClass('disabled');
+    source.update('key', null);
+    source.setUrl();
+    editor.focus();
   });
 
   const languageSelector = new source.selector('Language', source.languages, async e => {
