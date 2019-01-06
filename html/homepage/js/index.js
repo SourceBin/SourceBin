@@ -46,10 +46,10 @@
     if (!response) return;
     source.update('key', response.key);
 
-    source.languageSelector.open(async () => {
+    async function save() {
       const url = source.setUrl();
       const result = await navigator.permissions.query({ name: 'clipboard-write' })
-      if (result.state == 'granted' || result.state === 'prompt') {
+      if (result.state === 'granted' || result.state === 'prompt') {
         navigator.clipboard.writeText(url).then(() => {
           source.popup('Copied Link to Clipboard');
         }, () => {
@@ -58,7 +58,25 @@
       } else {
         source.popup('Saved the bin, you can copy the link now');
       }
-    });
+    }
+
+    if (source.settings.rememberLanguage) save();
+    else source.languageSelector.open(() => save());
+  });
+
+  source('updateSettings', (settings = {}) => {
+    settings = {
+      fontSize: 15,
+      printMargin: true,
+      rememberLanguage: true,
+
+      ...JSON.parse(localStorage.getItem('settings') || '{}'),
+      ...settings
+    };
+    localStorage.setItem('settings', JSON.stringify(settings));
+
+    source.editor.setFontSize(settings.fontSize);
+    source.editor.setShowPrintMargin(settings.printMargin);
   });
 })();
 
@@ -74,8 +92,8 @@
   const editor = ace.edit('editor');
   source({ editor });
 
-  editor.setFontSize(15);
-  source.setTheme('discord');
+  source.updateSettings();
+  source.setTheme();
   source.setMode();
 
   editor.container.style.display = 'inherit';

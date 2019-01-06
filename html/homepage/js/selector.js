@@ -13,7 +13,9 @@ source('selector', function(title, content, onSelect) {
       ),
       $content.addClass('content')
     )
-  ).set('style', 'display:none');
+  ).set('style', 'display:none').on('click', e => {
+    if (e.target === $selector.element) this.close();
+  });
   $.wrap(document.body).append($selector);
 
   let callback;
