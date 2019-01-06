@@ -8,11 +8,10 @@ const redirect_uri = oauth2.query.redirect_uri;
 const scope = oauth2.query.scope;
 
 const client_secret = config.oauth2.client_secret;
-// const redirectPath = url.parse(redirect_uri).pathname;
+// Const redirectPath = url.parse(redirect_uri).pathname;
 const API_ENDPOINT = 'https://discordapp.com/api/v6';
 
 class Discord {
-
   /**
    * Exchange oauth code for access token
    * @param {String} code The oauth code
@@ -27,8 +26,8 @@ class Discord {
         client_secret,
         redirect_uri,
         scope,
-        code
-      }
+        code,
+      },
     });
   }
 
@@ -46,8 +45,8 @@ class Discord {
         client_secret,
         redirect_uri,
         scope,
-        refresh_token
-      }
+        refresh_token,
+      },
     });
   }
 
@@ -59,14 +58,14 @@ class Discord {
   static setTokens(res, tokens) {
     const cookies = [
       createCookie('access_token', tokens.access_token, {
-        expires: new Date(Date.now() + tokens.expires_in * 1000),
+        expires: new Date(Date.now() + (tokens.expires_in * 1000)),
         httpOnly: true,
-        sameSite: 'strict'
+        sameSite: 'strict',
       }),
       createCookie('refresh_token', tokens.refresh_token, {
         httpOnly: true,
-        sameSite: 'strict'
-      })
+        sameSite: 'strict',
+      }),
     ];
     res.setHeader('Set-Cookie', [...res.getHeader('Set-Cookie') || [], ...cookies]);
   }
@@ -91,8 +90,8 @@ class Discord {
     return request(method, {
       url: API_ENDPOINT + url,
       auth: {
-        bearer: token
-      }
+        bearer: token,
+      },
     });
   }
 }

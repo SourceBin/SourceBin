@@ -54,7 +54,7 @@ ServerResponse.prototype.json = function(statusCode, json, stringify = true) {
 ServerResponse.prototype.png = function(statusCode, image) {
   this.writeHead(statusCode, { 'Content-Type': 'image/png' });
   return this.end(image);
-}
+};
 
 /**
  * Redirect the request to a different url

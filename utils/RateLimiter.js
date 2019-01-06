@@ -1,5 +1,4 @@
 class RateLimiter {
-
   /**
    * @param {Number} max The max amount of hits per windowMs
    * @param {Number} windowMs The time window for hits in milliseconds
@@ -51,7 +50,9 @@ class RateLimiter {
       if (dates[0] > now) {
         if (this.onExceed) this.onExceed(key);
         return true;
-      } else dates.shift();
+      } else {
+        dates.shift();
+      }
     }
     dates.push(now.getTime() + this.windowMs);
     this.hits.set(key, dates);

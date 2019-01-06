@@ -7,14 +7,12 @@ const methods = require('../../json/methods.json')
 require('./Response.js');
 
 class Router {
-
   constructor() {
-
     /**
      * All global callbacks
      * @type {Array<Function>}
      */
-    this.globals = new Array();
+    this.globals = [];
 
     /**
      * All the routes for the app
@@ -37,7 +35,7 @@ class Router {
         const routes = this.routes.get(method) || [];
         routes.push({ path, callbacks });
         return this.routes.set(method, routes);
-      }
+      };
     }
   }
 
@@ -66,14 +64,17 @@ class Router {
     this.reqValidator = callback;
   }
 
-  async server($this, req, res) {
+  async server(req, res) {
+    const $this = this;
     const data = {};
 
     data.cookies = {};
     if (req.headers.cookie) {
       req.headers.cookie.split(';')
         .map(cookie => cookie.trim().split('='))
-        .forEach(cookie => data.cookies[cookie[0]] = cookie[1]);
+        .forEach(cookie => {
+          data.cookies[cookie[0]] = cookie[1];
+        });
     }
 
     data.ip = (req.headers['x-real-ip'] ||
@@ -90,24 +91,34 @@ class Router {
     data.method = req.method.toLowerCase();
     const routes = this.routes.get(data.method);
     if (!routes) {
-      return res.json(405, { error: `The request method ${data.method.toUpperCase()} is not accepted` });
+      res.json(405, { error: `The request method ${data.method.toUpperCase()} is not accepted` });
+      return;
     }
 
     const parsedUrl = url.parse(req.url, true);
     data.path = parsedUrl.pathname.replace(/^\/+|\/+$/g, '');
     data.matches = null;
     const route = routes.find(({ path }) => {
-      if (typeof path === 'string') return data.path === path;
-      else return data.matches = data.path.match(path);
+      if (typeof path === 'string') {
+        return data.path === path;
+      } else {
+        data.matches = data.path.match(path);
+        return true;
+      }
     });
     if (!route) {
-      return res.json(404, { error: `The requested URL /${data.path} was not found` });
+      res.json(404, { error: `The requested URL /${data.path} was not found` });
+      return;
     }
+
     data.query = parsedUrl.query;
     data.headers = req.headers;
     const decoder = new StringDecoder('utf-8');
     data.buffer = '';
-    req.on('data', chunk => data.buffer += decoder.write(chunk));
+
+    req.on('data', chunk => {
+      data.buffer += decoder.write(chunk);
+    });
     req.on('end', () => {
       data.buffer += decoder.end();
 
@@ -133,7 +144,7 @@ class Router {
             fn(res, data, next);
           } catch (err) {
             console.error(err);
-            return res.json(500, { error: 'An unknown error occured!' });
+            res.json(500, { error: 'An unknown error occured!' });
           }
         }
       }
@@ -149,9 +160,8 @@ class Router {
    */
   listen(port, callback) {
     http.createServer((...params) => {
-      this.server(this, ...params);
+      this.server(...params);
     }).listen(port, callback);
   }
-
 }
 module.exports = Router;

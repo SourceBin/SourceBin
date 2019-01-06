@@ -20,9 +20,9 @@ module.exports = router => {
   router.get('/logout', res => {
     const cookies = [
       createCookie('access_token', '', { expires: new Date(0) }),
-      createCookie('refresh_token', '', { expires: new Date(0) })
+      createCookie('refresh_token', '', { expires: new Date(0) }),
     ];
     res.setHeader('Set-Cookie', [...res.getHeader('Set-Cookie') || [], ...cookies]);
     return res.redirect(302, '/');
   });
-}
+};

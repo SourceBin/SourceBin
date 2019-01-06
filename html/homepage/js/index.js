@@ -1,3 +1,4 @@
+/* global source ace */
 (() => {
   source('setTheme', (theme = {}) => {
     if (!theme.ace || !theme.name) theme = JSON.parse(localStorage.getItem('theme')) || {};
@@ -10,8 +11,9 @@
   });
 
   source('setMode', language => {
-    if (language) source.update({ language });
-    else {
+    if (language) {
+      source.update({ language });
+    } else {
       language = source.language;
       if (!language) return;
     }
@@ -26,7 +28,7 @@
     const language = source.language;
     let url = window.location.origin;
     if (key) {
-      url += '/' + key;
+      url += `/${key}`;
       if (language && language.extension) url += language.extension;
     }
 
@@ -48,7 +50,7 @@
 
     async function save() {
       const url = source.setUrl();
-      const result = await navigator.permissions.query({ name: 'clipboard-write' })
+      const result = await navigator.permissions.query({ name: 'clipboard-write' });
       if (result.state === 'granted' || result.state === 'prompt') {
         navigator.clipboard.writeText(url).then(() => {
           source.popup('Copied Link to Clipboard');
@@ -71,7 +73,7 @@
       rememberLanguage: true,
 
       ...JSON.parse(localStorage.getItem('settings') || '{}'),
-      ...settings
+      ...settings,
     };
     localStorage.setItem('settings', JSON.stringify(settings));
 

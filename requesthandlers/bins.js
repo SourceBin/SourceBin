@@ -1,7 +1,6 @@
 const { Methods } = require('../utils');
 
 module.exports = (router, limiters, { bins }) => {
-
   router.post('/bin', limiters.createBin, (res, data) => {
     if (typeof data.buffer !== 'string') return res.json(400, { error: 'Expected a string' });
     else if (!data.buffer.length) return res.json(400, { error: 'Can\'t save an empty string' });
@@ -25,4 +24,4 @@ module.exports = (router, limiters, { bins }) => {
       return res.json(200, keys);
     });
   });
-}
+};

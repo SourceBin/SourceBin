@@ -1,6 +1,6 @@
 const {
   Cache: { CacheMap, CacheSet },
-  Discord: { getUser, refreshToken, setTokens }
+  Discord: { getUser, refreshToken, setTokens },
 } = require('../utils');
 
 const discordCache = new CacheMap(1000 * 60);
@@ -9,7 +9,6 @@ const bannedCache = new CacheSet(1000 * 60 * 30);
 
 module.exports = (router, _, { bans }) => {
   router.validateReq(async (_, res, data) => {
-
     // Refresh access token when expired
     if (!data.cookies.access_token && data.cookies.refresh_token) {
       const tokens = await refreshToken(data.cookies.refresh_token);
@@ -42,7 +41,8 @@ module.exports = (router, _, { bans }) => {
 
     // Check for bans
     if (bannedCache.has(data.auth)) {
-      return res.json(403, { error: 'IP adress rejected' });
+      res.json(403, { error: 'IP adress rejected' });
+      return;
     }
 
     if (!noCheckCache.has(data.auth)) {
@@ -51,11 +51,13 @@ module.exports = (router, _, { bans }) => {
 
         if (ban) {
           bannedCache.add(data.auth);
-          return res.json(403, { error: 'IP adress rejected' });
-        } else noCheckCache.add(data.auth);
+          res.json(403, { error: 'IP adress rejected' });
+        } else {
+          noCheckCache.add(data.auth);
+        }
       } catch (err) {
-        return res.json(500, { error: 'Unknown error' });
-      };
+        res.json(500, { error: 'Unknown error' });
+      }
     }
   });
-}
+};

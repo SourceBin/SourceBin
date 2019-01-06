@@ -1,4 +1,4 @@
-const source = function(nameOrObj, value) {
+function source(nameOrObj, value) {
   if (typeof nameOrObj === 'object') {
     Object.entries(nameOrObj).forEach(([name, value]) => {
       if (source[name] !== undefined) throw new Error(`'${name}' is already defined`);
@@ -20,7 +20,7 @@ source.update = (nameOrObj, value) => {
     if (!source[nameOrObj] === undefined) throw new Error(`'${nameOrObj}' isn't defined yet`);
     source[nameOrObj] = value;
   }
-}
+};
 
 (() => {
   const methods = {
@@ -71,8 +71,8 @@ source.update = (nameOrObj, value) => {
     delete: function() {
       const parent = this.parentElement;
       if (parent) parent.removeChild(this);
-    }
-  }
+    },
+  };
 
   function wrap(element) {
     const proxy = new Proxy(element, {
@@ -83,17 +83,17 @@ source.update = (nameOrObj, value) => {
           if (typeof prop === 'function') {
             return function(...args) {
               return prop.apply(target, [proxy, ...args]);
-            }
+            };
           } else {
             return prop;
           }
         } else {
-          const prop = target[propKey]
+          const prop = target[propKey];
 
           if (typeof prop === 'function') {
             return function(...args) {
               return prop.apply(target, args);
-            }
+            };
           } else {
             return prop;
           }
@@ -101,13 +101,13 @@ source.update = (nameOrObj, value) => {
       },
       set(target, propKey, value) {
         target[propKey] = value;
-      }
+      },
     });
     proxy.element = element;
     return proxy;
   }
 
-  const $ = function(tag, attributes = {}) {
+  function $(tag, attributes = {}) {
     const element = document.createElement(tag);
     for (const [key, value] of Object.entries(attributes)) {
       element.setAttribute(key, value);
@@ -116,33 +116,31 @@ source.update = (nameOrObj, value) => {
   }
   $.id = function(id) {
     return wrap(document.getElementById(id));
-  }
+  };
   $.tag = function(tag) {
     return [...document.getElementsByTagName(tag)].map(wrap);
-  }
+  };
   $.class = function(className) {
     return [...document.getElementsByClassName(className)].map(wrap);
-  }
+  };
   $.wrap = function(element) {
     return wrap(element);
-  }
+  };
   source({ $ });
 
-  source('request', (method, url, body = null, json = true) => {
-    return new Promise((res, rej) => {
-      const xhttp = new XMLHttpRequest();
+  source('request', (method, url, body = null, json = true) => new Promise((res, rej) => {
+    const xhttp = new XMLHttpRequest();
 
-      xhttp.addEventListener('load', () => {
-        const response = json ? JSON.parse(xhttp.response) : xhttp.response;
+    xhttp.addEventListener('load', () => {
+      const response = json ? JSON.parse(xhttp.response) : xhttp.response;
 
-        if (xhttp.status === 200) res(response);
-        else rej(response);
-      });
-
-      xhttp.open(method.toUpperCase(), url, true);
-      xhttp.send(body);
+      if (xhttp.status === 200) res(response);
+      else rej(response);
     });
-  });
+
+    xhttp.open(method.toUpperCase(), url, true);
+    xhttp.send(body);
+  }));
 
   source('require', async path => {
     const file = await source.request('get', path, null, false);
@@ -157,7 +155,7 @@ source.update = (nameOrObj, value) => {
   source('shortcut', (combination, callback) => {
     let fired = false;
 
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', event => {
       if (
         fired ||
         event.code.startsWith('Shift') ||
@@ -170,6 +168,8 @@ source.update = (nameOrObj, value) => {
       callback(event);
     });
 
-    document.addEventListener('keyup', () => fired = false);
+    document.addEventListener('keyup', () => {
+      fired = false;
+    });
   });
 })();

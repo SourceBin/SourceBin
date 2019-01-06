@@ -1,7 +1,9 @@
-// css: ../css/popup.css
+// CSS: ../css/popup.css
+
+/* global source */
 source('popup', function(text) {
   const $ = source.$;
-  $popup = $('div').addClass('popup').setText(text).on('click', () => this.delete());
+  const $popup = $('div').addClass('popup').setText(text).on('click', () => this.delete());
   $.wrap(document.body).append($popup);
 
   this.delete = () => $popup.delete();

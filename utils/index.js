@@ -6,5 +6,5 @@ module.exports = {
   Discord: require('./Discord.js'),
   Cache: require('./Cache.js'),
   Engine: require('./Engine.js'),
-  Router: require('./Router')
+  Router: require('./Router'),
 };

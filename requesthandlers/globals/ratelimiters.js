@@ -1,11 +1,11 @@
 const { RateLimiter } = require('../../utils');
+const { bans } = require('./databases.js');
 
 const limiters = {};
 
 const banned = new Set();
 const mainLimiter = new RateLimiter(100, 1000 * 60 * 60, async ip => {
-  if (banned.has(ip)) return;
-  else {
+  if (!banned.has(ip)) {
     banned.add(ip);
     await bans.createDocument({ ip });
     banned.delete(ip);

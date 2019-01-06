@@ -4,7 +4,6 @@ const languages = require('../json/languages.json');
 const themes = require('../json/themes.json');
 
 class Methods {
-
   /**
    * Generates a random 8 char key
    * @returns {String}
@@ -22,13 +21,19 @@ class Methods {
   static findLanguage(search, type) {
     if (!search) return null;
     type = type.toLowerCase();
-    if (type === 'name') return Object.values(languages).find(language => {
-      return language.name.toLowerCase() === search.toLowerCase();
-    });
-    if (type === 'extension') return Object.values(languages).find(language => {
-      if (!language.extensions) return null;
-      return language.extensions.includes(search.toLowerCase());
-    });
+
+    if (type === 'name') {
+      return Object.values(languages).find(language => language.name.toLowerCase() === search.toLowerCase());
+    }
+
+    if (type === 'extension') {
+      return Object.values(languages).find(language => {
+        if (!language.extensions) return null;
+        return language.extensions.includes(search.toLowerCase());
+      });
+    }
+
+    return null;
   }
 
   /**
@@ -51,14 +56,12 @@ class Methods {
    * @returns {Function}
    */
   static promisify(fn) {
-    return (...args) => {
-      return new Promise((resolve, reject) => {
-        fn(...args, (err, ...params) => {
-          if (err) reject(err);
-          else resolve(...params);
-        });
+    return (...args) => new Promise((resolve, reject) => {
+      fn(...args, (err, ...params) => {
+        if (err) reject(err);
+        else resolve(...params);
       });
-    }
+    });
   }
 
   /**
@@ -108,7 +111,7 @@ class Methods {
     const httpOnly = options.httpOnly || false;
     const sameSite = options.sameSite;
 
-    if (!expires) expires = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 10);
+    if (!expires) expires = new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 365 * 10));
     if (expires instanceof Date) expires = expires.toUTCString();
 
     value += expires ? `; expires=${expires}` : '';

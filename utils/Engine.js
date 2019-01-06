@@ -1,13 +1,14 @@
 const crypto = require('crypto');
+// eslint-disable-next-line
 const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
 
 class Engine {
-
   /**
    * Create a new engine object with a set of options
    * @param {Object} [options={}] The options for the engine
    * @param {Boolean} [options.cache=true] Whether to cache the compiled function
-   * @param {Number} [options.cacheInterval=0] The delay between clearing the cache if cache is enabled, if 0 or less cache will never clear
+   * @param {Number} [options.cacheInterval=0] The delay between clearing the cache
+   * if cache is enabled, if 0 or less cache will never clear
    * @param {Object} [options.flags={}] Custom flags for the engine
    */
   constructor(options = {}) {
@@ -15,31 +16,31 @@ class Engine {
       ...{
         cache: true,
         cacheInterval: 0,
-        flags: {}
+        flags: {},
       },
-      ...options
+      ...options,
     };
 
     this.flags = {
       ...{
-        '#': (append) => {
+        '#': append => {
           append();
         },
         '=': (append, code) => {
-          append(code, function escapeHtml(str) {
+          append(code, function escapeHtml(str) { // eslint-disable-line
             return String(str)
               .replace(/&/g, '&amp;')
               .replace(/</g, '&lt;')
               .replace(/>/g, '&gt;')
               .replace(/"/g, '&quot;')
-              .replace(/'/g, '&#39;')
+              .replace(/'/g, '&#39;');
           });
         },
         '-': (append, code) => {
           append(code);
-        }
+        },
       },
-      ...options.flags
+      ...options.flags,
     };
 
     if (options.cache) {
@@ -90,15 +91,15 @@ class Engine {
     function append(text, string = false) {
       if (string) {
         output += `${array}.push(\`${
-                    text.replace(/`/g, '\\`').replace(/\$/g, '\\$')
-                    }\`);`;
+          text.replace(/`/g, '\\`').replace(/\$/g, '\\$')
+        }\`);`;
       } else {
         output += `${array}.push(${text});`;
       }
     }
 
     let match;
-    while ((match = regex.exec(input))) {
+    while ((match = regex.exec(input))) { // eslint-disable-line no-extra-parens
       let [full, flag, code] = match;
 
       // Append regular text
@@ -127,7 +128,7 @@ class Engine {
         }
       } else {
         // Append JavaScript code
-        output += code + '\n';
+        output += `${code}\n`;
       }
     }
 
@@ -148,6 +149,7 @@ class Engine {
         }`;
     }
 
+    // eslint-disable-next-line space-unary-ops
     const func = new(options.async ? AsyncFunction : Function)(variableNames || '', output).bind(functions);
 
     // Add the function to cache and return it

@@ -1,4 +1,6 @@
-// css: ../css/selector.css
+// CSS: ../css/selector.css
+
+/* global source */
 source('selector', function(title, content, onSelect) {
   const $ = source.$;
 
@@ -28,34 +30,34 @@ source('selector', function(title, content, onSelect) {
 
     $input.focus();
     isOpen = true;
-  }
+  };
 
   this.close = () => {
     $selector.set('style', 'display:none');
     source.editor.focus();
     isOpen = false;
-  }
+  };
 
   let index = 0;
   this.fill = () => {
     $content.innerHTML = '';
     $content.append(
       ...content
-      .filter(i => i.toLowerCase().includes($input.value.toLowerCase()))
-      .map(i => $('p').setText(i).on('click', async e => {
-        await onSelect.bind(this)(e);
-        if (callback) {
-          callback.bind(this)(e);
-          callback = null;
-        }
-        this.close();
-      }))
+        .filter(i => i.toLowerCase().includes($input.value.toLowerCase()))
+        .map(i => $('p').setText(i).on('click', async e => {
+          await onSelect.bind(this)(e);
+          if (callback) {
+            callback.bind(this)(e);
+            callback = null;
+          }
+          this.close();
+        }))
     );
 
     index = 0;
     const $i = $content.child(index);
     if ($i) $i.addClass('hover');
-  }
+  };
 
   source.shortcut(e => isOpen && e.key === 'ArrowUp', e => {
     if (index <= 0) return;

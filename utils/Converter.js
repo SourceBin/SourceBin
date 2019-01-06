@@ -4,7 +4,7 @@ class Converter {
   }
 
   convert(text, variables = {}) {
-    const regex = /<% ([\-_\\a-zA-Z0-9]+?)(=(.+?))? %>/;
+    const regex = /<% ([-_\\a-zA-Z0-9]+?)(=(.+?))? %>/;
     const matches = Converter.removeDupes(text.match(new RegExp(regex, 'g')) || []);
     for (let match of matches) {
       match = regex.exec(match);
@@ -18,7 +18,7 @@ class Converter {
   }
 
   static convert(text, variables) {
-    const regex = /<% ([\-_\\a-zA-Z0-9]+?)(=(.+?))? %>/;
+    const regex = /<% ([-_\\a-zA-Z0-9]+?)(=(.+?))? %>/;
     const matches = Converter.removeDupes(text.match(new RegExp(regex, 'g')) || []);
     for (let match of matches) {
       match = regex.exec(match);

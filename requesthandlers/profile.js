@@ -4,7 +4,7 @@ const { Methods: { escapeHtml }, Converter: { convert } } = require('../utils');
 module.exports = (router, limiters, { bins }) => {
   const profile = fs.readFileSync('./html/profile/account/index.html').toString();
   const noAccount = convert(fs.readFileSync('./html/profile/noaccount/index.html').toString(), {
-    oauth2: require('../config.json').oauth2.uri
+    oauth2: require('../config.json').oauth2.uri,
   });
 
   router.get('/profile', limiters.loadPage, async (res, data) => {
@@ -19,7 +19,7 @@ module.exports = (router, limiters, { bins }) => {
       username: escapeHtml(`${data.user.username}#${data.user.discriminator}`),
       id: data.user.id,
       avatar: avatar,
-      bins: `[${bin.map(bin => `'${bin.key}'`).join(',')}]`
+      bins: `[${bin.map(bin => `'${bin.key}'`).join(',')}]`,
     }));
   });
-}
+};
