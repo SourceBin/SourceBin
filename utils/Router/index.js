@@ -103,7 +103,7 @@ class Router {
         return data.path === path;
       } else {
         data.matches = data.path.match(path);
-        return true;
+        return !!data.matches;
       }
     });
     if (!route) {
