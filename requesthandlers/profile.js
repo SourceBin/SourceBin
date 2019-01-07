@@ -10,11 +10,11 @@ module.exports = (router, limiters, { bins }) => {
   router.get('/profile', limiters.loadPage, async (res, data) => {
     if (!data.user.username) return res.html(200, noAccount);
 
-    const bin = await bins.find({ id: data.user.id });
+    const bin = await bins.model.find({ id: data.user.id }).select('key -_id').exec();
     const avatar = data.user.avatar ?
       `avatars/${data.user.id}/${data.user.avatar}.${data.user.avatar.startsWith('a_') ? 'gif' : 'png'}` :
       `embed/avatars/${data.user.discriminator % 5}.png`;
-
+    console.log(bin);
     return res.html(200, convert(profile, {
       username: escapeHtml(`${data.user.username}#${data.user.discriminator}`),
       id: data.user.id,

@@ -13,15 +13,13 @@ module.exports = (router, limiters, { bins }) => {
   });
 
   router.delete('/bin', limiters.deleteBin, async (res, data) => {
-    const bin = await bins.findOneAndDelete({ key: data.buffer, id: data.user.id });
-    if (bin) return res.json(200, { message: 'Success' });
-    else return res.json(400, { error: 'Bin does not exist, or you have no permission to delete it' });
+    const bin = await bins.model.findOneAndDelete({ key: data.buffer, id: data.user.id }).exec();
+    if (bin) res.json(200, { message: 'Success' });
+    else res.json(400, { error: 'Bin does not exist, or you have no permission to delete it' });
   });
 
-  router.get('/list', limiters.list, res => {
-    bins.find().then(bins => {
-      const keys = bins.map(bin => bin.key);
-      return res.json(200, keys);
-    });
+  router.get('/list', limiters.list, async res => {
+    const bin = await bins.model.find().select('key -_id').exec();
+    res.json(200, bin.map(bin => bin.key));
   });
 };

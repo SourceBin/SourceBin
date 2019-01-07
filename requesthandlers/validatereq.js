@@ -47,7 +47,7 @@ module.exports = (router, _, { bans }) => {
 
     if (!noCheckCache.has(data.auth)) {
       try {
-        const ban = await bans.findOne({ ip: data.auth });
+        const ban = await bans.model.findOne({ ip: data.auth }).exec();
 
         if (ban) {
           bannedCache.add(data.auth);
