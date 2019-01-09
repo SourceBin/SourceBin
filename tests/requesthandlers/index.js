@@ -40,6 +40,11 @@ after(() => {
   mongoose.disconnect();
   mongoServer.stop();
   console.log('\n- MongoDB Disconnected');
+
+  if (noConfig) {
+    fs.unlinkSync('./config.json');
+    console.log('- Deleted config file');
+  }
 });
 
 afterEach(async () => {
