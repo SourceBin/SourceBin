@@ -67,14 +67,23 @@ nav ul li {
 }
 
 nav ul li ul {
-  float: left;
-  left: 0;
-  width:150%;
-  opacity: 0;
   position: absolute;
-  top: 35px;
+  left: 0;
+  top: var(--nav-size);
+
+  background-color: #2f3542;
+  cursor: default;
+  height: 200px;
+  width: 400px;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+
+  opacity: 0;
   visibility: hidden;
-  z-index: 1;
   -webkit-transition: all .25s ease;
   -moz-transition: all .25s ease;
   -ms-transition: all .25s ease;
@@ -84,17 +93,28 @@ nav ul li ul {
 
 nav ul li:hover ul {
   opacity: 1;
-  top: 50px;
   visibility: visible;
 }
 
 nav ul li ul li {
   float: none;
   width: 100%;
+  padding: 10px 20px;
+
+  color: rgba(255, 255, 255, .9);
+  font-size: 20px;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-nav li ul a:hover {
-  background: #bbb;
+nav ul li ul li input {
+  float: right;
+  width: 40px;
+  height: 20px;
+  margin-right: 50px;
 }
 
 #editor {
