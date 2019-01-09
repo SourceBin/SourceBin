@@ -14,7 +14,7 @@ module.exports = (router, limiters, { bins }) => {
     const avatar = data.user.avatar ?
       `avatars/${data.user.id}/${data.user.avatar}.${data.user.avatar.startsWith('a_') ? 'gif' : 'png'}` :
       `embed/avatars/${data.user.discriminator % 5}.png`;
-    console.log(bin);
+
     return res.html(200, convert(profile, {
       username: escapeHtml(`${data.user.username}#${data.user.discriminator}`),
       id: data.user.id,

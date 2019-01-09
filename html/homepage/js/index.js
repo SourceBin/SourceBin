@@ -76,6 +76,7 @@
       ...settings,
     };
     localStorage.setItem('settings', JSON.stringify(settings));
+    source.update({ settings });
 
     source.editor.setFontSize(settings.fontSize);
     source.editor.setShowPrintMargin(settings.printMargin);

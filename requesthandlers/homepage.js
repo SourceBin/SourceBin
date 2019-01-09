@@ -17,7 +17,7 @@ module.exports = (router, limiters, { bins }) => {
   // Bin
   router.get(/^([a-f0-9]{10})(\.[a-zA-Z0-9]+)?$/, limiters.loadPage, async (res, data) => {
     const bin = await bins.model.findOne({ key: data.matches[1] }).exec();
-    if (!bin) return res.html(200, homepage({ languages, themes }));
+    if (!bin) return res.html(200, homepage(languages, themes));
 
     const language = Methods.findLanguage(data.matches[2], 'extension');
     return res.html(200, homepage(languages, themes, bin, language));
