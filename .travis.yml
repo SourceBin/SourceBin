@@ -1,8 +1,16 @@
 language: node_js
 node_js:
   - 10
+
 install: npm install
-script: npm run test
+
+jobs:
+  include:
+    - stage: lint
+      script: npm run lint
+    - stage: tests
+      script: npm run test:requesthandlers
+
 cache:
   directories:
     - node_modules

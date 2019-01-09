@@ -10,13 +10,16 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
-    "eslint": "^5.12.0"
+    "eslint": "^5.12.0",
+    "mocha": "^5.2.0",
+    "mongodb-memory-server": "^2.9.1"
   },
   "scripts": {
     "start": "node index.js",
-    "test": "npm run lint",
-    "lint": "eslint html models requesthandlers utils index.js",
-    "lint:fix": "eslint --fix html models requesthandlers utils index.js"
+    "test": "npm run lint && npm run test:requesthandlers",
+    "lint": "eslint html models requesthandlers utils tests index.js",
+    "lint:fix": "eslint --fix html models requesthandlers utils tests index.js",
+    "test:requesthandlers": "mocha --exit tests/requesthandlers"
   },
   "author": "SebastiaanYN",
   "license": "ISC"
