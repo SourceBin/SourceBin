@@ -13,11 +13,11 @@ function source(nameOrObj, value) {
 source.update = (nameOrObj, value) => {
   if (typeof nameOrObj === 'object') {
     Object.entries(nameOrObj).forEach(([name, value]) => {
-      if (!source[name] === undefined) throw new Error(`'${name}' isn't defined yet`);
+      if (source[name] === undefined) throw new Error(`'${name}' isn't defined yet`);
       source[name] = value;
     });
   } else {
-    if (!source[nameOrObj] === undefined) throw new Error(`'${nameOrObj}' isn't defined yet`);
+    if (source[nameOrObj] === undefined) throw new Error(`'${nameOrObj}' isn't defined yet`);
     source[nameOrObj] = value;
   }
 };
@@ -67,6 +67,9 @@ source.update = (nameOrObj, value) => {
     child: function(_, index) {
       const child = this.children[index];
       return child ? wrap(child) : child;
+    },
+    children: function() {
+      return [...this.children].map(wrap);
     },
     delete: function() {
       const parent = this.parentElement;

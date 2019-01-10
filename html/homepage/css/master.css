@@ -74,7 +74,7 @@ nav ul li ul {
   background-color: #2f3542;
   cursor: default;
   height: 200px;
-  width: 400px;
+  width: 350px;
   z-index: 10;
 
   display: flex;
@@ -102,7 +102,7 @@ nav ul li ul li {
   padding: 10px 20px;
 
   color: rgba(255, 255, 255, .9);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
 
   display: flex;

@@ -66,15 +66,15 @@
     else source.languageSelector.open(() => save());
   });
 
-  source('updateSettings', (settings = {}) => {
-    settings = {
-      fontSize: 15,
-      printMargin: true,
-      rememberLanguage: true,
+  source('updateSettings', () => {
+    const settings = {};
 
-      ...JSON.parse(localStorage.getItem('settings') || '{}'),
-      ...settings,
-    };
+    const $settings = source.$.id('settings')
+      .child(0).children().map(el => el.child(0).on('change', source.updateSettings));
+    settings.fontSize = parseInt($settings[0].value);
+    settings.printMargin = $settings[1].checked;
+    settings.rememberLanguage = $settings[2].checked;
+
     localStorage.setItem('settings', JSON.stringify(settings));
     source.update({ settings });
 
@@ -95,14 +95,26 @@
   const editor = ace.edit('editor');
   source({ editor });
 
+  const $ = source.$;
+
+  source('settings', {
+    fontSize: 15,
+    printMargin: true,
+    rememberLanguage: true,
+    ...JSON.parse(localStorage.getItem('settings') || '{}'),
+  });
+  const $settings = source.$.id('settings')
+    .child(0).children().map(el => el.child(0).on('change', source.updateSettings));
+  $settings[0].value = source.settings.fontSize;
+  $settings[1].checked = source.settings.printMargin;
+  $settings[2].checked = source.settings.rememberLanguage;
+
   source.updateSettings();
   source.setTheme();
   source.setMode();
 
   editor.container.style.display = 'inherit';
   editor.focus();
-
-  const $ = source.$;
   const $save = $.id('save');
   $save.on('click', () => {
     if ($save.hasClass('disabled')) return;
