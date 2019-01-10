@@ -6,10 +6,10 @@ install: npm install
 
 jobs:
   include:
-    - stage: lint
-      script: npm run lint
-    - stage: tests
-      script: npm run test:requesthandlers
+    - script: npm run lint
+      name: "Lint"
+    - script: npm run test:requesthandlers
+      name: "Unit tests"
 
 cache:
   directories:
