@@ -1,0 +1,15 @@
+version: '3'
+services:
+  sourcebin:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - PORT=3000
+      - REDIS_URL=redis://redis
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    container_name: redis

@@ -26,6 +26,6 @@ const mongoose = require('mongoose');
 const { database } = require('./config.json');
 mongoose.connect(database, { useNewUrlParser: true })
   .then(() => {
-    router.listen(3000, () => console.log('HTTP server listening on port 3000'));
+    router.listen(process.env.PORT, () => console.log(`HTTP server listening on port ${process.env.PORT}`));
   })
   .catch(e => console.log(e));
