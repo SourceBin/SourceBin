@@ -24,7 +24,7 @@ require('./requesthandlers')(router);
 
 const mongoose = require('mongoose');
 const { database } = require('./config.json');
-mongoose.connect(database, { useNewUrlParser: true })
+mongoose.connect(database, { useNewUrlParser: true, useFindAndModify: false })
   .then(() => {
     router.listen(process.env.PORT, () => console.log(`HTTP server listening on port ${process.env.PORT}`));
   })

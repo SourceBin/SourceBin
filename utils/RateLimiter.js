@@ -1,10 +1,24 @@
 class RateLimiter {
   /**
+   * @param {String} name The name of the ratelimiter
+   * @param {RedisClient} redis The redis client to use
    * @param {Number} max The max amount of hits per windowMs
    * @param {Number} windowMs The time window for hits in milliseconds
    * @param {Function} onExceed Function to call when somebody hits a ratelimit
    */
-  constructor(max, windowMs, onExceed) {
+  constructor(name, redis, max, windowMs, onExceed) {
+    /**
+     * The name of the ratelimiter
+     * @type {String}
+     */
+    this.name = name;
+
+    /**
+     * The redis client to use
+     * @type {RedisClient}
+     */
+    this.redis = redis;
+
     /**
      * The max amount of hits per windowMs
      * @type {Number}
@@ -22,41 +36,37 @@ class RateLimiter {
      * @type {Function}
      */
     this.onExceed = onExceed;
-
-    /**
-     * Hits stored by key
-     * @type {Map<*, Array<Date>>}
-     */
-    this.hits = new Map();
-
-    setInterval(() => {
-      for (const [key, dates] of this.hits) {
-        const filtered = dates.filter(date => date < new Date());
-        if (filtered) this.hits.set(key, filtered);
-        else this.hits.delete(key);
-      }
-    }, 1000 * 60 * 60);
   }
 
   /**
    * Ratelimit a key
    * @param {*} key The key to ratelimit
-   * @returns {Boolean} Whether to limit the request
+   * @returns {Promise<Boolean>} Whether to limit the request
    */
   rateLimit(key) {
-    const now = new Date();
-    const dates = this.hits.get(key) || [];
-    if (dates.length === this.max) {
-      if (dates[0] > now) {
-        if (this.onExceed) this.onExceed(key);
-        return true;
-      } else {
-        dates.shift();
-      }
-    }
-    dates.push(now.getTime() + this.windowMs);
-    this.hits.set(key, dates);
-    return false;
+    return new Promise(res => {
+      const time = Math.floor(Date.now() / this.windowMs);
+      const requester = `${this.name}:${key}:${time}`;
+
+      this.redis.get(requester, (err, hits) => {
+        if (err) {
+          console.error(err);
+          res(true);
+        }
+
+        if (hits > this.max) {
+          if (this.onExceed) this.onExceed(key);
+          res(true);
+        }
+
+        this.redis.multi()
+          .incr(requester)
+          .expire(requester, this.windowMs / 1000 * 2)
+          .exec();
+
+        res(false);
+      });
+    });
   }
 
   /**
@@ -66,11 +76,13 @@ class RateLimiter {
   get middleware() {
     const $this = this;
 
-    function limit(res, data, next) {
-      const limit = $this.rateLimit(data.auth);
+    async function limit(res, data, next) {
+      const limit = await $this.rateLimit(data.auth);
+
       if (limit) return res.json(429, { error: 'Ratelimit exceeded' });
       else return next();
     }
+
     return limit;
   }
 }

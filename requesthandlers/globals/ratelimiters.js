@@ -1,24 +1,22 @@
+const redis = require('redis').createClient(process.env.REDIS_URL);
 const { RateLimiter } = require('../../utils');
 const { bans } = require('./databases.js');
 
-const limiters = {};
-
-const banned = new Set();
-const mainLimiter = new RateLimiter(100, 1000 * 60 * 60, async ip => {
-  if (!banned.has(ip)) {
-    banned.add(ip);
-    await bans.createDocument({ ip });
-    banned.delete(ip);
-  }
+const masterLimiter = new RateLimiter('master', redis, 100, 1000 * 60 * 60, ip => {
+  bans.model.findOneAndUpdate({ ip }, {
+    $setOnInsert: { ip },
+  }, { upsert: true }).exec();
 });
-const main = key => mainLimiter.rateLimit(key);
+const master = key => masterLimiter.rateLimit(key);
 
-limiters.loadPage = new RateLimiter(500, 1000 * 60 * 15, main);
-limiters.createBin = new RateLimiter(45, 1000 * 60 * 15, main);
-limiters.deleteBin = new RateLimiter(200, 1000 * 60 * 15, main);
-limiters.loadAssets = new RateLimiter(10000, 1000 * 60 * 15, main);
-limiters.languageTheme = new RateLimiter(1500, 1000 * 60 * 15, main);
-limiters.list = new RateLimiter(200, 1000 * 60 * 15, main);
+const limiters = {
+  loadPage: new RateLimiter('loadPage', redis, 500, 1000 * 60 * 15, master),
+  createBin: new RateLimiter('createBin', redis, 45, 1000 * 60 * 15, master),
+  deleteBin: new RateLimiter('deleteBin', redis, 200, 1000 * 60 * 15, master),
+  loadAssets: new RateLimiter('loadAssets', redis, 10000, 1000 * 60 * 15, master),
+  languageTheme: new RateLimiter('languageTheme', redis, 1500, 1000 * 60 * 15, master),
+  list: new RateLimiter('list', redis, 200, 1000 * 60 * 15, master),
+};
 
 module.exports = {};
 for (const [key, value] of Object.entries(limiters)) {
