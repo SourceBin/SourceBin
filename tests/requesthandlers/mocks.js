@@ -1,6 +1,8 @@
 const { default: rewiremock } = require('rewiremock/node');
 rewiremock.enable();
 
+rewiremock('redis').with(require('redis-mock'));
+
 class DiscordMock {
   static exchangeCode(code) {
     if (code === 'wrong_code') return { error: 'wrong code' };
