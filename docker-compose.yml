@@ -9,6 +9,7 @@ services:
       - REDIS_URL=redis://redis
     depends_on:
       - redis
+    restart: always
 
   redis:
     image: redis:alpine
