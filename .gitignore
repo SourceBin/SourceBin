@@ -1,3 +1,9 @@
+# Node files
 node_modules/
 package-lock.json
+
+# Configuration file
 config.json
+
+# Letsencrypt certificates and settings
+nginx/letsencrypt
