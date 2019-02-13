@@ -9,6 +9,7 @@ services:
       - REDIS_URL=redis://redis
     depends_on:
       - redis
+    container_name: sourcebin_app
     restart: always
 
   redis:
