@@ -21,8 +21,8 @@
     "postinstall": "node scripts/postinstall.js",
     "start": "node index.js",
     "test": "npm run lint && npm run test:requesthandlers",
-    "lint": "eslint html models requesthandlers utils tests index.js",
-    "lint:fix": "eslint --fix html models requesthandlers utils tests index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "test:requesthandlers": "mocha --exit tests/requesthandlers"
   },
   "author": "SebastiaanYN",

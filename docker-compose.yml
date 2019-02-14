@@ -1,7 +1,8 @@
 version: '3'
+
 services:
-  sourcebin:
-    build: .
+  app:
+    build: ./app
     ports:
       - 3000:3000
     environment:
@@ -9,9 +10,10 @@ services:
       - REDIS_URL=redis://redis
     depends_on:
       - redis
-    container_name: sourcebin_app
+    container_name: app
     restart: always
 
   redis:
     image: redis:alpine
     container_name: redis
+    restart: always

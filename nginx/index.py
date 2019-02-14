@@ -1,8 +1,8 @@
-import sys
 import json
-from subprocess import call
-from os import path
+import sys
 from crontab import CronTab
+from os import path
+from subprocess import call
 
 def log(str):
     print(f'\u001b[35;1m{str}\u001b[0m')
