@@ -1,4 +1,4 @@
-const { Methods } = require('../utils');
+const { Methods } = require('utils');
 
 module.exports = (router, limiters, { bins }) => {
   router.post('/bin', limiters.createBin, async (res, data) => {

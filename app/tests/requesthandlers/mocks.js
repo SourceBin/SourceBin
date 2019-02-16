@@ -4,24 +4,24 @@ rewiremock.enable();
 rewiremock('redis').with(require('redis-mock'));
 
 class DiscordMock {
-  static exchangeCode(code) {
+  exchangeCode(code) {
     if (code === 'wrong_code') return { error: 'wrong code' };
     else return { access_token: 'access', refresh_token: 'refresh', expires_in: 0 };
   }
 
-  static getUser(token) {
+  getUser(token) {
     if (token === 'access') return { id: 'some_id' };
     else return { code: 0 };
   }
 
-  static refreshToken(token) {
+  refreshToken(token) {
     if (token === 'refresh') return { access_token: 'access', refresh_token: 'refresh', expires_in: 0 };
     else return { error: 'something went wrong' };
   }
 
-  static setTokens() {} // eslint-disable-line no-empty-function
+  setTokens() {} // eslint-disable-line no-empty-function
 }
-rewiremock('../../utils/Discord.js').with(DiscordMock);
+rewiremock('utils/Discord.js').with(DiscordMock);
 
 const CacheMock = {
   CacheMap: class CacheMap extends Map {
@@ -37,9 +37,9 @@ const CacheMock = {
     }
   },
 };
-rewiremock('../../utils/Cache.js').with(CacheMock);
+rewiremock('utils/Cache.js').with(CacheMock);
 
-const methods = require('../../json/methods.json').map(method => method.toLowerCase());
+const methods = require('utils/json/methods.json').map(method => method.toLowerCase());
 class RouterMock {
   constructor() {
     const routes = new Map();
@@ -72,7 +72,7 @@ class RouterMock {
   }
 }
 
-require('../../utils/Router/Response.js');
+require('utils/Router/Response.js');
 const { ServerResponse } = require('http');
 class ServerResponseMock extends ServerResponse {
   constructor(method = 'get') {

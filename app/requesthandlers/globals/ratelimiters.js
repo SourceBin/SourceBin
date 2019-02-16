@@ -1,5 +1,5 @@
 const redis = require('redis').createClient(process.env.REDIS_URL);
-const { RateLimiter } = require('../../utils');
+const { RateLimiter } = require('utils');
 const { bans } = require('./databases.js');
 
 const masterLimiter = new RateLimiter('master', redis, 100, 1000 * 60 * 60, ip => {

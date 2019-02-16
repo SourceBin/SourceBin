@@ -5,10 +5,9 @@
   "main": "index.js",
   "dependencies": {
     "@types/mongoose": "^5.3.5",
-    "@types/request": "^2.48.1",
     "mongoose": "^5.2.9",
     "redis": "^2.8.0",
-    "request": "^2.88.0"
+    "utils": "file:../utils"
   },
   "devDependencies": {
     "eslint": "^5.12.0",

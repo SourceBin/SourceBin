@@ -1,7 +1,7 @@
 const http = require('http');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
-const methods = require('../../json/methods.json')
+const methods = require('../json/methods.json')
   .map(method => method.toLowerCase());
 
 require('./Response.js');

@@ -20,7 +20,7 @@ const cluster = require('cluster');
 const os = require('os');
 
 function startServer() {
-  const { Router } = require('./utils');
+  const { Router } = require('utils');
   const router = new Router();
   require('./requesthandlers')(router);
 

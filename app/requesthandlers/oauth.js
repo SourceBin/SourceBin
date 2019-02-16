@@ -1,6 +1,8 @@
-const { Methods: { createCookie }, Discord: { exchangeCode, setTokens } } = require('../utils');
-const config = require('../config.json');
+const { Methods: { createCookie }, Discord } = require('utils');
 const url = require('url');
+
+const config = require('../config.json');
+const discord = new Discord(config.oauth2.uri, config.oauth2.client_secret);
 
 const oauth2 = url.parse(config.oauth2.uri, true);
 const redirect_uri = oauth2.query.redirect_uri;
@@ -10,10 +12,10 @@ module.exports = router => {
   router.get(authorizePath, async (res, data) => {
     if (!data.query.code) return res.json(400, { error: 'Invalid request' });
 
-    const tokens = await exchangeCode(data.query.code);
+    const tokens = await discord.exchangeCode(data.query.code);
     if (tokens.error) return res.json(400, tokens);
 
-    setTokens(res, tokens);
+    discord.setTokens(res, tokens);
     return res.redirect(302, '/');
   });
 

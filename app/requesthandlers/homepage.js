@@ -1,9 +1,9 @@
 const fs = require('fs');
-const { Engine, Methods } = require('../utils');
+const { Engine, Methods } = require('utils');
 const engine = new Engine();
 
-const languages = require('../json/languages.json');
-const themes = require('../json/themes.json');
+const languages = require('utils/json/languages.json');
+const themes = require('utils/json/themes.json');
 
 module.exports = (router, limiters, { bins }) => {
   const homepage = engine.compile(

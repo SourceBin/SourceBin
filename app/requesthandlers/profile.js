@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { Methods: { escapeHtml }, Converter: { convert } } = require('../utils');
+const { Methods: { escapeHtml }, Converter: { convert } } = require('utils');
 
 module.exports = (router, limiters, { bins }) => {
   const profile = fs.readFileSync('./html/profile/account/index.html').toString();

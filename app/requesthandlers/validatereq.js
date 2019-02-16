@@ -1,7 +1,7 @@
-const {
-  Cache: { CacheMap, CacheSet },
-  Discord: { getUser, refreshToken, setTokens },
-} = require('../utils');
+const { Cache: { CacheMap, CacheSet }, Discord } = require('utils');
+
+const config = require('../config.json');
+const discord = new Discord(config.oauth2.uri, config.oauth2.client_secret);
 
 const discordCache = new CacheMap(1000 * 60);
 const noCheckCache = new CacheSet(1000);
@@ -11,10 +11,10 @@ module.exports = (router, _, { bans }) => {
   router.validateReq(async (_, res, data) => {
     // Refresh access token when expired
     if (!data.cookies.access_token && data.cookies.refresh_token) {
-      const tokens = await refreshToken(data.cookies.refresh_token);
+      const tokens = await discord.refreshToken(data.cookies.refresh_token);
       if (!tokens.error) {
         data.cookies.access_token = tokens.access_token;
-        setTokens(res, tokens);
+        discord.setTokens(res, tokens);
       }
     }
 
@@ -28,7 +28,7 @@ module.exports = (router, _, { bans }) => {
         data.user = user;
         data.auth = user.id;
       } else {
-        const user = await getUser(data.cookies.access_token);
+        const user = await discord.getUser(data.cookies.access_token);
 
         if (user.code !== 0) {
           discordCache.set(data.cookies.access_token, user);

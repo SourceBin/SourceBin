@@ -1,7 +1,8 @@
 FROM node:lts-alpine
 
 WORKDIR /var/app
-COPY . .
+COPY app .
+COPY utils ../utils
 RUN npm install --only=production --unsafe-perm
 
 EXPOSE 3000

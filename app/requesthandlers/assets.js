@@ -2,7 +2,7 @@ const fs = require('fs');
 const readFile = require('util').promisify(fs.readFile);
 
 const path = require('path');
-const { Methods, Cache: { CacheMap } } = require('../utils');
+const { Methods, Cache: { CacheMap } } = require('utils');
 
 const fileCache = new CacheMap();
 

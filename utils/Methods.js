@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const request = require('request');
-const languages = require('../json/languages.json');
-const themes = require('../json/themes.json');
+const languages = require('./json/languages.json');
+const themes = require('./json/themes.json');
 
 class Methods {
   /**

@@ -1,4 +1,4 @@
-const { Database } = require('../../utils');
+const { Database } = require('utils');
 
 module.exports = {
   bans: new Database(require('../../models/Ban.js')),

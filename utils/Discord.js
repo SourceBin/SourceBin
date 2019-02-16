@@ -1,31 +1,37 @@
 const { request, createCookie } = require('./Methods.js');
-const config = require('../config.json');
 const url = require('url');
 
-const oauth2 = url.parse(config.oauth2.uri, true);
-const client_id = oauth2.query.client_id;
-const redirect_uri = oauth2.query.redirect_uri;
-const scope = oauth2.query.scope;
-
-const client_secret = config.oauth2.client_secret;
-// Const redirectPath = url.parse(redirect_uri).pathname;
 const API_ENDPOINT = 'https://discordapp.com/api/v6';
 
 class Discord {
+  /**
+   * Create an instance of the Discord class
+   * @param {String} uri The uri
+   * @param {String} secret The secret
+   */
+  constructor(uri, secret) {
+    const oauth2 = url.parse(uri, true);
+    this.client_id = oauth2.query.client_id;
+    this.redirect_uri = oauth2.query.redirect_uri;
+    this.scope = oauth2.query.scope;
+
+    this.client_secret = secret;
+  }
+
   /**
    * Exchange oauth code for access token
    * @param {String} code The oauth code
    * @returns {Object}
    */
-  static exchangeCode(code) {
+  exchangeCode(code) {
     return request('post', {
       url: `${API_ENDPOINT}/oauth2/token`,
       form: {
         grant_type: 'authorization_code',
-        client_id,
-        client_secret,
-        redirect_uri,
-        scope,
+        client_id: this.client_id,
+        client_secret: this.client_secret,
+        redirect_uri: this.redirect_uri,
+        scope: this.scope,
         code,
       },
     });
@@ -36,15 +42,15 @@ class Discord {
    * @param {String} refresh_token The refresh token for the access token
    * @returns {Object}
    */
-  static refreshToken(refresh_token) {
+  refreshToken(refresh_token) {
     return request('post', {
       url: `${API_ENDPOINT}/oauth2/token`,
       form: {
         grant_type: 'refresh_token',
-        client_id,
-        client_secret,
-        redirect_uri,
-        scope,
+        client_id: this.client_id,
+        client_secret: this.client_secret,
+        redirect_uri: this.redirect_uri,
+        scope: this.scope,
         refresh_token,
       },
     });
@@ -55,7 +61,7 @@ class Discord {
    * @param {ServerResponse} res The ServerResponse object
    * @param {Object} tokens The tokens received from discord
    */
-  static setTokens(res, tokens) {
+  setTokens(res, tokens) {
     const cookies = [
       createCookie('access_token', tokens.access_token, {
         expires: new Date(Date.now() + (tokens.expires_in * 1000)),
@@ -75,7 +81,7 @@ class Discord {
    * @param {String} token The access token of the user
    * @returns {Object}
    */
-  static getUser(token) {
+  getUser(token) {
     return Discord.fetch('/users/@me', 'get', token);
   }
 

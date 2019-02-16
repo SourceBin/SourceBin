@@ -1,0 +1,7 @@
+{
+  "name": "utils",
+  "dependencies": {
+    "@types/request": "^2.48.1",
+    "request": "^2.88.0"
+  }
+}
