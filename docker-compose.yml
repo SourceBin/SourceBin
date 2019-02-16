@@ -15,6 +15,18 @@ services:
     container_name: app
     restart: always
 
+  api:
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+    ports:
+      - 3001:3001
+    environment:
+      - PORT=3001
+      - REDIS_URL=redis://redis
+    container_name: api
+    restart: always
+
   redis:
     image: redis:alpine
     container_name: redis

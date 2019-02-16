@@ -122,10 +122,10 @@ class Router {
     req.on('end', () => {
       data.buffer += decoder.end();
 
-      console.log(`${data.ip.padEnd(35)} | ` +
-        `${data.method.padEnd(6)} | ` +
-        `${(data.path || '/').padEnd(40)} | ` +
-        `${data.query ? JSON.stringify(data.query) : '{}'}`
+      console.log(
+        `${new Date().toLocaleString('uk')} | ` +
+        `${data.ip.padEnd(15)} | ` +
+        `${data.method.toUpperCase()} /${(data.path)}`
       );
 
       let globals = 0;
