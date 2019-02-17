@@ -11,6 +11,7 @@ module.exports = models => {
 
   const limiters = {
     rawBin: new RateLimiter('api:rawBin', redis, 1000, 1000, master),
+    createBin: new RateLimiter('api:createBin', redis, 100, 1000, master),
   };
 
   const middleware = {};
