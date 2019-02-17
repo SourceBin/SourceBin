@@ -2,7 +2,9 @@ language: node_js
 node_js:
   - 10
 
-install: npm install --prefix app
+install:
+  - npm install --prefix app
+  - npm install --prefix api
 
 jobs:
   include:
@@ -11,6 +13,10 @@ jobs:
       name: "Lint"
     - script: npm run test:requesthandlers --prefix app
       name: "Unit tests"
+
+    - stage: Api
+      script: npm run lint --prefix api
+      name: "Lint"
 
 cache: npm
 

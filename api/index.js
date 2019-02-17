@@ -20,7 +20,7 @@ function spawnWorker() {
   worker.on('message', message => console.log(message));
 }
 
-if (false && cluster.isMaster) {
+if (false && cluster.isMaster) { // eslint-disable-line no-constant-condition
   console.log(`Master '${process.pid}' is running`);
 
   const cores = os.cpus().length;
