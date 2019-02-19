@@ -1,3 +1,5 @@
+/* global ctx */
+
 const { default: rewiremock } = require('rewiremock/node');
 rewiremock.enable();
 
@@ -39,47 +41,106 @@ const CacheMock = {
 };
 rewiremock('utils/Cache.js').with(CacheMock);
 
-const methods = require('utils/json/methods.json').map(method => method.toLowerCase());
 class RouterMock {
-  constructor() {
-    const routes = new Map();
-    this.routes = {
-      get: function(path, method = 'get') {
-        let match;
+  constructor(ctx) {
+    this.ctx = ctx;
+    this.routes = [];
 
-        const route = Array.from(routes.keys()).find(({ method: m, path: route }) => {
-          if (m !== method) return false;
-
-          if (typeof route === 'string') {
-            return path === route;
-          } else {
-            match = path.replace(/^\/+|\/+$/g, '').match(route);
-            return !!match;
-          }
-        });
-
-        return match ? { handlers: routes.get(route), matches: match } : routes.get(route);
-      },
-    };
-
-    for (const method of methods) {
-      this[method] = (path, ...callbacks) => routes.set({ method, path }, callbacks);
-    }
+    this._beforeEach = null;
+    this._afterEach = null;
+    this._on404 = null;
   }
 
-  validateReq(callback) {
-    this.validateReq = callback;
+  getRoute(path, method = 'get') {
+    path = path.replace(/^\/+|\/+$/g, '');
+    let matches;
+
+    const route = this.routes
+      .filter(route => route.method === method)
+      .find(route => {
+        if (route.path instanceof RegExp) {
+          matches = path.match(route.path);
+          return !!matches;
+        } else {
+          return route.path === path;
+        }
+      });
+
+    return matches ? { route, matches } : route;
+  }
+
+  route(options) {
+    options.method = options.method.toLowerCase();
+
+    if (typeof options.path === 'string') {
+      options.path = options.path.replace(/^\/+|\/+$/g, '');
+    }
+
+    this.routes.push(options);
+  }
+
+  static register(id) {
+    let ctx = {};
+
+    function register(name, value) {
+      if (ctx[name]) {
+        throw new Error(`Plugin with name "${name}" already exists`);
+      }
+
+      ctx[name] = value;
+    }
+
+    require('fs')
+      .readdirSync(id)
+      .forEach(plugin => {
+        require(require('path').join(id, plugin))(register.bind(this), ctx);
+      });
+
+    return ctx;
+  }
+
+  beforeEach(callback) {
+    this._beforeEach = callback;
+  }
+
+  getBeforeEach() {
+    return this._beforeEach;
+  }
+
+  afterEach(callback) {
+    this._afterEach = callback;
+  }
+
+  getAfterEach() {
+    return this._afterEach;
+  }
+
+  on404(callback) {
+    this._on404 = callback;
+  }
+
+  getOn404() {
+    return this._on404;
   }
 }
 
-require('utils/Router/Response.js');
-const { ServerResponse } = require('http');
-class ServerResponseMock extends ServerResponse {
+const Request = require('utils/Router/lib/Request.js');
+class RequestMock extends Request {
+  constructor() {
+    super(new (require('http').IncomingMessage)());
+  }
+}
+
+const Reply = require('utils/Router/lib/Reply.js');
+class ReplyMock extends Reply {
   constructor(method = 'get') {
-    super({ method });
-    this.setHeader('__test', true);
+    super(new (require('http').ServerResponse)({ method }));
+    this.header('__test', true);
     this.removeHeader('__test');
   }
 }
 
-module.exports = { RouterMock, ServerResponseMock };
+global.ctx = RouterMock.register(require('path').join(process.cwd(), './plugins'));
+ctx.log = () => null;
+
+module.exports = { RouterMock, RequestMock, ReplyMock };

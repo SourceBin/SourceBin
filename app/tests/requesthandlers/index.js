@@ -1,8 +1,5 @@
 /* global before after afterEach */
 
-const fs = require('fs');
-const path = require('path');
-
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
@@ -12,8 +9,8 @@ before(function(done) {
 
   mongoServer = new MongoMemoryServer();
   mongoServer.getConnectionString()
-    .then(mongoUri => mongoose
-      .connect(mongoUri, { useNewUrlParser: true })
+    .then(uri => mongoose
+      .connect(uri, { useNewUrlParser: true })
       .catch(e => done(e)))
     .then(() => {
       console.log('- MongoDB Connected\n\n');
@@ -30,8 +27,3 @@ after(() => {
 afterEach(async () => {
   await mongoose.connection.dropDatabase();
 });
-
-
-fs.readdirSync(__dirname)
-  .filter(f => f.endsWith('.test.js'))
-  .forEach(f => require(path.join(__dirname, f)));

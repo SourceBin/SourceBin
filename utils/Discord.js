@@ -61,7 +61,7 @@ class Discord {
    * @param {ServerResponse} res The ServerResponse object
    * @param {Object} tokens The tokens received from discord
    */
-  setTokens(res, tokens) {
+  setTokens(reply, tokens) {
     const cookies = [
       createCookie('access_token', tokens.access_token, {
         expires: new Date(Date.now() + (tokens.expires_in * 1000)),
@@ -73,7 +73,8 @@ class Discord {
         sameSite: 'strict',
       }),
     ];
-    res.setHeader('Set-Cookie', [...res.getHeader('Set-Cookie') || [], ...cookies]);
+
+    reply.header('Set-Cookie', [...reply.getHeader('Set-Cookie') || [], ...cookies]);
   }
 
   /**

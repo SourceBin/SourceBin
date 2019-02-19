@@ -1,65 +1,62 @@
-/* global describe it */
-/* eslint-disable no-await-in-loop */
+/* global describe it ctx */
 
 const assert = require('assert').strict;
 
-const { RouterMock, ServerResponseMock } = require('./mocks.js');
-const routerMock = new RouterMock();
+const { RouterMock, RequestMock, ReplyMock } = require('./mocks.js');
+const router = new RouterMock(ctx);
 
-const { ratelimiters, databases } = require('../../requesthandlers/globals');
-require('../../requesthandlers/profile.js')(routerMock, ratelimiters, databases);
+require('../../routes/profile.js')(router.route.bind(router), ctx);
 
 describe('profile', () => {
   describe('/profile', () => {
-    const handlers = routerMock.routes.get('/profile');
+    const route = router.getRoute('/profile');
 
     it('returns a 200 when user info is missing', async () => {
-      const res = new ServerResponseMock();
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res, { user: {} }, () => null);
-      }
+      request.user = {};
 
-      assert.equal(res.statusCode, 200);
-      assert.equal(res.getHeader('content-type'), 'text/html');
+      await route.handler(request, reply);
+
+      assert.equal(reply.getCode(), 200);
+      assert.equal(reply.getHeader('content-type'), 'text/html');
     });
 
     it('returns a 200 when user info is provided and owns bins', async () => {
-      await databases.bins.createDocument({ key: '0123456789', code: 'code', id: 'some_id' });
+      await new ctx.models.Bin({ key: '0123456789', code: 'code', id: 'some_id' }).save();
 
-      const res = new ServerResponseMock();
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res, {
-          user: {
-            username: 'some_user',
-            discriminator: '0000',
-            id: 'some_id',
-            avatar: 'some_avatar',
-          },
-        }, () => null);
-      }
+      request.user = {
+        username: 'some_user',
+        discriminator: '0000',
+        id: 'some_id',
+        avatar: 'some_avatar',
+      };
 
-      assert.equal(res.statusCode, 200);
-      assert.equal(res.getHeader('content-type'), 'text/html');
+      await route.handler(request, reply);
+
+      assert.equal(reply.getCode(), 200);
+      assert.equal(reply.getHeader('content-type'), 'text/html');
     });
 
     it('returns a 200 when user info is provided and does not own bins', async () => {
-      const res = new ServerResponseMock();
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res, {
-          user: {
-            username: 'some_user',
-            discriminator: '0000',
-            id: 'some_id',
-            avatar: 'some_avatar',
-          },
-        }, () => null);
-      }
+      request.user = {
+        username: 'some_user',
+        discriminator: '0000',
+        id: 'some_id',
+        avatar: 'some_avatar',
+      };
 
-      assert.equal(res.statusCode, 200);
-      assert.equal(res.getHeader('content-type'), 'text/html');
+      await route.handler(request, reply);
+
+      assert.equal(reply.getCode(), 200);
+      assert.equal(reply.getHeader('content-type'), 'text/html');
     });
   });
 });

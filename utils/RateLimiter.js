@@ -76,11 +76,12 @@ class RateLimiter {
   get middleware() {
     const $this = this;
 
-    async function limit(res, data, next) {
-      const limit = await $this.rateLimit(data.auth);
+    async function limit(request, reply) {
+      const limit = await $this.rateLimit(request.auth);
 
-      if (limit) return res.json(429, { error: 'Ratelimit exceeded' });
-      else return next();
+      if (limit) {
+        reply.code(429).json({ error: 'Ratelimit exceeded' });
+      }
     }
 
     return limit;

@@ -1,81 +1,82 @@
-/* global describe it */
-/* eslint-disable no-await-in-loop */
+/* global describe it ctx */
 
 const assert = require('assert').strict;
 
-const { RouterMock, ServerResponseMock } = require('./mocks.js');
-const routerMock = new RouterMock();
+const { RouterMock, RequestMock, ReplyMock } = require('./mocks.js');
+const router = new RouterMock(ctx);
 
-const { ratelimiters, databases } = require('../../requesthandlers/globals');
-require('../../requesthandlers/homepage.js')(routerMock, ratelimiters, databases);
+require('../../routes/homepage.js')(router.route.bind(router), ctx);
 
 describe('homepage', () => {
   describe('/', () => {
-    const handlers = routerMock.routes.get('/');
+    const route = router.getRoute('/');
 
     it('returns a 200', async () => {
-      const res = new ServerResponseMock();
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res, {}, () => null);
-      }
+      await route.handler(request, reply);
 
-      assert.equal(res.statusCode, 200);
-      assert.equal(res.getHeader('content-type'), 'text/html');
+      assert.equal(reply.getCode(), 200);
+      assert.equal(reply.getHeader('content-type'), 'text/html');
     });
   });
 
   describe('/bin_code', () => {
     it('returns a 200 when bin does not exist without extension', async () => {
-      const { handlers, matches } = routerMock.routes.get('/0123456789');
-      const res = new ServerResponseMock();
+      const { route, matches } = router.getRoute('/0123456789');
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res, { matches }, () => null);
-      }
+      request.matches = matches;
 
-      assert.equal(res.statusCode, 200);
-      assert.equal(res.getHeader('content-type'), 'text/html');
+      await route.handler(request, reply);
+
+      assert.equal(reply.getCode(), 200);
+      assert.equal(reply.getHeader('content-type'), 'text/html');
     });
 
     it('returns a 200 when bin does not exist with extension', async () => {
-      const { handlers, matches } = routerMock.routes.get('/0123456789.js');
-      const res = new ServerResponseMock();
+      const { route, matches } = router.getRoute('/0123456789.js');
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res, { matches }, () => null);
-      }
+      request.matches = matches;
 
-      assert.equal(res.statusCode, 200);
-      assert.equal(res.getHeader('content-type'), 'text/html');
+      await route.handler(request, reply);
+
+      assert.equal(reply.getCode(), 200);
+      assert.equal(reply.getHeader('content-type'), 'text/html');
     });
 
     it('returns a 200 when bin exists without extension', async () => {
-      await databases.bins.createDocument({ key: '0123456789', code: 'code' });
+      await new ctx.models.Bin({ key: '0123456789', code: 'code' }).save();
 
-      const { handlers, matches } = routerMock.routes.get('/0123456789');
-      const res = new ServerResponseMock();
+      const { route, matches } = router.getRoute('/0123456789');
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res, { matches }, () => null);
-      }
+      request.matches = matches;
 
-      assert.equal(res.statusCode, 200);
-      assert.equal(res.getHeader('content-type'), 'text/html');
+      await route.handler(request, reply);
+
+      assert.equal(reply.getCode(), 200);
+      assert.equal(reply.getHeader('content-type'), 'text/html');
     });
 
     it('returns a 200 when bin exists with extension', async () => {
-      await databases.bins.createDocument({ key: '0123456789', code: 'code' });
+      await new ctx.models.Bin({ key: '0123456789', code: 'code' }).save();
 
-      const { handlers, matches } = routerMock.routes.get('/0123456789.js');
-      const res = new ServerResponseMock();
+      const { route, matches } = router.getRoute('/0123456789.js');
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res, { matches }, () => null);
-      }
+      request.matches = matches;
 
-      assert.equal(res.statusCode, 200);
-      assert.equal(res.getHeader('content-type'), 'text/html');
+      await route.handler(request, reply);
+
+      assert.equal(reply.getCode(), 200);
+      assert.equal(reply.getHeader('content-type'), 'text/html');
     });
   });
 });

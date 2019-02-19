@@ -1,13 +1,11 @@
-/* global describe it */
-/* eslint-disable no-await-in-loop */
+/* global describe it ctx */
 
 const assert = require('assert').strict;
 
-const { RouterMock, ServerResponseMock } = require('./mocks.js');
-const routerMock = new RouterMock();
+const { RouterMock, RequestMock, ReplyMock } = require('./mocks.js');
+const router = new RouterMock(ctx);
 
-const { ratelimiters, databases } = require('../../requesthandlers/globals');
-require('../../requesthandlers/oauth.js')(routerMock, ratelimiters, databases);
+require('../../routes/oauth.js')(router.route.bind(router), ctx);
 
 describe('oauth', () => {
   describe('/authorize', () => {
@@ -18,55 +16,57 @@ describe('oauth', () => {
     const redirect_uri = oauth2.query.redirect_uri;
     const authorizePath = url.parse(redirect_uri).pathname;
 
-    const handlers = routerMock.routes.get(authorizePath);
+    const route = router.getRoute(authorizePath);
 
     it('returns a 400 when code is missing', async () => {
-      const res = new ServerResponseMock();
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res, { query: {} });
-      }
+      request.query = {};
 
-      assert.equal(res.statusCode, 400);
-      assert.equal(res.getHeader('content-type'), 'application/json');
+      await route.handler(request, reply);
+
+      assert.equal(reply.getCode(), 400);
+      assert.equal(reply.getHeader('content-type'), 'application/json');
     });
 
     it('returns a 400 when the token exchange fails', async () => {
-      const res = new ServerResponseMock();
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res, { query: { code: 'wrong_code' } });
-      }
+      request.query = { code: 'wrong_code' };
 
-      assert.equal(res.statusCode, 400);
-      assert.equal(res.getHeader('content-type'), 'application/json');
+      await route.handler(request, reply);
+
+      assert.equal(reply.getCode(), 400);
+      assert.equal(reply.getHeader('content-type'), 'application/json');
     });
 
     it('returns a 302 when the exchange goes well', async () => {
-      const res = new ServerResponseMock();
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res, { query: { code: 'good_code' } });
-      }
+      request.query = { code: 'good_code' };
 
-      assert.equal(res.statusCode, 302);
-      assert.equal(res.getHeader('Location'), '/');
+      await route.handler(request, reply);
+
+      assert.equal(reply.getCode(), 302);
+      assert.equal(reply.getHeader('Location'), '/');
     });
   });
 
   describe('/logout', () => {
-    const handlers = routerMock.routes.get('/logout');
+    const route = router.getRoute('/logout');
 
     it('sets the cookies and redirects to index', async () => {
-      const res = new ServerResponseMock();
+      const request = new RequestMock();
+      const reply = new ReplyMock();
 
-      for (const handler of handlers) {
-        await handler(res);
-      }
+      await route.handler(request, reply);
 
-      assert.equal(res.statusCode, 302);
-      assert.equal(res.getHeader('Location'), '/');
-      assert.deepEqual(res.getHeader('set-cookie'), [
+      assert.equal(reply.getCode(), 302);
+      assert.equal(reply.getHeader('Location'), '/');
+      assert.deepEqual(reply.getHeader('set-cookie'), [
         'access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/',
         'refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/',
       ]);
