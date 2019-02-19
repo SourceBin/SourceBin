@@ -8,15 +8,13 @@ install:
 
 jobs:
   include:
-    - stage: App
+    - stage: Test
       script: npm run lint --prefix app
-      name: "Lint"
+      name: "App: Lint"
     - script: npm run test:requesthandlers --prefix app
-      name: "Unit tests"
-
-    - stage: Api
-      script: npm run lint --prefix api
-      name: "Lint"
+      name: "App: Unit tests"
+    - script: npm run lint --prefix api
+      name: "Api: Lint"
 
 cache: npm
 
