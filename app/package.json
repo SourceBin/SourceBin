@@ -1,8 +1,5 @@
 {
-  "name": "sourcebin",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "name": "app",
   "dependencies": {
     "@types/mongoose": "^5.3.5",
     "mongoose": "^5.2.9",
@@ -17,13 +14,10 @@
     "rewiremock": "^3.13.0"
   },
   "scripts": {
-    "postinstall": "node scripts/postinstall.js",
     "start": "node index.js",
     "test": "npm run lint && npm run test:requesthandlers",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test:requesthandlers": "mocha --exit tests/requesthandlers"
-  },
-  "author": "SebastiaanYN",
-  "license": "ISC"
+  }
 }

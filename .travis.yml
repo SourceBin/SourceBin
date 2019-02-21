@@ -3,8 +3,9 @@ node_js:
   - 10
 
 install:
-  - npm install --prefix app
-  - npm install --prefix api
+  - chmod +x install.sh
+  - ./install.sh --non-interactive
+cache: npm
 
 jobs:
   include:
@@ -15,8 +16,6 @@ jobs:
       name: "App: Unit tests"
     - script: npm run lint --prefix api
       name: "Api: Lint"
-
-cache: npm
 
 after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh

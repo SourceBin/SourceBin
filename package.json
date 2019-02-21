@@ -1,4 +1,17 @@
 {
+  "name": "sourcebin",
+  "version": "1.0.0",
+  "description": "Open-source code bin",
+  "author": "SebastiaanYN",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SebastiaanYN/SourceBin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SebastiaanYN/SourceBin/issues"
+  },
+  "homepage": "https://sourceb.in",
   "devDependencies": {
     "eslint": "^5.14.1"
   }
