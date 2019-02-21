@@ -34,7 +34,7 @@ class Router {
    * @returns {Router} this instance
    */
   register(id) {
-    const src = path.join(process.cwd(), id);
+    const src = path.isAbsolute(id) ? id : path.join(process.cwd(), id);
 
     if (fs.lstatSync(src).isDirectory()) {
       fs
@@ -55,7 +55,7 @@ class Router {
    * @returns {Router} this instance
    */
   load(id) {
-    const src = path.join(process.cwd(), id);
+    const src = path.isAbsolute(id) ? id : path.join(process.cwd(), id);
 
     if (fs.lstatSync(src).isDirectory()) {
       fs

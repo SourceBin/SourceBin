@@ -10,6 +10,7 @@ services:
     environment:
       - PORT=3000
       - REDIS_URL=redis://redis
+      - PRODUCTION=true
     depends_on:
       - redis
     container_name: app
@@ -24,6 +25,7 @@ services:
     environment:
       - PORT=3001
       - REDIS_URL=redis://redis
+      - PRODUCTION=true
     depends_on:
       - redis
     container_name: api

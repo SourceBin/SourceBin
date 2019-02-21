@@ -3,7 +3,7 @@ const path = require('path');
 const { Methods, Cache: { CacheMap } } = require('utils');
 
 const readFile = require('util').promisify(fs.readFile);
-const fileCache = new CacheMap();
+const fileCache = new CacheMap(process.env.PRODUCTION ? 0 : 100);
 const logo = fs.readFileSync('./html/logo.png');
 
 module.exports = (route, ctx) => {
