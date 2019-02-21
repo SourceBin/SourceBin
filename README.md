@@ -8,13 +8,10 @@
   </p>
 </div>
 
-**SourceBin** is an open-source bin website that allows you to share code snippets in over 450 different languages.
-It uses MongoDB as the database and ace editor for the interface.
-
-The site can be found at [sourceb.in](https://sourceb.in). You can also join the [discord server](https://discord.gg/EkX2X2F).
+**SourceBin** is an open-source pastebin that allows you to share code snippets in over 450 different languages.
+You can find the site at [sourceb.in](https://sourceb.in), and you can join the discord server with this link https://discord.gg/EkX2X2F.
 
 ## Installation
 1. Download or clone the repository
-2. Run `npm install`
-3. Edit the `config.json` file and put relevant content in it
-4. Run `node index.js`
+2. Execute `install.sh` and follow the steps
+3. Run the services seperately or run it in docker `docker-compose up -d` or `docker-compose -f docker-compose.yml -f docker-compose.nginx.yml up -d`
