@@ -101,5 +101,23 @@ class Discord {
       },
     });
   }
+
+  /**
+   * Get the avatar of a user
+   * @param {Object} user The user to get the avatar of
+   * @param {Number} [size=256] The size of the avatar, can be any power of two between 16 and 2048
+   * @returns {String}
+   */
+  static getAvatar(user, size = 256) {
+    let url = 'https://cdn.discordapp.com/';
+
+    if (user.avatar) {
+      url += `avatars/${user.id}/${user.avatar}.${user.avatar.startsWith('a_') ? 'gif' : 'png'}`;
+    } else {
+      url += `embed/avatars/${user.discriminator % 5}.png`;
+    }
+
+    return `${url}?size=${size}`;
+  }
 }
 module.exports = Discord;

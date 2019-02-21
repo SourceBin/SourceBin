@@ -1,17 +1,8 @@
-const crypto = require('crypto');
 const request = require('request');
 const languages = require('./json/languages.json');
 const themes = require('./json/themes.json');
 
 class Methods {
-  /**
-   * Generates a random 8 char key
-   * @returns {String}
-   */
-  static generateKey() {
-    return crypto.randomBytes(5).toString('hex');
-  }
-
   /**
    * Find a language by search
    * @param {String} search The search query

@@ -22,6 +22,10 @@ class DiscordMock {
   }
 
   setTokens() {} // eslint-disable-line no-empty-function
+
+  static getAvatar() {
+    return 'avatar';
+  }
 }
 rewiremock('utils/Discord.js').with(DiscordMock);
 

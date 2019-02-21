@@ -1,4 +1,4 @@
-const { Methods } = require('utils');
+const { Bin } = require('utils');
 
 module.exports = (route, ctx) => {
   route({
@@ -6,18 +6,14 @@ module.exports = (route, ctx) => {
     path: '/bin',
     middleware: [ctx.limiters.createBin],
     async handler(request, reply) {
-      let error = null;
+      const { valid, error } = Bin.isValid(request.body);
 
-      if (typeof request.body !== 'string') error = 'Expected a string';
-      else if (!request.body.length) error = 'Can\'t save an empty string';
-      else if (request.body.length > 100000) error = 'String is too long, max 100.000';
-
-      if (error) {
+      if (!valid) {
         reply.code(400).json({ error });
         return;
       }
 
-      const key = Methods.generateKey();
+      const key = Bin.generateKey();
       let data = null;
       if (request.user.id) {
         data = { key, code: request.body, id: request.user.id };
