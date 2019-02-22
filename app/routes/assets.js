@@ -1,9 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const { Methods, Cache: { CacheMap } } = require('utils');
+const { Assets, Methods } = require('utils');
 
-const readFile = require('util').promisify(fs.readFile);
-const fileCache = new CacheMap(process.env.PRODUCTION ? 0 : 100);
+const assets = new Assets('./html', !!process.env.PRODUCTION);
 const logo = fs.readFileSync('./html/logo.png');
 
 module.exports = (route, ctx) => {
@@ -21,30 +20,11 @@ module.exports = (route, ctx) => {
     path: /^assets\/(.+?\.(js|css))$/,
     middleware: [ctx.limiters.loadAssets],
     async handler(request, reply) {
-      if (fileCache.has(request.matches[0])) {
-        reply[request.matches[2]](fileCache.get(request.matches[0]));
-        return;
-      }
+      const file = await assets.get(path.join('./html/', request.matches[1]));
 
-      try {
-        let file = (await readFile(`./html/${request.matches[1]}`)).toString();
-
-        if (request.matches[2] === 'js') {
-          const match = file.match(/^\/\/ CSS: (.+)$/m);
-
-          if (match) {
-            const css = (await readFile(
-              path.join(`./html/${request.matches[1]}`, `../${match[1]}`)
-            )).toString();
-
-            file += `(() => {const style = document.createElement('style');
-              style.innerHTML = \`${css}\`;document.head.appendChild(style);})();`;
-          }
-        }
-
-        fileCache.set(request.matches[0], file);
+      if (file) {
         reply[request.matches[2]](file);
-      } catch (err) {
+      } else {
         reply.code(400).json({ error: 'File not found' });
       }
     },

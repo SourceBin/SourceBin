@@ -1,11 +1,12 @@
 module.exports = {
+  Assets: require('./Assets.js'),
+  Bin: require('./Bin.js'),
+  Cache: require('./Cache.js'),
   Converter: require('./Converter.js'),
-  RateLimiter: require('./RateLimiter.js'),
-  Methods: require('./Methods.js'),
   Database: require('./Database.js'),
   Discord: require('./Discord.js'),
-  Cache: require('./Cache.js'),
   Engine: require('./Engine.js'),
-  Bin: require('./Bin.js'),
+  Methods: require('./Methods.js'),
+  RateLimiter: require('./RateLimiter.js'),
   Router: require('./Router'),
 };
