@@ -3,7 +3,7 @@ const { Bin } = require('utils');
 module.exports = (route, ctx) => {
   route({
     method: 'GET',
-    path: /^bin\/([a-f0-9]{10})(\.[a-zA-Z0-9]+)?$/,
+    path: /^bin\/([a-f0-9]{10})$/,
     middleware: [ctx.limiters.rawBin],
     async handler(request, reply) {
       const bin = await ctx.models.Bin
@@ -11,7 +11,11 @@ module.exports = (route, ctx) => {
         .select('-__v -_id')
         .exec();
 
-      reply.json(bin);
+      if (bin) {
+        reply.json(bin);
+      } else {
+        reply.code(404).json({ error: 'Bin not found' });
+      }
     },
   });
 

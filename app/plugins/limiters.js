@@ -2,7 +2,7 @@ const { RateLimiter } = require('utils');
 
 module.exports = (register, ctx) => {
   const master = new RateLimiter('master', ctx.redis, 100, 1000 * 60 * 60, ip => {
-    ctx.models.Ban.findOneAndUpdate({ ip }, {
+    ctx.models.Ban.updateOne({ ip }, {
       $setOnInsert: { ip },
     }, { upsert: true }).exec();
   });
@@ -13,6 +13,5 @@ module.exports = (register, ctx) => {
     deleteBin: master.createChild('deleteBin', 200, 1000 * 60 * 15),
     loadAssets: master.createChild('loadAssets', 10000, 1000 * 60 * 15),
     languageTheme: master.createChild('languageTheme', 1500, 1000 * 60 * 15),
-    list: master.createChild('list', 200, 1000 * 60 * 15),
   });
 };

@@ -40,14 +40,4 @@ module.exports = (route, ctx) => {
       }
     },
   });
-
-  route({
-    method: 'GET',
-    path: '/list',
-    middleware: [ctx.limiters.list],
-    async handler(_, reply) {
-      const bin = await ctx.models.Bin.find().select('key -_id').exec();
-      reply.json(bin.map(bin => bin.key));
-    },
-  });
 };

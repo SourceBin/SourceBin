@@ -1,4 +1,5 @@
 const request = require('request');
+
 const languages = require('./json/languages.json');
 const themes = require('./json/themes.json');
 
@@ -78,9 +79,14 @@ class Methods {
    */
   static request(method, options, json = true) {
     return new Promise((resolve, reject) => {
-      request[method.toLowerCase()](options, (err, _, body) => {
-        if (err) reject(err);
-        else resolve(json ? JSON.parse(body) : body);
+      request[method.toLowerCase()](options, (err, response, body) => {
+        if (err) {
+          reject(err);
+        } else if (json && response.headers['content-type'] !== 'application/json') {
+          reject(new Error(JSON.stringify(response) + JSON.stringify(body)));
+        } else {
+          resolve(json ? JSON.parse(body) : body);
+        }
       });
     });
   }

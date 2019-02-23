@@ -2,7 +2,7 @@ const { RateLimiter } = require('utils');
 
 module.exports = (register, ctx) => {
   const master = new RateLimiter('master', ctx.redis, 100, 1000 * 60 * 60, ip => {
-    ctx.models.Ban.findOneAndUpdate({ ip }, {
+    ctx.models.Ban.updateOne({ ip }, {
       $setOnInsert: { ip },
     }, { upsert: true }).exec();
   });
