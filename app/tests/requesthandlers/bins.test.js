@@ -203,23 +203,4 @@ describe('bins', () => {
       assert.notEqual(bins.length, 0);
     });
   });
-
-  describe('/list', () => {
-    const route = router.getRoute('/list');
-
-    it('returns a 200 and all keys', async () => {
-      const request = new RequestMock();
-      const reply = new ReplyMock();
-
-      await new ctx.models.Bin({ key: '1', code: 'code_1' }).save();
-      await new ctx.models.Bin({ key: '2', code: 'code_2' }).save();
-      await new ctx.models.Bin({ key: '3', code: 'code_3' }).save();
-
-      await route.handler(request, reply);
-
-      assert.equal(reply.getCode(), 200);
-      assert.equal(reply.getHeader('content-type'), 'application/json');
-      assert.deepEqual(JSON.parse(reply.raw.output[2]), ['1', '2', '3']);
-    });
-  });
 });
