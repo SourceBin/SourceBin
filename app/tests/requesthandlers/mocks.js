@@ -53,6 +53,20 @@ class RouterMock {
     this._beforeEach = null;
     this._afterEach = null;
     this._on404 = null;
+
+    this.route = function(options) {
+      options.method = options.method.toLowerCase();
+
+      if (typeof options.path === 'string') {
+        options.path = options.path.replace(/^\/+|\/+$/g, '');
+      }
+
+      this.routes.push(options);
+    };
+
+    this.route.beforeEach = this.beforeEach.bind(this);
+    this.route.afterEach = this.afterEach.bind(this);
+    this.route.on404 = this.on404.bind(this);
   }
 
   getRoute(path, method = 'get') {
@@ -71,16 +85,6 @@ class RouterMock {
       });
 
     return matches ? { route, matches } : route;
-  }
-
-  route(options) {
-    options.method = options.method.toLowerCase();
-
-    if (typeof options.path === 'string') {
-      options.path = options.path.replace(/^\/+|\/+$/g, '');
-    }
-
-    this.routes.push(options);
   }
 
   static register(id) {

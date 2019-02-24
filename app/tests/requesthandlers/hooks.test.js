@@ -1,11 +1,16 @@
 /* global describe it ctx */
 
 const assert = require('assert').strict;
+const path = require('path');
+const fs = require('fs');
 
 const { RouterMock, RequestMock, ReplyMock } = require('./mocks.js');
 const router = new RouterMock(ctx);
 
-require('../../hooks.js')(router);
+const dir = path.join(__dirname, '../../hooks');
+fs.readdirSync(dir).forEach(file => {
+  require(path.join(dir, file))(router.route, ctx);
+});
 
 describe('hooks', () => {
   describe('beforeEach', () => {
