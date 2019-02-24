@@ -1,15 +1,15 @@
-const { performance: { now } } = require('perf_hooks');
-const { Cache: { CacheMap, CacheSet }, Discord } = require('utils');
+const { Cache: { CacheSet }, Discord, Methods } = require('utils');
 
-const config = require('./config.json');
+const config = require('../config.json');
 const discord = new Discord(config.oauth2.uri, config.oauth2.client_secret);
 
-const discordCache = new CacheMap(1000 * 60);
 const noCheckCache = new CacheSet(1000);
 const bannedCache = new CacheSet(1000 * 60 * 30);
 
-module.exports = router => {
-  router.beforeEach(async (request, reply, ctx) => {
+module.exports = (route, ctx) => {
+  const getAsync = require('util').promisify(ctx.redis.get.bind(ctx.redis));
+
+  route.beforeEach(async (request, reply) => {
     // Refresh access token when expired
     if (!request.cookies.access_token && request.cookies.refresh_token) {
       const tokens = await discord.refreshToken(request.cookies.refresh_token);
@@ -24,16 +24,26 @@ module.exports = router => {
     request.auth = request.ip;
     request.user = {};
     if (request.cookies.access_token) {
-      if (discordCache.has(request.cookies.access_token)) {
-        const user = discordCache.get(request.cookies.access_token);
+      const redisKey = `oauth:${request.cookies.access_token}`;
+      let user = JSON.parse(await getAsync(redisKey));
 
+      if (user) {
         request.user = user;
         request.auth = user.id;
       } else {
-        const user = await discord.getUser(request.cookies.access_token);
+        user = await discord.getUser(request.cookies.access_token);
 
-        if (user.code !== 0) {
-          discordCache.set(request.cookies.access_token, user);
+        if (user.code === 0) {
+          // Remove access_token, since it's likely to be invalid
+          reply.header('Set-Cookie', [
+            ...reply.getHeader('Set-Cookie') || [],
+            Methods.createCookie('access_token', '', { expires: new Date(0) }),
+          ]);
+        } else {
+          ctx.redis.multi()
+            .set(redisKey, JSON.stringify(user))
+            .expire(redisKey, 60)
+            .exec();
 
           request.user = user;
           request.auth = user.id;
@@ -61,21 +71,5 @@ module.exports = router => {
         reply.code(500).json({ error: 'Unknown error' });
       }
     }
-  });
-
-  router.afterEach((request, reply, ctx) => {
-    ctx.log(
-      `${new Date().toLocaleString('uk')} | ` +
-      `${reply.getCode()} | ` +
-      `${now() - request.start}ms | ` +
-      `${request.method.toUpperCase()} /${request.path}`
-    );
-  });
-
-  router.on404((request, reply, ctx) => {
-    ctx.log('404', `${request.method.toUpperCase()} /${request.path}`);
-    reply
-      .code(404)
-      .html(`<h1>404 /${request.path} was not found</h1>`);
   });
 };

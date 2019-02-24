@@ -1,6 +1,5 @@
-// eslint-disable-next-line arrow-body-style
 module.exports = router => {
-  return function route(options) {
+  function route(options) {
     if (
       !options.method ||
       !options.path ||
@@ -19,5 +18,22 @@ module.exports = router => {
       middleware: options.middleware,
       handler: options.handler,
     });
+  }
+
+  route.beforeEach = callback => {
+    router.beforeEach(callback);
+    return route;
   };
+
+  route.afterEach = callback => {
+    router.afterEach(callback);
+    return route;
+  };
+
+  route.on404 = callback => {
+    router.on404(callback);
+    return route;
+  };
+
+  return route;
 };

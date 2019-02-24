@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 const { Router } = require('utils');
 const router = new Router();
-require('./hooks.js')(router);
 
 router.register('./plugins/');
+router.load('./hooks/');
 router.load('./routes/');
 
 const { database } = require('./config.json');
