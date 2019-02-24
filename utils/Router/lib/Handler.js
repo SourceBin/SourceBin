@@ -30,7 +30,7 @@ module.exports = router => {
 
     // Before each handler
     if (router._beforeEach) {
-      router._beforeEach(request, reply, router._ctx);
+      await router._beforeEach(request, reply, router._ctx);
     }
 
     // Call all middleware
@@ -51,7 +51,7 @@ module.exports = router => {
 
     // After each handler
     if (router._afterEach) {
-      router._afterEach(request, reply, router._ctx);
+      await router._afterEach(request, reply, router._ctx);
     }
   }
 
