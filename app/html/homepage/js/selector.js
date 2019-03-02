@@ -46,10 +46,12 @@ source('selector', function(title, content, onSelect) {
         .filter(i => i.toLowerCase().includes($input.value.toLowerCase()))
         .map(i => $('p').setText(i).on('click', async e => {
           await onSelect.bind(this)(e);
+
           if (callback) {
             callback.bind(this)(e);
             callback = null;
           }
+
           this.close();
         }))
     );
@@ -65,21 +67,24 @@ source('selector', function(title, content, onSelect) {
     $content.child(index).removeClass('hover');
     index--;
     $content.child(index).addClass('hover').scrollIntoView({ block: 'center' });
+
     e.preventDefault();
   });
 
   source.shortcut(e => isOpen && e.key === 'ArrowDown', e => {
-    if (index + 1 >= $content.children.length) return;
+    if (index + 1 >= $content.children().length) return;
 
     $content.child(index).removeClass('hover');
     index++;
     $content.child(index).addClass('hover').scrollIntoView({ block: 'center' });
+
     e.preventDefault();
   });
 
   source.shortcut(e => isOpen && e.key === 'Enter', e => {
     const el = $content.child(index);
     if (el) el.click();
+
     e.preventDefault();
   });
 

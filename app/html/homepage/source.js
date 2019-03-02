@@ -159,6 +159,8 @@ source.update = (nameOrObj, value) => {
     let fired = false;
 
     document.addEventListener('keydown', event => {
+      event.ctrl = event.ctrlKey || event.metaKey;
+
       if (
         fired ||
         event.code.startsWith('Shift') ||

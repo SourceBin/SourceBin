@@ -26,6 +26,7 @@
   source('setUrl', () => {
     const key = source.key;
     const language = source.language;
+
     let url = window.location.origin;
     if (key) {
       url += `/${key}`;
@@ -51,12 +52,11 @@
     async function save() {
       const url = source.setUrl();
       const result = await navigator.permissions.query({ name: 'clipboard-write' });
+
       if (result.state === 'granted' || result.state === 'prompt') {
-        navigator.clipboard.writeText(url).then(() => {
-          source.popup('Copied Link to Clipboard');
-        }, () => {
-          source.popup('Saved the bin, you can copy the link now');
-        });
+        navigator.clipboard.writeText(url)
+          .then(() => source.popup('Copied Link to Clipboard'))
+          .catch(() => source.popup('Saved the bin, you can copy the link now'));
       } else {
         source.popup('Saved the bin, you can copy the link now');
       }
@@ -84,10 +84,12 @@
 })();
 
 (async () => {
+  // Load JavaScript files
   await source.require('./assets/editor/ace.js');
   await source.require('./assets/homepage/js/selector.js');
   source.require('./assets/homepage/js/popup.js');
 
+  // Setup ace
   ace.config.set('basePath', '/assets/editor');
   ace.config.set('modePath', '/assets/editor');
   ace.config.set('themePath', '/assets/editor');
@@ -97,22 +99,29 @@
 
   const $ = source.$;
 
+  // Configure the settings
   source('settings', {
     fontSize: 15,
     printMargin: true,
     rememberLanguage: true,
     ...JSON.parse(localStorage.getItem('settings') || '{}'),
   });
+
   const $settings = source.$.id('settings')
-    .child(0).children().map(el => el.child(0).on('change', source.updateSettings));
+    .child(0)
+    .children()
+    .map(el => el.child(0).on('change', source.updateSettings));
+
   $settings[0].value = source.settings.fontSize;
   $settings[1].checked = source.settings.printMargin;
   $settings[2].checked = source.settings.rememberLanguage;
 
+  // Call functions to correctly instantiate everything
   source.updateSettings();
   source.setTheme();
   source.setMode();
 
+  // Setup all buttons
   editor.container.style.display = 'inherit';
   editor.focus();
   const $save = $.id('save');
@@ -123,7 +132,7 @@
     source.save();
   });
 
-  source.shortcut(e => e.key === 's' && e.ctrlKey, e => {
+  source.shortcut(e => e.key === 's' && e.ctrl, e => {
     $save.click();
     e.preventDefault();
   });
