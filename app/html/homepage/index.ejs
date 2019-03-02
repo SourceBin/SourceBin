@@ -54,12 +54,12 @@
 
   <script src="./assets/homepage/source.js"></script>
   <script>
-    (async () => {
+    (() => {
       const key = <%- bin ? `'${bin.key}'` : 'null' %>;
       const language = <%- language ? JSON.stringify({
         name: language.name,
         ace_mode: language.ace_mode,
-        extension: language.extensions[0]
+        extension: language.extensions[0],
       }) : `JSON.parse(localStorage.getItem('language'))` %>;
       const languages = <%- JSON.stringify(Object.keys(languages)) %>;
       const themes = <%- JSON.stringify(themes.map(theme => theme.name)) %>;
@@ -69,10 +69,10 @@
         language,
         theme: JSON.parse(localStorage.getItem('theme')),
         languages,
-        themes
+        themes,
       });
 
-      await source.require('./assets/homepage/js/index.js');
+      source.require('./assets/homepage/js/index.js');
     })();
 
   </script>
