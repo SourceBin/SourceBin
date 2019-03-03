@@ -68,7 +68,7 @@ nav ul li {
 
 nav ul li ul {
   position: absolute;
-  left: 0;
+  right: 0;
   top: var(--nav-size);
 
   background-color: #2f3542;
@@ -80,7 +80,6 @@ nav ul li ul {
   display: flex;
   flex-direction: column;
   justify-content: center;
-
 
   opacity: 0;
   visibility: hidden;

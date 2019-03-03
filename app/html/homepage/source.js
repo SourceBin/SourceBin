@@ -148,11 +148,19 @@ source.update = (nameOrObj, value) => {
   source('require', async path => {
     const file = await source.request('get', path, null, false);
 
-    const script = document.createElement('script');
-    script.setAttribute('path', path);
-    script.innerHTML = file;
+    let el;
+    switch (path.split('.').pop()) {
+      case 'js':
+        el = document.createElement('script');
+        el.setAttribute('path', path);
+        break;
+      case 'css':
+        el = document.createElement('style');
+        break;
+    }
 
-    document.head.appendChild(script);
+    el.innerHTML = file;
+    document.head.appendChild(el);
   });
 
   source('shortcut', (combination, callback) => {
