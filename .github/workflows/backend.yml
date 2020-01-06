@@ -1,0 +1,32 @@
+name: Backend
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@master
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: npm install
+      run: npm install
+      working-directory: backend
+
+    - name: Build
+      run: npm run build
+      working-directory: backend
+
+    - name: Lint
+      run: npm run lint
+      working-directory: backend
