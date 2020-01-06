@@ -1,9 +1,0 @@
-{
-  "name": "utils",
-  "dependencies": {
-    "@types/request": "^2.48.1",
-    "clean-css": "^4.2.1",
-    "request": "^2.88.0",
-    "uglify-es": "^3.3.9"
-  }
-}
