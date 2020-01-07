@@ -1,6 +1,7 @@
 {
   "main": "build/index.js",
   "scripts": {
+    "test": "npm run build && npm run lint",
     "build": "tsc",
     "start": "node .",
     "lint": "eslint --ext .js,.ts --ignore-path ../.gitignore ."
