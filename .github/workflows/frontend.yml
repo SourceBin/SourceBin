@@ -1,12 +1,12 @@
-name: Backend
+name: Frontend
 
 on:
   push:
     paths:
-    - 'backend/**'
+    - 'frontend/**'
   pull_request:
     paths:
-    - 'backend/**'
+    - 'frontend/**'
 
 jobs:
   test:
@@ -27,12 +27,12 @@ jobs:
 
     - name: npm install
       run: npm install
-      working-directory: backend
+      working-directory: frontend
 
     - name: Build
       run: npm run build
-      working-directory: backend
+      working-directory: frontend
 
     - name: Lint
       run: npm run lint
-      working-directory: backend
+      working-directory: frontend
