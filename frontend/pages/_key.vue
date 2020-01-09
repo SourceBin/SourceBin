@@ -14,7 +14,7 @@ export default {
       this.updateUrl();
     },
   },
-  async asyncData({ redirect, store, params }) {
+  async asyncData({ error, store, params }) {
     const { key } = params;
 
     if (!key) {
@@ -23,8 +23,11 @@ export default {
 
     try {
       await store.dispatch('bin/load', key);
-    } catch (err) {
-      redirect('/');
+    } catch ({ response }) {
+      error({
+        statusCode: response.status,
+        message: response.data.message,
+      });
     }
   },
   methods: {
@@ -49,6 +52,9 @@ export default {
         { name: 'og:image', content: meta.image },
       ],
     };
+  },
+  validate({ params }) {
+    return /[0-9A-F]{10}/i.test(params.key);
   },
 };
 </script>
