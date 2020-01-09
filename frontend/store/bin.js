@@ -1,6 +1,5 @@
 export const state = () => ({
   key: null,
-  language: null,
   content: '',
 
   saved: false,
