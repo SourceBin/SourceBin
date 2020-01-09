@@ -1,4 +1,8 @@
 module.exports = {
+  parserOptions: {
+    ecmaVersion: 11,
+  },
+
   extends: [
     '@syntek/syntek/vue',
     'plugin:nuxt/recommended',

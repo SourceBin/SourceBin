@@ -1,14 +1,36 @@
 <template lang="html">
-  <pre>{{ bin.content }}</pre>
+  <client-only>
+    <AceEditor
+      id="editor"
+      v-model="content"
+      language="javascript"
+      theme="dracula"
+    />
+  </client-only>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 
+import AceEditor from '~/components/AceEditor.vue';
+
 import { meta } from '../config.js';
 
 export default {
-  computed: mapState(['bin']),
+  components: {
+    AceEditor,
+  },
+  computed: {
+    content: {
+      get() {
+        return this.bin.content;
+      },
+      set(value) {
+        this.$store.commit('bin/updateContent', value);
+      },
+    },
+    ...mapState(['bin']),
+  },
   watch: {
     'bin.key': function () {
       this.updateUrl();
@@ -32,7 +54,7 @@ export default {
   },
   methods: {
     updateUrl() {
-      window.history.pushState(null, null, this.bin.key);
+      window.history.pushState(null, null, this.bin.key || '/');
     },
   },
   head() {
@@ -54,7 +76,14 @@ export default {
     };
   },
   validate({ params }) {
-    return /[0-9A-F]{10}/i.test(params.key);
+    return !params.key || /[0-9A-F]{10}/i.test(params.key);
   },
 };
 </script>
+
+<style lang="scss">
+#editor {
+  width: 100vw;
+  height: 100vh;
+}
+</style>
