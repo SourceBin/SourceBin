@@ -9,6 +9,7 @@ export const mutations = {
   updateContent(state, content) {
     state.content = content;
 
+    state.key = null;
     state.saved = false;
   },
   loadSuccess(state, bin) {
