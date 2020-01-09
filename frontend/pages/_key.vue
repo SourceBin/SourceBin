@@ -9,6 +9,11 @@ import { meta } from '../config.js';
 
 export default {
   computed: mapState(['bin']),
+  watch: {
+    'bin.key': function () {
+      this.updateUrl();
+    },
+  },
   async asyncData({ redirect, store, params }) {
     const { key } = params;
 
@@ -21,6 +26,11 @@ export default {
     } catch (err) {
       redirect('/');
     }
+  },
+  methods: {
+    updateUrl() {
+      window.history.pushState(null, null, this.bin.key);
+    },
   },
   head() {
     return {
