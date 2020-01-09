@@ -1,14 +1,33 @@
 <template lang="html">
-  <pre>{{ bin ? bin.content : '' }}</pre>
+  <pre>{{ bin.content }}</pre>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import { meta } from '../config.js';
 
 export default {
+  computed: mapState(['bin']),
+  async asyncData({ redirect, store, params }) {
+    const { key } = params;
+
+    if (!key) {
+      return;
+    }
+
+    try {
+      await store.dispatch('bin/load', key);
+    } catch (err) {
+      redirect('/');
+    }
+  },
   head() {
     return {
-      title: meta.title,
+      title: this.bin.key
+        ? `${meta.title} | ${this.bin.key}`
+        : meta.title,
+
       meta: [
         { name: 'description', hid: 'description', content: meta.description },
 
@@ -20,12 +39,6 @@ export default {
         { name: 'og:image', content: meta.image },
       ],
     };
-  },
-  async asyncData({ $axios, params }) {
-    const { key } = params;
-
-    const bin = await $axios.$get(`/bins/${key}`).catch(() => undefined);
-    return { bin };
   },
 };
 </script>
