@@ -1,23 +1,35 @@
 <template lang="html">
-  <client-only>
-    <AceEditor
-      id="editor"
-      v-model="content"
-      language="javascript"
-      theme="dracula"
-    />
-  </client-only>
+  <div>
+    <Navbar>
+      <li>Save</li>
+      <li>New</li>
+      <li>Language</li>
+      <li>Theme</li>
+      <li>Settings</li>
+    </Navbar>
+
+    <client-only>
+      <AceEditor
+        id="editor"
+        v-model="content"
+        language="javascript"
+        theme="dracula"
+      />
+    </client-only>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 
-import AceEditor from '~/components/AceEditor.vue';
+import Navbar from '@/components/Navbar.vue';
+import AceEditor from '@/components/AceEditor.vue';
 
 import { meta } from '../config.js';
 
 export default {
   components: {
+    Navbar,
     AceEditor,
   },
   computed: {
