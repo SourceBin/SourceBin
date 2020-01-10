@@ -11,7 +11,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
 
-    "outDir": "build",
+    "outDir": "dist",
     "sourceMap": true
   }
 }
