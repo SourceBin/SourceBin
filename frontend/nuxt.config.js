@@ -1,7 +1,7 @@
 import { meta } from './config.js';
 
 export default {
-  buildDir: 'build',
+  buildDir: 'dist',
   mode: 'universal',
 
   head: {
