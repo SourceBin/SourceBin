@@ -15,21 +15,20 @@
 </template>
 
 <style lang="scss" scoped>
-@import url("https://fonts.googleapis.com/css?family=Raleway");
+@import url('https://fonts.googleapis.com/css?family=Raleway');
 
 $height: 30px;
 
 $font: 13px Raleway, monospace;
 $color: #0d0d0d;
 
-$background: silver;
+$background: #c0c0c0;
 $background-hover: #a7a7a7;
 
 header {
   background: $background;
   color: $color;
   font: $font;
-
   user-select: none;
   cursor: default;
 }
@@ -43,14 +42,12 @@ ul {
   margin: 0;
   padding: 0;
   min-height: $height;
-
   list-style: none;
 }
 
 li {
   float: left;
   display: block;
-
   padding: 0 15px;
   line-height: $height;
 

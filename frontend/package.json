@@ -4,19 +4,20 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "lint": "eslint --ext .js,.vue --ignore-path ../.gitignore ."
+    "lint": "npm run lint:code && npm run lint:css",
+    "lint:code": "eslint --ext .js,.vue --ignore-path ../.gitignore .",
+    "lint:css": "stylelint '{**/*,*}.{css,sass,scss,vue}' --syntax scss --ignore-path ../.gitignore"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/pwa": "^3.0.0-0",
     "brace": "^0.11.1",
-    "node-sass": "^4.13.0",
     "normalize.css": "^8.0.1",
     "nuxt": "^2.0.0",
-    "sass-loader": "^8.0.0",
     "vuex": "^3.1.2"
   },
   "devDependencies": {
+    "@mapbox/stylelint-processor-arbitrary-tags": "^0.3.0",
     "@syntek/eslint-config-syntek": "^2.0.2",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.8.0",
@@ -25,6 +26,11 @@
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-jsdoc": "^15.8.0",
     "eslint-plugin-nuxt": ">=0.4.2",
-    "eslint-plugin-vue": "^5.2.3"
+    "eslint-plugin-vue": "^5.2.3",
+    "node-sass": "^4.13.0",
+    "sass-loader": "^8.0.1",
+    "stylelint": "^12.0.1",
+    "stylelint-config-strict-scss": "^0.5.0",
+    "stylelint-scss": "^3.13.0"
   }
 }
