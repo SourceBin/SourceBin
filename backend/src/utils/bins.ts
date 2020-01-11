@@ -1,12 +1,21 @@
 import crypto from 'crypto';
 
-export function isValid(content?: string): content is string {
+import { bin } from '../config';
+
+export function isValidContent(content: any): content is string {
   if (typeof content !== 'string') {
     return false;
   }
 
-  // TODO: Add more checks
-  return true;
+  return content.length > 0 && content.length <= bin.maxContentLength;
+}
+
+export function isValidLanguage(language: any): language is string {
+  if (typeof language !== 'string') {
+    return false;
+  }
+
+  return language.length > 0 && language.length <= bin.maxLanguageLength;
 }
 
 export function generateKey(): string {

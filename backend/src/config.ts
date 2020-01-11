@@ -13,3 +13,8 @@ export const rateLimits = {
     },
   },
 };
+
+export const bin = {
+  maxContentLength: 100_000,
+  maxLanguageLength: 100,
+};

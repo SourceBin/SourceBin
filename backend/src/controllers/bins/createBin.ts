@@ -2,14 +2,19 @@ import { Request, Response } from 'express';
 
 import { Bin } from '../../models/Bin';
 
-import { isValid, generateKey } from '../../utils/bins';
+import { isValidContent, isValidLanguage, generateKey } from '../../utils/bins';
 import { error } from '../../utils/errors';
 
 export async function createBin(req: Request, res: Response): Promise<void> {
-  const { content } = req.body;
+  const { content, language } = req.body;
 
-  if (!isValid(content)) {
+  if (!isValidContent(content)) {
     error(400, 'Content is invalid', res);
+    return;
+  }
+
+  if (!isValidLanguage(language)) {
+    error(400, 'Language is invalid', res);
     return;
   }
 
@@ -18,6 +23,7 @@ export async function createBin(req: Request, res: Response): Promise<void> {
   const bin = new Bin({
     key,
     content,
+    language,
   });
 
   try {
