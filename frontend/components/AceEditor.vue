@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     setValue(value) {
-      this.editor.setValue(value);
+      this.editor.setValue(value, -1);
     },
     async setLanguage(mode) {
       await import(`brace/mode/${mode}`);
