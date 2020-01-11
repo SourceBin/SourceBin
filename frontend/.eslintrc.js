@@ -8,11 +8,16 @@ module.exports = {
     'plugin:nuxt/recommended',
   ],
 
+  settings: {
+    'import/resolver': {
+      alias: [
+        ['@', '.']
+      ],
+    },
+  },
+
   rules: {
     'import/prefer-default-export': 'off',
-
-    // Disable this rule so import aliases work
-    'import/no-unresolved': 'off',
   },
 
   overrides: [
