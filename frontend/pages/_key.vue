@@ -1,54 +1,20 @@
 <template lang="html">
   <div>
-    <Navbar>
-      <NavItem>Save</NavItem>
-      <NavItem>New</NavItem>
-      <NavItem>Language</NavItem>
-      <NavItem>Theme</NavItem>
-      <NavItem>Settings</NavItem>
-    </Navbar>
-
-    <client-only>
-      <AceEditor
-        id="editor"
-        v-model="content"
-        language="javascript"
-        theme="dracula"
-      />
-    </client-only>
+    <Header />
+    <Editor />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
-import Navbar from '@/components/nav/Navbar.vue';
-import NavItem from '@/components/nav/NavItem.vue';
-import AceEditor from '@/components/AceEditor.vue';
+import Header from '@/components/home/Header.vue';
+import Editor from '@/components/home/Editor.vue';
 
 import { meta } from '@/config.js';
 
 export default {
   components: {
-    Navbar,
-    NavItem,
-    AceEditor,
-  },
-  computed: {
-    content: {
-      get() {
-        return this.bin.content;
-      },
-      set(value) {
-        this.$store.commit('bin/updateContent', value);
-      },
-    },
-    ...mapState(['bin']),
-  },
-  watch: {
-    'bin.key': function () {
-      this.updateUrl();
-    },
+    Header,
+    Editor,
   },
   async asyncData({ error, store, params }) {
     const { key } = params;
@@ -66,16 +32,11 @@ export default {
       });
     }
   },
-  methods: {
-    updateUrl() {
-      window.history.pushState(null, null, this.bin.key || '/');
-    },
-  },
   head() {
+    const { key } = this.$store.state.bin;
+
     return {
-      title: this.bin.key
-        ? `${meta.title} | ${this.bin.key}`
-        : meta.title,
+      title: key ? `${meta.title} | ${key}` : meta.title,
 
       meta: [
         { name: 'description', hid: 'description', content: meta.description },
@@ -94,10 +55,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-#editor {
-  width: 100vw;
-  height: 100vh;
-}
-</style>

@@ -1,17 +1,15 @@
 <template lang="html">
-  <header>
-    <nav>
-      <ul>
-        <slot />
-      </ul>
+  <nav>
+    <ul>
+      <slot />
+    </ul>
 
-      <ul>
-        <NavItem no-select>
-          SourceBin
-        </NavItem>
-      </ul>
-    </nav>
-  </header>
+    <ul>
+      <NavItem no-select>
+        SourceBin
+      </NavItem>
+    </ul>
+  </nav>
 </template>
 
 <script>
@@ -28,17 +26,14 @@ export default {
 @import '@/assets/nav/_variables.scss';
 @import url('https://fonts.googleapis.com/css?family=Raleway');
 
-header {
+nav {
+  display: flex;
+  justify-content: space-between;
   background: $background;
   color: $color;
   font: $font;
   user-select: none;
   cursor: default;
-}
-
-nav {
-  display: flex;
-  justify-content: space-between;
 }
 
 ul {
