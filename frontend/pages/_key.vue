@@ -1,11 +1,11 @@
 <template lang="html">
   <div>
     <Navbar>
-      <li>Save</li>
-      <li>New</li>
-      <li>Language</li>
-      <li>Theme</li>
-      <li>Settings</li>
+      <NavItem>Save</NavItem>
+      <NavItem>New</NavItem>
+      <NavItem>Language</NavItem>
+      <NavItem>Theme</NavItem>
+      <NavItem>Settings</NavItem>
     </Navbar>
 
     <client-only>
@@ -22,14 +22,16 @@
 <script>
 import { mapState } from 'vuex';
 
-import Navbar from '@/components/Navbar.vue';
+import Navbar from '@/components/nav/Navbar.vue';
+import NavItem from '@/components/nav/NavItem.vue';
 import AceEditor from '@/components/AceEditor.vue';
 
-import { meta } from '../config.js';
+import { meta } from '@/config.js';
 
 export default {
   components: {
     Navbar,
+    NavItem,
     AceEditor,
   },
   computed: {
