@@ -9,7 +9,7 @@ export async function getBin(req: Request, res: Response): Promise<void> {
 
   const bin = await Bin
     .findOne({ key })
-    .select('-_id key content created')
+    .select('-_id key content language created')
     .exec();
 
   if (bin) {
