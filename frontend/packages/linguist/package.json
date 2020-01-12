@@ -1,0 +1,14 @@
+{
+  "name": "linguist",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/index.json",
+  "scripts": {
+    "build": "node index.js",
+    "install": "npm run build"
+  },
+  "dependencies": {
+    "axios": "^0.19.1",
+    "js-yaml": "^3.13.1"
+  }
+}
