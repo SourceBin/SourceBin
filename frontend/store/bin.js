@@ -1,7 +1,7 @@
 export const state = () => ({
   key: null,
   content: '',
-  language: null,
+  languageId: null,
 
   saved: false,
 });
@@ -19,7 +19,7 @@ export const mutations = {
   loadSuccess(state, bin) {
     state.key = bin.key;
     state.content = bin.content;
-    state.language = bin.language;
+    state.languageId = bin.languageId;
 
     state.saved = true;
   },
@@ -39,7 +39,7 @@ export const actions = {
   async save({ commit, state }) {
     const res = await this.$axios.$post('/bins', {
       content: state.content,
-      language: state.language,
+      languageId: state.languageId,
     });
 
     commit('saveSuccess', res.key);
