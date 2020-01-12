@@ -16,7 +16,7 @@ export default {
     Header,
     Editor,
   },
-  async asyncData({ error, store, params }) {
+  async fetch({ error, store, params }) {
     const { key } = params;
 
     if (!key) {

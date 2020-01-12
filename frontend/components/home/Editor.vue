@@ -3,7 +3,7 @@
     <AceEditor
       id="editor"
       v-model="content"
-      language="javascript"
+      :language="language"
       theme="dracula"
     />
   </client-only>
@@ -11,6 +11,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import linguist from 'linguist';
 
 import AceEditor from '@/components/AceEditor.vue';
 
@@ -26,6 +27,9 @@ export default {
       set(value) {
         this.$store.commit('bin/updateContent', value);
       },
+    },
+    language() {
+      return linguist[this.bin.languageId].aceMode;
     },
     ...mapState(['bin']),
   },
