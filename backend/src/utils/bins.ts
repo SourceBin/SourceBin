@@ -10,12 +10,8 @@ export function isValidContent(content: any): content is string {
   return content.length > 0 && content.length <= bin.maxContentLength;
 }
 
-export function isValidLanguage(language: any): language is string {
-  if (typeof language !== 'string') {
-    return false;
-  }
-
-  return language.length > 0 && language.length <= bin.maxLanguageLength;
+export function isValidLanguageId(languageId: any): languageId is number {
+  return Number.isInteger(languageId);
 }
 
 export function generateKey(): string {
