@@ -11,13 +11,14 @@ module.exports = {
   settings: {
     'import/resolver': {
       alias: [
-        ['@', '.']
+        ['@', '.'],
       ],
     },
   },
 
   rules: {
     'import/prefer-default-export': 'off',
+    'import/no-extraneous-dependencies': 'off',
   },
 
   overrides: [
@@ -26,7 +27,7 @@ module.exports = {
       rules: {
         'no-shadow': 'off',
         'no-param-reassign': 'off',
-      }
+      },
     },
     {
       files: ['*.vue'],
@@ -34,5 +35,5 @@ module.exports = {
         'func-names': 'off',
       },
     },
-  ]
+  ],
 }

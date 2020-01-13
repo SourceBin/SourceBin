@@ -39,6 +39,7 @@ export default {
 <style lang="scss" scoped>
 #editor {
   width: 100vw;
-  height: 100vh;
+  // TODO: Make the editor 100% of the remaining height
+  height: calc(100vh - 30px);
 }
 </style>

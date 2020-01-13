@@ -16,6 +16,9 @@ export const mutations = {
     state.key = null;
     state.saved = false;
   },
+  setLanguage(state, languageId) {
+    state.languageId = languageId;
+  },
   loadSuccess(state, bin) {
     state.key = bin.key;
     state.content = bin.content;

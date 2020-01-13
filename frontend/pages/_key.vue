@@ -48,6 +48,10 @@ export default {
         { name: 'og:url', content: meta.url },
         { name: 'og:image', content: meta.image },
       ],
+
+      link: [
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap' },
+      ],
     };
   },
   validate({ params }) {
