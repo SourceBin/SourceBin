@@ -39,7 +39,7 @@ li:not(.no-select) {
   cursor: pointer;
 
   &:hover {
-    background: $background-hover;
+    background: $hover-background;
   }
 }
 
@@ -47,7 +47,7 @@ li.disabled {
   cursor: not-allowed;
 
   &:hover {
-    background: lighten($background-hover, 5%);
+    background: lighten($hover-background, 5%);
   }
 }
 </style>

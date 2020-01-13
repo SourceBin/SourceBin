@@ -1,0 +1,16 @@
+@import '@/assets/_globals.scss';
+
+$container-z-index: 10000;
+
+$container-background: rgba(255, 255, 255, 0.1);
+$selector-background: #2c2f33;
+$option-hover-background: lighten($selector-background, 5%);
+
+$color: #fff;
+
+$title-font: bold 30px $font-family;
+$close-font: 20px Arial, sans-serif;
+$option-font: 18px $font-family;
+
+$input-border: 1px solid $color;
+$option-border: 1px solid darken($selector-background, 5%);

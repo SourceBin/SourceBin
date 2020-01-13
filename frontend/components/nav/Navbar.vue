@@ -24,7 +24,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/nav/_variables.scss';
-@import url('https://fonts.googleapis.com/css?family=Raleway');
 
 nav {
   display: flex;

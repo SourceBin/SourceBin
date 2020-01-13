@@ -23,8 +23,18 @@ export default {
     '@nuxtjs/pwa',
   ],
 
+  plugins: [
+    '@/plugins/createSelector.js',
+  ],
+
   manifest: {
     name: meta.title,
     description: meta.description,
+  },
+
+  build: {
+    transpile: [
+      'lodash-es',
+    ],
   },
 };
