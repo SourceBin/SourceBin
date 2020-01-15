@@ -16,7 +16,8 @@
     "lodash-es": "^4.17.15",
     "normalize.css": "^8.0.1",
     "nuxt": "^2.0.0",
-    "themes": "file:packages/themes"
+    "themes": "file:packages/themes",
+    "vuex-persistedstate": "^2.7.0"
   },
   "devDependencies": {
     "@mapbox/stylelint-processor-arbitrary-tags": "^0.3.0",
