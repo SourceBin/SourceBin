@@ -4,9 +4,16 @@ const yaml = require('js-yaml');
 
 const config = require('./config.json');
 
-async function loadLinguist() {
+async function loadGithubLinguist() {
   const { data } = await axios.get(config.url);
   return yaml.safeLoad(data);
+}
+
+function getIndexFile() {
+  return `
+    module.exports.linguist = require('./linguist.json');
+    module.exports.languages = require('./languages.json');
+  `;
 }
 
 function transformLanguage(name, data) {
@@ -17,28 +24,44 @@ function transformLanguage(name, data) {
   };
 }
 
-function transformLinguist(linguist) {
+function transformLinguist(githubLinguist) {
   const output = {};
 
-  for (const [language, data] of Object.entries(linguist)) {
-    output[data.language_id] = transformLanguage(language, data);
+  for (const [name, data] of Object.entries(githubLinguist)) {
+    output[data.language_id] = transformLanguage(name, data);
   }
 
   return output;
 }
 
-function writeFile(content) {
+function transformLanguages(githubLinguist) {
+  const output = {};
+
+  for (const [name, data] of Object.entries(githubLinguist)) {
+    output[name] = data.language_id;
+  }
+
+  return output;
+}
+
+function writeFile(index, linguist, languages) {
   if (!fs.existsSync('./dist')) {
     fs.mkdirSync('./dist');
   }
 
-  fs.writeFileSync('./dist/index.json', JSON.stringify(content, null, 2));
+  fs.writeFileSync('./dist/index.js', index);
+  fs.writeFileSync('./dist/linguist.json', JSON.stringify(linguist, null, 2));
+  fs.writeFileSync('./dist/languages.json', JSON.stringify(languages, null, 2));
 }
 
 async function main() {
-  const linguist = await loadLinguist();
-  const output = transformLinguist(linguist);
-  writeFile(output);
+  const githubLinguist = await loadGithubLinguist();
+
+  const index = getIndexFile();
+  const linguist = transformLinguist(githubLinguist);
+  const languages = transformLanguages(githubLinguist);
+
+  writeFile(index, linguist, languages);
 }
 
 main();
