@@ -13,11 +13,11 @@
       </NavItem>
 
       <NavItem @click="selectLanguage">
-        Language
+        Language - {{ language }}
       </NavItem>
 
       <NavItem @click="selectTheme">
-        Theme
+        Theme - {{ theme }}
       </NavItem>
 
       <NavItem>Settings</NavItem>
@@ -37,6 +37,14 @@ export default {
     Navbar,
     NavItem,
   },
+  computed: {
+    language() {
+      return linguist[this.$store.state.bin.languageId].name;
+    },
+    theme() {
+      return themes[this.$store.state.settings.theme];
+    },
+  },
   mounted() {
     this.languageSelector = this.$createSelector({
       title: 'Language Selector',
@@ -45,7 +53,7 @@ export default {
         .map(([id, language]) => ({
           name: language.name,
           aliases: language.aliases,
-          data: id,
+          data: Number(id),
         })),
     });
 
@@ -63,8 +71,12 @@ export default {
     this.languageSelector.remove();
   },
   methods: {
-    save() {
-      this.$store.dispatch('bin/save');
+    async save() {
+      const languageId = await this.selectLanguage();
+
+      if (languageId) {
+        this.$store.dispatch('bin/save');
+      }
     },
     reset() {
       this.$store.commit('bin/reset');
@@ -75,6 +87,8 @@ export default {
       if (languageId) {
         this.$store.commit('bin/setLanguage', languageId);
       }
+
+      return languageId;
     },
     async selectTheme() {
       const theme = await this.themeSelector.promptSelect();
@@ -82,6 +96,8 @@ export default {
       if (theme) {
         this.$store.commit('settings/setTheme', theme);
       }
+
+      return theme;
     },
   },
 };
