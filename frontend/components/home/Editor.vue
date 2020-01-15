@@ -13,11 +13,9 @@
 import { mapState } from 'vuex';
 import linguist from 'linguist';
 
-import AceEditor from '@/components/AceEditor.vue';
-
 export default {
   components: {
-    AceEditor,
+    AceEditor: () => import('@/components/AceEditor.vue'),
   },
   computed: {
     content: {
