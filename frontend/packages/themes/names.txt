@@ -1,0 +1,37 @@
+Ambiance
+Chaos
+Chrome
+Clouds
+Clouds Midnight
+Cobalt
+Crimson Editor
+Dawn
+Dracula
+Dreamweaver
+Eclipse
+Github
+Gob
+Gruvbox
+Idle Fingers
+iPlastic
+Katzenmilch
+KR Theme
+Kuroir
+Merbivore Soft
+Merbivore
+Mono Industrial
+Monokai
+Pastel on Dark
+Solarized Dark
+Solarized Light
+SQLServer
+Terminal
+Textmate
+Tomorrow Night Blue
+Tomorrow Night Bright
+Tomorrow Night Eighties
+Tomorrow Night
+Tomorrow
+Twilight
+Vibrant Ink
+XCode

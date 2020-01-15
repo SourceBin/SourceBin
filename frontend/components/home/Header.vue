@@ -16,7 +16,10 @@
         Language
       </NavItem>
 
-      <NavItem>Theme</NavItem>
+      <NavItem @click="selectTheme">
+        Theme
+      </NavItem>
+
       <NavItem>Settings</NavItem>
     </Navbar>
   </header>
@@ -24,6 +27,7 @@
 
 <script>
 import { linguist } from 'linguist';
+import themes from 'themes';
 
 import Navbar from '@/components/nav/Navbar.vue';
 import NavItem from '@/components/nav/NavItem.vue';
@@ -44,6 +48,16 @@ export default {
           data: id,
         })),
     });
+
+    this.themeSelector = this.$createSelector({
+      title: 'Theme Selector',
+      options: Object
+        .entries(themes)
+        .map(([theme, name]) => ({
+          name,
+          data: theme,
+        })),
+    });
   },
   beforeDestroy() {
     this.languageSelector.remove();
@@ -60,6 +74,13 @@ export default {
 
       if (languageId) {
         this.$store.commit('bin/setLanguage', languageId);
+      }
+    },
+    async selectTheme() {
+      const theme = await this.themeSelector.promptSelect();
+
+      if (theme) {
+        this.$store.commit('settings/setTheme', theme);
       }
     },
   },
