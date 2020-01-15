@@ -4,7 +4,7 @@
       id="editor"
       v-model="content"
       :language="language"
-      theme="dracula"
+      :theme="settings.theme"
     />
   </client-only>
 </template>
@@ -29,7 +29,7 @@ export default {
     language() {
       return linguist[this.bin.languageId].aceMode;
     },
-    ...mapState(['bin']),
+    ...mapState(['bin', 'settings']),
   },
 };
 </script>

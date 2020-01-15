@@ -1,0 +1,10 @@
+{
+  "name": "themes",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/index.json",
+  "scripts": {
+    "build": "node index.js",
+    "install": "npm run build"
+  }
+}
