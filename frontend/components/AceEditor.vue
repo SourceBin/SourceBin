@@ -32,6 +32,12 @@ export default {
         this.setValue(value);
       }
     },
+    language(language) {
+      this.setLanguage(language);
+    },
+    theme(theme) {
+      this.setTheme(theme);
+    },
   },
   mounted() {
     this.editor = ace.edit(this.$el);
