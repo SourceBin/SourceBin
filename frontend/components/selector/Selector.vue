@@ -22,11 +22,14 @@
       <ul>
         <Option
           v-for="(option, index) in options"
+          :key="index"
+
           v-show="visibleOptions.includes(option)"
 
           @click.native="$emit('select', option.data)"
-          :key="index"
-          v-bind="option"
+
+          :name="option.name"
+          :favorite="option.favorite"
         />
       </ul>
     </div>
