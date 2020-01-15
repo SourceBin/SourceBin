@@ -1,7 +1,9 @@
+import { languages } from 'linguist';
+
 export const state = () => ({
   key: null,
   content: '',
-  languageId: null,
+  languageId: languages.Text,
 
   saved: false,
 });

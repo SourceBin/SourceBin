@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import linguist from 'linguist';
+import { linguist } from 'linguist';
 
 import Navbar from '@/components/nav/Navbar.vue';
 import NavItem from '@/components/nav/NavItem.vue';

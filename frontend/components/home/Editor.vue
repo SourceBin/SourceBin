@@ -11,7 +11,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import linguist from 'linguist';
+import { linguist } from 'linguist';
 
 export default {
   components: {
