@@ -19,18 +19,16 @@
         <a @click="close">X</a>
       </div>
 
-      <ul>
-        <Option
+      <ul ref="options">
+        <li
           v-for="(option, index) in options"
+          v-if="matchesSearch(option)"
+
           :key="index"
-
-          v-show="visibleOptions.includes(option)"
-
-          @click.native="select(option)"
-
-          :name="option.name"
-          :favorite="option.favorite"
-        />
+          @click="select(option)"
+        >
+          {{ option.name }}
+        </li>
       </ul>
     </div>
   </div>
@@ -40,12 +38,7 @@
 import Mousetrap from 'mousetrap';
 import { debounce } from 'lodash-es';
 
-import Option from './Option.vue';
-
 export default {
-  components: {
-    Option,
-  },
   props: {
     visible: Boolean,
     title: {
@@ -60,7 +53,8 @@ export default {
   data() {
     return {
       search: '',
-      visibleOptions: this.options,
+      selectedIndex: 0,
+      selectedElement: null,
     };
   },
   computed: {
@@ -70,24 +64,73 @@ export default {
       },
       set: debounce(function (value) {
         this.search = value;
-      }, 200),
+      }, 100),
     },
   },
   watch: {
-    search() {
-      const search = this.search.toLowerCase();
-      const isMatch = value => value.toLowerCase().includes(search);
-
-      this.visibleOptions = this.options.filter(
-        option => isMatch(option.name) || (option.aliases || []).some(isMatch),
-      );
+    search: {
+      handler() {
+        this.selectedIndex = 0;
+        this.updateSelected();
+      },
+      immediate: true,
+    },
+    selectedIndex() {
+      this.updateSelected();
     },
   },
   mounted() {
     // Keybinds
-    Mousetrap(this.$el).bind('esc', this.close);
+    const mousetrap = new Mousetrap(this.$el);
+
+    mousetrap.bind('esc', this.close);
+
+    mousetrap.bind('up', () => {
+      if (this.selectedIndex > 0) {
+        this.selectedIndex -= 1;
+      }
+
+      return false;
+    });
+
+    mousetrap.bind('down', () => {
+      if (this.selectedIndex < this.$refs.options.children.length - 1) {
+        this.selectedIndex += 1;
+      }
+
+      return false;
+    });
+
+    mousetrap.bind('enter', () => {
+      if (this.selectedElement) {
+        this.selectedElement.click();
+      }
+
+      return false;
+    });
   },
   methods: {
+    matchesSearch(option) {
+      const search = this.search.toLowerCase();
+      const isMatch = value => value.toLowerCase().includes(search);
+
+      return isMatch(option.name) || (option.aliases || []).some(isMatch);
+    },
+    updateSelected() {
+      if (this.selectedElement) {
+        this.selectedElement.classList.remove('selected');
+      }
+
+      this.$nextTick(() => {
+        this.selectedElement = this.$refs.options.children[this.selectedIndex];
+
+        if (this.selectedElement) {
+          this.selectedElement.classList.add('selected');
+          this.selectedElement.scrollIntoView({ block: 'center' });
+        }
+      });
+    },
+
     show() {
       this.search = '';
       this.visible = true;
@@ -97,12 +140,14 @@ export default {
     hide() {
       this.visible = false;
     },
+
     close() {
       this.$emit('close');
     },
     select(option) {
       this.$emit('select', option.data);
     },
+
     promptSelect() {
       // Close the selector to reject the promise of other prompts
       this.close();
@@ -121,6 +166,7 @@ export default {
         });
       });
     },
+
     remove() {
       this.$destroy();
       this.$el.remove();
@@ -196,5 +242,25 @@ ul {
   height: 100%;
   list-style: none;
   overflow-y: scroll;
+}
+
+li {
+  font: $option-font;
+  padding: 10px 20px;
+  cursor: pointer;
+  user-select: none;
+  border-top: $option-border;
+
+  &:last-child {
+    border-bottom: $option-border;
+  }
+
+  &.selected {
+    background: $option-selected-background;
+  }
+
+  &:hover {
+    background: $option-hover-background;
+  }
 }
 </style>
