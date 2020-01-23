@@ -94,6 +94,9 @@ export default {
     },
 
     promptSelect() {
+      // Emit the close event to reject the promise of other prompts
+      this.$emit('close');
+
       return new Promise((resolve) => {
         this.show();
 

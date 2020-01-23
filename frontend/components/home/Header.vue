@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import Mousetrap from 'mousetrap';
 import { linguist } from 'linguist';
 import themes from 'themes';
 
@@ -48,6 +49,7 @@ export default {
     },
   },
   mounted() {
+    // Selectors
     this.languageSelector = this.$createSelector({
       title: 'Language Selector',
       options: Object
@@ -67,6 +69,15 @@ export default {
           name,
           data: theme,
         })),
+    });
+
+    // Keybinds
+    Mousetrap.bind('ctrl+s', (e) => {
+      if (!e.repeat) {
+        this.save();
+      }
+
+      return false;
     });
   },
   beforeDestroy() {

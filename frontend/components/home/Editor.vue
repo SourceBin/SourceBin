@@ -2,9 +2,12 @@
   <client-only>
     <AceEditor
       id="editor"
+      ref="editor"
+
       v-model="content"
       :language="language"
       :theme="settings.theme"
+      @ready="ready"
     />
   </client-only>
 </template>
@@ -32,6 +35,14 @@ export default {
       return linguist[this.bin.languageId].aceMode;
     },
     ...mapState(['bin', 'settings']),
+  },
+  methods: {
+    ready() {
+      // Add mousetrap class to editor textarea to allow keybinds
+      Array
+        .from(this.$refs.editor.$el.getElementsByTagName('textarea'))
+        .forEach(el => el.classList.add('mousetrap'));
+    },
   },
 };
 </script>
