@@ -1,7 +1,7 @@
 <template lang="html">
   <div
     v-show="visible"
-    @click.self="$emit('close')"
+    @click.self="close"
     class="container"
   >
     <div class="selector">
@@ -16,7 +16,7 @@
           type="text"
         >
 
-        <a @click="$emit('close')">X</a>
+        <a @click="close">X</a>
       </div>
 
       <ul>
@@ -26,7 +26,7 @@
 
           v-show="visibleOptions.includes(option)"
 
-          @click.native="$emit('select', option.data)"
+          @click.native="select(option)"
 
           :name="option.name"
           :favorite="option.favorite"
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import Mousetrap from 'mousetrap';
 import { debounce } from 'lodash-es';
 
 import Option from './Option.vue';
@@ -82,6 +83,10 @@ export default {
       );
     },
   },
+  mounted() {
+    // Keybinds
+    Mousetrap(this.$el).bind('esc', this.close);
+  },
   methods: {
     show() {
       this.search = '';
@@ -92,10 +97,15 @@ export default {
     hide() {
       this.visible = false;
     },
-
-    promptSelect() {
-      // Emit the close event to reject the promise of other prompts
+    close() {
       this.$emit('close');
+    },
+    select(option) {
+      this.$emit('select', option.data);
+    },
+    promptSelect() {
+      // Close the selector to reject the promise of other prompts
+      this.close();
 
       return new Promise((resolve) => {
         this.show();
@@ -111,7 +121,6 @@ export default {
         });
       });
     },
-
     remove() {
       this.$destroy();
       this.$el.remove();
