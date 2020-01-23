@@ -15,6 +15,7 @@
     "clipboard-copy": "^3.1.0",
     "linguist": "file:packages/linguist",
     "lodash-es": "^4.17.15",
+    "mousetrap": "^1.6.4",
     "normalize.css": "^8.0.1",
     "nuxt": "^2.0.0",
     "themes": "file:packages/themes",

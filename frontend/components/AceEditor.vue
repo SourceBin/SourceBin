@@ -39,7 +39,7 @@ export default {
       this.setTheme(theme);
     },
   },
-  mounted() {
+  async mounted() {
     this.editor = ace.edit(this.$el);
 
     // Automatically scrolling cursor into view after selection change this will
@@ -49,14 +49,21 @@ export default {
 
     // Settings
     this.setValue(this.value);
-    this.setLanguage(this.language);
-    this.setTheme(this.theme);
+
+    await Promise.all([
+      this.setLanguage(this.language),
+      this.setTheme(this.theme),
+    ]);
+
     this.editor.setOptions(this.options);
 
     // Listeners
     this.editor.on('change', () => {
       this.$emit('input', this.editor.getValue());
     });
+
+    // Emit ready event
+    this.$emit('ready');
   },
   beforeDestroy() {
     this.editor.destroy();
