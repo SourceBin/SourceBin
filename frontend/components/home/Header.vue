@@ -29,6 +29,8 @@
 import { linguist } from 'linguist';
 import themes from 'themes';
 
+import clipboardCopy from 'clipboard-copy';
+
 import Navbar from '@/components/nav/Navbar.vue';
 import NavItem from '@/components/nav/NavItem.vue';
 
@@ -75,7 +77,13 @@ export default {
       const languageId = await this.selectLanguage();
 
       if (languageId) {
-        this.$store.dispatch('bin/save');
+        await this.$store.dispatch('bin/save');
+
+        // Update URL with key
+        window.history.pushState(null, null, this.$store.state.bin.key);
+
+        // Copy URL to clipboard
+        await clipboardCopy(window.location.href);
       }
     },
     reset() {

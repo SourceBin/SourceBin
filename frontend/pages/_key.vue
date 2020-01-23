@@ -25,9 +25,10 @@ export default {
   },
   watch: {
     key(key) {
-      const url = `/${key || ''}`;
+      const url = '/';
 
-      if (url !== window.location.pathname) {
+      // Update URL if the bin is not saved, and the URL is different
+      if (key === null && url !== window.location.pathname) {
         window.history.pushState(null, null, url);
       }
     },
