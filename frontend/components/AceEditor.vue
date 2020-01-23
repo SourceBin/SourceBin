@@ -57,6 +57,9 @@ export default {
 
     this.editor.setOptions(this.options);
 
+    // Commands
+    this.editor.commands.removeCommand('gotoline');
+
     // Listeners
     this.editor.on('change', () => {
       this.$emit('input', this.editor.getValue());
