@@ -23,7 +23,9 @@ export default {
         return this.bin.content;
       },
       set(value) {
-        this.$store.commit('bin/updateContent', value);
+        if (value !== this.bin.content) {
+          this.$store.commit('bin/updateContent', value);
+        }
       },
     },
     language() {
