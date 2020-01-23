@@ -9,6 +9,8 @@
 import Header from '@/components/home/Header.vue';
 import Editor from '@/components/home/Editor.vue';
 
+import { loadBin } from '@/assets/home/loadBin.js';
+
 import { meta } from '@/config.js';
 
 export default {
@@ -16,21 +18,33 @@ export default {
     Header,
     Editor,
   },
+  computed: {
+    key() {
+      return this.$store.state.bin.key;
+    },
+  },
+  watch: {
+    key(key) {
+      const url = `/${key || ''}`;
+
+      if (url !== window.location.pathname) {
+        window.history.pushState(null, null, url);
+      }
+    },
+  },
   async fetch({ error, store, params }) {
-    const { key } = params;
-
-    if (!key) {
-      return;
-    }
-
-    try {
-      await store.dispatch('bin/load', key);
-    } catch ({ response }) {
-      error({
-        statusCode: response.status,
-        message: response.data.message,
-      });
-    }
+    await loadBin(params.key, error, store);
+  },
+  mounted() {
+    window.addEventListener('popstate', this.handlePopstate);
+  },
+  beforeDestroy() {
+    window.removeEventListener('popstate', this.handlePopstate);
+  },
+  methods: {
+    handlePopstate() {
+      loadBin(this.$route.params.key, this.$nuxt.error, this.$store);
+    },
   },
   head() {
     const { key } = this.$store.state.bin;
