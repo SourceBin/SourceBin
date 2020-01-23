@@ -79,6 +79,14 @@ export default {
 
       return false;
     });
+
+    Mousetrap.bind('ctrl+l', (e) => {
+      if (!e.repeat) {
+        this.selectLanguage();
+      }
+
+      return false;
+    });
   },
   beforeDestroy() {
     this.languageSelector.remove();
