@@ -4,7 +4,9 @@ $container-z-index: 10000;
 
 $container-background: rgba(255, 255, 255, 0.1);
 $selector-background: #2c2f33;
-$option-hover-background: lighten($selector-background, 5%);
+
+$option-selected-background: lighten($selector-background, 4%);
+$option-hover-background: lighten($selector-background, 8%);
 
 $color: #fff;
 

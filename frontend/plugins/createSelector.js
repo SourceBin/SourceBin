@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import Selector from '@/components/selector/Selector.vue';
+import Selector from '@/components/Selector.vue';
 
 const SelectorClass = Vue.extend(Selector);
 
