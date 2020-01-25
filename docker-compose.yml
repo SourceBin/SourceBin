@@ -1,6 +1,18 @@
 version: '3'
 
 services:
+  frontend:
+    build: frontend
+    ports:
+      - 3000:3000
+    environment:
+      - PORT=3000
+      - API_URL=http://backend:3001/
+    depends_on:
+      - backend
+    container_name: frontend
+    restart: always
+
   backend:
     build: backend
     ports:

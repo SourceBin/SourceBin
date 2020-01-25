@@ -18,7 +18,12 @@ rebuild:
 .PHONY: start
 start:
 	# start services in the background
-	$(DC) up -d
+	$(DC) up -d $(SERVICES)
+
+.PHONY: restart
+restart:
+	# restart services
+	$(DC) restart $(SERVICES)
 
 .PHONY: stop
 stop:
