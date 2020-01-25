@@ -13,64 +13,54 @@
       </NavItem>
 
       <NavItem @click="selectLanguage">
-        Language - {{ language }}
+        Language - {{ $store.getters.language.name }}
       </NavItem>
 
-      <NavItem @click="selectTheme">
-        Theme - {{ theme }}
+      <NavItem @click="openSettings">
+        Settings
       </NavItem>
-
-      <NavItem>Settings</NavItem>
     </Navbar>
+
+    <Selector
+      ref="languageSelector"
+      :options="languageOptions"
+      title="Language Selector"
+    />
+
+    <Settings ref="settings" />
   </header>
 </template>
 
 <script>
 import Mousetrap from 'mousetrap';
 import { linguist } from 'linguist';
-import themes from 'themes';
 
 import clipboardCopy from 'clipboard-copy';
 
 import Navbar from '@/components/nav/Navbar.vue';
 import NavItem from '@/components/nav/NavItem.vue';
+import Selector from '@/components/Selector.vue';
+import Settings from '@/components/Settings.vue';
 
 export default {
   components: {
     Navbar,
     NavItem,
+    Selector,
+    Settings,
   },
-  computed: {
-    language() {
-      return linguist[this.$store.state.bin.languageId].name;
-    },
-    theme() {
-      return themes[this.$store.state.settings.theme];
-    },
-  },
-  mounted() {
-    // Selectors
-    this.languageSelector = this.$createSelector({
-      title: 'Language Selector',
-      options: Object
+  data() {
+    return {
+      languageOptions: Object
         .entries(linguist)
         .map(([id, language]) => ({
           name: language.name,
           aliases: language.aliases,
           data: Number(id),
         })),
-    });
-
-    this.themeSelector = this.$createSelector({
-      title: 'Theme Selector',
-      options: Object
-        .entries(themes)
-        .map(([theme, name]) => ({
-          name,
-          data: theme,
-        })),
-    });
-
+    };
+  },
+  mounted() {
     // Keybinds
     Mousetrap.bind('ctrl+s', (e) => {
       if (!e.repeat) {
@@ -87,9 +77,6 @@ export default {
 
       return false;
     });
-  },
-  beforeDestroy() {
-    this.languageSelector.remove();
   },
   methods: {
     async save() {
@@ -109,22 +96,16 @@ export default {
       this.$store.commit('bin/reset');
     },
     async selectLanguage() {
-      const languageId = await this.languageSelector.promptSelect();
+      const languageId = await this.$refs.languageSelector.promptSelect();
 
       if (languageId) {
-        this.$store.commit('bin/setLanguage', languageId);
+        this.$store.commit('bin/setLanguageId', languageId);
       }
 
       return languageId;
     },
-    async selectTheme() {
-      const theme = await this.themeSelector.promptSelect();
-
-      if (theme) {
-        this.$store.commit('settings/setTheme', theme);
-      }
-
-      return theme;
+    openSettings() {
+      this.$refs.settings.open();
     },
   },
 };

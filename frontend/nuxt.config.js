@@ -24,7 +24,6 @@ export default {
   ],
 
   plugins: [
-    '@/plugins/createSelector.js',
     { src: '@/plugins/localStorage.js', mode: 'client' },
   ],
 

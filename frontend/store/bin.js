@@ -1,9 +1,7 @@
-import { languages } from 'linguist';
-
 export const state = () => ({
   key: null,
   content: '',
-  languageId: languages.Text,
+  languageId: null,
 
   saved: false,
 });
@@ -18,7 +16,7 @@ export const mutations = {
     state.key = null;
     state.saved = false;
   },
-  setLanguage(state, languageId) {
+  setLanguageId(state, languageId) {
     state.languageId = languageId;
   },
   loadSuccess(state, bin) {

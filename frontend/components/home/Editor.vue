@@ -7,6 +7,7 @@
       v-model="content"
       :language="language"
       :theme="settings.theme"
+      :options="options"
       @ready="ready"
     />
   </client-only>
@@ -14,7 +15,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import { linguist } from 'linguist';
 
 export default {
   components: {
@@ -32,7 +32,13 @@ export default {
       },
     },
     language() {
-      return linguist[this.bin.languageId].aceMode;
+      return this.$store.getters.language.aceMode;
+    },
+    options() {
+      return {
+        fontSize: this.settings.fontSize,
+        showPrintMargin: this.settings.printMargin,
+      };
     },
     ...mapState(['bin', 'settings']),
   },
