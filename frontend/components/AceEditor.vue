@@ -38,6 +38,9 @@ export default {
     theme(theme) {
       this.setTheme(theme);
     },
+    options(options) {
+      this.setOptions(options);
+    },
   },
   async mounted() {
     this.editor = ace.edit(this.$el);
@@ -85,6 +88,9 @@ export default {
       await import(`brace/theme/${theme}`);
 
       this.editor.setTheme(`ace/theme/${theme}`);
+    },
+    setOptions(options) {
+      this.editor.setOptions(options);
     },
   },
 };

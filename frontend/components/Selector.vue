@@ -4,7 +4,7 @@
     @click.self="close"
     class="container"
   >
-    <div class="selector">
+    <div class="content">
       <div class="header">
         <h1>{{ title }}</h1>
 
@@ -40,7 +40,6 @@ import { debounce } from 'lodash-es';
 
 export default {
   props: {
-    visible: Boolean,
     title: {
       type: String,
       required: true,
@@ -53,6 +52,7 @@ export default {
   data() {
     return {
       search: '',
+      visible: false,
       selectedIndex: 0,
       selectedElement: null,
     };
@@ -68,18 +68,17 @@ export default {
     },
   },
   watch: {
-    search: {
-      handler() {
-        this.selectedIndex = 0;
-        this.updateSelected();
-      },
-      immediate: true,
+    search() {
+      this.selectedIndex = 0;
+      this.updateSelected();
     },
     selectedIndex() {
       this.updateSelected();
     },
   },
   mounted() {
+    this.updateSelected();
+
     // Keybinds
     const mousetrap = new Mousetrap(this.$el);
 
@@ -166,17 +165,27 @@ export default {
         });
       });
     },
-
-    remove() {
-      this.$destroy();
-      this.$el.remove();
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/selector/_variables.scss';
+@import '@/assets/_globals.scss';
+
+$container-z-index: 100000;
+
+$container-background: rgba(255, 255, 255, 0.1);
+$content-background: #2c2f33;
+
+$option-selected-background: lighten($content-background, 4%);
+$option-hover-background: lighten($content-background, 8%);
+
+$title-font: bold 30px $font-family;
+$close-font: 20px Arial, sans-serif;
+$option-font: 18px $font-family;
+
+$input-border: 1px solid $color;
+$option-border: 1px solid darken($content-background, 5%);
 
 .container {
   position: fixed;
@@ -191,14 +200,14 @@ export default {
   background: $container-background;
 }
 
-.selector {
+.content {
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
   max-width: 1000px;
   height: 100%;
-  background: $selector-background;
+  background: $content-background;
   color: $color;
 }
 
