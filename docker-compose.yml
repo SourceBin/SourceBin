@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  backend:
+    build: backend
+    ports:
+      - 3001:3001
+    environment:
+      - PORT=3001
+      - MONGODB_URI=${MONGODB_URI}
+    container_name: backend
+    restart: always

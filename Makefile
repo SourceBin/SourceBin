@@ -1,36 +1,45 @@
 .DEFAULT: build
 
-IMAGE_PREFIX := sourcebin_
-BACKEND := backend
+COMPOSE_FILES := -f docker-compose.yml
+DC := docker-compose $(COMPOSE_FILES)
 
-#########
-# Build #
-#########
+SERVICES := $(or $(SERVICES), $(SERVICES), )
+
 .PHONY: build
-build: build-backend
+build:
+	# build images
+	$(DC) build $(SERVICES)
 
-.PHONY: build-backend
-build-backend:
-	# build backend image
-	docker build $(BACKEND) -t $(IMAGE_PREFIX)$(BACKEND)
+.PHONY: rebuild
+rebuild:
+	# rebuild images without cache
+	$(DC) build --no-cache $(SERVICES)
 
-#######
-# Dev #
-#######
-.PHONY: dev-backend
-dev-backend:
-	# run backend container on port 3001
-	docker run --env-file .env -p 3001:3000 --rm -it $(IMAGE_PREFIX)$(BACKEND)
+.PHONY: start
+start:
+	# start services in the background
+	$(DC) up -d
 
-#########
-# Other #
-#########
+.PHONY: stop
+stop:
+	# stop services
+	$(DC) down
+
+.PHONY: logs
+logs:
+	# attach to the logs
+	$(DC) logs -f --tail=$(or $(TAIL), $(TAIL), 100) $(SERVICES)
+
 .PHONY: clean
 clean:
-	# remove images tagged with the IMAGE_PREFIX
-	docker images -a | grep $(IMAGE_PREFIX) | awk '{print $$3}' | xargs docker rmi
+	# remove created images
+	$(DC) down --remove-orphans --rmi all
 
 .PHONY: prune
 prune:
 	# clean all that is not actively used
 	docker system prune -af
+
+.env: | .env.example
+	# create .env file from the example
+	cp .env.example .env
