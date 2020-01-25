@@ -170,6 +170,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'sass-mq';
 @import '@/assets/_globals.scss';
 
 $container-z-index: 100000;
@@ -215,6 +216,12 @@ $option-border: 1px solid darken($content-background, 5%);
   display: flex;
   justify-content: space-between;
   padding: 25px 100px;
+
+  @include mq($until: tablet) {
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 10px;
+  }
 }
 
 h1 {
