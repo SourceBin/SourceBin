@@ -132,6 +132,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'sass-mq';
 @import '@/assets/_globals.scss';
 
 $container-z-index: 10000;
@@ -166,6 +167,10 @@ $setting-font: 18px $font-family;
   max-height: 100%;
   background: $content-background;
   color: $color;
+
+  @include mq($until: tablet) {
+    padding: 30px 10px;
+  }
 }
 
 h1 {
@@ -190,6 +195,10 @@ a {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 0 50px;
+
+  @include mq($until: tablet) {
+    grid-template-columns: 1fr;
+  }
 
   div {
     display: flex;
