@@ -10,15 +10,15 @@ build:
 	# build images
 	$(DC) build $(SERVICES)
 
-.PHONY: rebuild
-rebuild:
-	# rebuild images without cache
-	$(DC) build --no-cache $(SERVICES)
-
 .PHONY: start
 start:
 	# start services in the background
 	$(DC) up -d $(SERVICES)
+
+.PHONY: rebuild
+rebuild:
+	# rebuild images
+	$(DC) up -d --no-deps --build $(SERVICES)
 
 .PHONY: restart
 restart:
