@@ -10,6 +10,13 @@ RUN npm i
 # Copy source
 COPY frontend .
 
+# Set API url
+ARG API_URL
+ENV API_URL $API_URL
+
+ARG API_URL_BROWSER
+ENV API_URL_BROWSER $API_URL_BROWSER
+
 # Build source
 RUN npm run build
 
