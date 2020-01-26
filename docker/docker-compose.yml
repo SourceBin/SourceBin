@@ -5,11 +5,13 @@ services:
     build:
       context: ..
       dockerfile: docker/frontend/Dockerfile
+      args:
+        - API_URL=http://backend:3001/
+        - API_URL_BROWSER=/api
     ports:
       - 3000:3000
     environment:
       - PORT=3000
-      - API_URL=http://backend:3001/
     depends_on:
       - backend
     container_name: frontend
