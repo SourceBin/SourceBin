@@ -6,11 +6,11 @@ FROM node:12.14-alpine AS builder
 WORKDIR /usr/src
 
 # Install dependencies
-COPY package.json .
+COPY backend/package.json .
 RUN npm i
 
 # Copy source
-COPY . .
+COPY backend .
 
 # Build source
 RUN npm run build
@@ -23,7 +23,7 @@ FROM node:12.14-alpine
 WORKDIR /usr/src
 
 # Install dependences
-COPY package.json .
+COPY backend/package.json .
 RUN npm i --production
 
 # Copy dist
