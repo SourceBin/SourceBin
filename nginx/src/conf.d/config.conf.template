@@ -1,0 +1,46 @@
+# Redirect HTTP to HTTPS
+server {
+  listen 80;
+  listen [::]:80 default_server ipv6only=on;
+
+  location /.well-known/acme-challenge/ {
+    root /var/www/certbot;
+  }
+
+  location / {
+    return 301 https://$host$request_uri;
+  }
+}
+
+# HTTPS
+server {
+  # Enable HTTP/2
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
+  server_name ${DOMAIN};
+
+  # Use the Let’s Encrypt certificates
+  ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
+
+  # Include the SSL configuration from cipherli.st
+  include snippets/ssl-params.conf;
+
+  # Set headers
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-NginX-Proxy true;
+  proxy_set_header Host $http_host;
+
+  proxy_cache_bypass $http_upgrade;
+  proxy_redirect off;
+  proxy_ssl_session_reuse off;
+
+  location / {
+    proxy_pass ${FRONTEND_URL};
+  }
+
+  location /api/ {
+    proxy_pass ${BACKEND_URL};
+  }
+}

@@ -22,3 +22,23 @@ services:
       - MONGODB_URI=${MONGODB_URI}
     container_name: backend
     restart: always
+
+  nginx:
+    build: nginx
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - DOMAIN=${DOMAIN}
+      - FRONTEND_URL=http://frontend:3000/
+      - BACKEND_URL=http://backend:3001/
+    volumes:
+      - ./nginx/certbot/certs:/etc/ssl/certs
+      - ./nginx/certbot/letsencrypt:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    depends_on:
+      - frontend
+      - backend
+    container_name: nginx
+    restart: always
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"

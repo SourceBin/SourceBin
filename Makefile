@@ -1,9 +1,12 @@
 .DEFAULT: build
 
+include .env
+
 COMPOSE_FILES := -f docker-compose.yml
 DC := docker-compose $(COMPOSE_FILES)
 
-SERVICES := $(or $(SERVICES), $(SERVICES), )
+CERT_DIR := nginx/certbot/letsencrypt/live/$(DOMAIN)
+DHPARAM_DIR := nginx/certbot/certs
 
 .PHONY: build
 build:
@@ -48,3 +51,23 @@ prune:
 .env: | .env.example
 	# create .env file from the example
 	cp .env.example .env
+
+$(CERT_DIR):
+	# create certificate directory
+	mkdir -p $(CERT_DIR)
+
+.PHONY: self-signed-cert
+self-signed-cert: | $(CERT_DIR)
+	# create a self signed certificate
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+		-keyout $(CERT_DIR)/privkey.pem \
+		-out $(CERT_DIR)/fullchain.pem \
+		-subj '/CN=localhost'
+
+$(DHPARAM_DIR):
+	# create dhparam directory
+	mkdir -p $(DHPARAM_DIR)
+
+.PHONY: dhparam
+dhparam: | $(DHPARAM_DIR)
+	openssl dhparam -out $(DHPARAM_DIR)/dhparam.pem 2048
