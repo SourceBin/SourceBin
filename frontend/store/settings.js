@@ -1,4 +1,4 @@
-import { languages } from 'linguist';
+import { languages } from '@packages/linguist';
 
 export const state = () => ({
   fontSize: 15,

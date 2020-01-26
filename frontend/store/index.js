@@ -1,5 +1,5 @@
-import themes from 'themes';
-import { linguist } from 'linguist';
+import themes from '@packages/themes';
+import { linguist } from '@packages/linguist';
 
 export const getters = {
   theme(state) {

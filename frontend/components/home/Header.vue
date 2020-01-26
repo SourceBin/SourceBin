@@ -33,7 +33,7 @@
 
 <script>
 import Mousetrap from 'mousetrap';
-import { linguist } from 'linguist';
+import { linguist } from '@packages/linguist';
 
 import clipboardCopy from 'clipboard-copy';
 
