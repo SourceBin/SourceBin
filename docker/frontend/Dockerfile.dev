@@ -3,7 +3,7 @@ FROM node:12.14-alpine
 WORKDIR /usr/src
 
 # Install dependences
-COPY frontend/packages packages
+COPY packages ../packages
 COPY frontend/package.json .
 RUN npm i
 

@@ -1,5 +1,5 @@
 {
-  "name": "linguist",
+  "name": "@packages/linguist",
   "version": "0.0.1",
   "private": true,
   "main": "dist/index.js",
