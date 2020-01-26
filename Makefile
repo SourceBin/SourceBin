@@ -2,8 +2,12 @@
 
 include .env
 
-COMPOSE_FILES = -f docker/docker-compose.yml
 DC = docker-compose $(COMPOSE_FILES)
+COMPOSE_FILES = -f docker/docker-compose.yml
+
+ifeq ($(ENV), dev)
+	COMPOSE_FILES += -f docker/docker-compose.dev.yml
+endif
 
 CERTBOT_DIR = certbot
 CERT_DIR = $(CERTBOT_DIR)/letsencrypt/live/$(DOMAIN)

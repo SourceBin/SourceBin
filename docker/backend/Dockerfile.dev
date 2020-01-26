@@ -1,0 +1,16 @@
+FROM node:12.14-alpine
+
+WORKDIR /usr/src
+
+# Install tsc-watch
+RUN npm i tsc-watch -g
+
+# Install dependencies
+COPY backend/package.json .
+RUN npm i
+
+# Set and expose port
+ENV PORT 3000
+EXPOSE $PORT
+
+CMD ["tsc-watch", "--compiler", "/usr/src/node_modules/.bin/tsc", "--onSuccess", "npm start"]

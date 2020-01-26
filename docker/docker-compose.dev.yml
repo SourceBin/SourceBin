@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      dockerfile: docker/frontend/Dockerfile.dev
+    volumes:
+      - ../frontend:/usr/src
+      - /usr/src/node_modules
+
+  backend:
+    build:
+      dockerfile: docker/backend/Dockerfile.dev
+    volumes:
+      - ../backend:/usr/src
+      - /usr/src/node_modules
