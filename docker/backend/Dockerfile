@@ -22,7 +22,7 @@ FROM node:12.14-alpine
 
 WORKDIR /usr/src
 
-# Install dependences
+# Install dependencies
 COPY backend/package.json .
 RUN npm i --production
 

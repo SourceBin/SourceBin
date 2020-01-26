@@ -29,6 +29,7 @@ export default {
 
   manifest: {
     name: meta.title,
+    short_name: meta.title,
     description: meta.description,
   },
 
