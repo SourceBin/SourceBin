@@ -2,7 +2,7 @@
 
 include .env
 
-COMPOSE_FILES = -f docker-compose.yml
+COMPOSE_FILES = -f docker/docker-compose.yml
 DC = docker-compose $(COMPOSE_FILES)
 
 CERTBOT_DIR = certbot
