@@ -2,11 +2,12 @@
 
 include .env
 
-COMPOSE_FILES := -f docker-compose.yml
-DC := docker-compose $(COMPOSE_FILES)
+COMPOSE_FILES = -f docker-compose.yml
+DC = docker-compose $(COMPOSE_FILES)
 
-CERT_DIR := nginx/certbot/letsencrypt/live/$(DOMAIN)
-DHPARAM_DIR := nginx/certbot/certs
+CERTBOT_DIR = certbot
+CERT_DIR = $(CERTBOT_DIR)/letsencrypt/live/$(DOMAIN)
+DHPARAM_DIR = $(CERTBOT_DIR)/certs
 
 .PHONY: build
 build:
@@ -70,4 +71,5 @@ $(DHPARAM_DIR):
 
 .PHONY: dhparam
 dhparam: | $(DHPARAM_DIR)
+	# create dhparam
 	openssl dhparam -out $(DHPARAM_DIR)/dhparam.pem 2048

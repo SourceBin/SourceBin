@@ -2,7 +2,9 @@ version: '3'
 
 services:
   frontend:
-    build: frontend
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
     ports:
       - 3000:3000
     environment:
@@ -14,7 +16,9 @@ services:
     restart: always
 
   backend:
-    build: backend
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
     ports:
       - 3001:3001
     environment:
@@ -24,7 +28,9 @@ services:
     restart: always
 
   nginx:
-    build: nginx
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
     ports:
       - 80:80
       - 443:443
@@ -33,9 +39,9 @@ services:
       - FRONTEND_URL=http://frontend:3000/
       - BACKEND_URL=http://backend:3001/
     volumes:
-      - ./nginx/certbot/certs:/etc/ssl/certs
-      - ./nginx/certbot/letsencrypt:/etc/letsencrypt
-      - ./nginx/certbot/www:/var/www/certbot
+      - ./certbot/certs:/etc/ssl/certs
+      - ./certbot/letsencrypt:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     depends_on:
       - frontend
       - backend

@@ -1,10 +1,11 @@
 FROM nginx:1.17-alpine
 
 # Copy config files
-COPY src /etc/nginx
+COPY nginx/conf.d /etc/nginx/conf.d
+COPY nginx/snippets /etc/nginx/snippets
 
 # Copy entrypoint
-COPY entrypoint.sh /
+COPY nginx/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
