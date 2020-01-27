@@ -26,4 +26,4 @@ The following steps outline how you can deploy SourceBin.
 3. Edit the configuration in the `.env` file
 4. Point domain to server
 5. Run `make cert dhparam` to generate certificates
-6. Run `make start`
+6. Run `make ENV=prod start`
