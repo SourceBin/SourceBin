@@ -7,6 +7,8 @@ COMPOSE_FILES = -f docker/docker-compose.yml
 
 ifeq ($(ENV), dev)
 	COMPOSE_FILES += -f docker/docker-compose.dev.yml
+else ifeq ($(ENV), prod)
+	COMPOSE_FILES += -f docker/docker-compose.prod.yml
 endif
 
 CERTBOT_DIR = certbot
@@ -56,6 +58,15 @@ prune:
 .env: | .env.example
 	# create .env file from the example
 	cp .env.example .env
+
+.PHONY: cert
+cert:
+	# create a certificate
+	docker run --rm -it \
+		-p 80:80 -p 443:443 \
+		-v $(PWD)/certbot/letsencrypt:/etc/letsencrypt \
+		certbot/certbot \
+		certonly --standalone -n --agree-tos -m $(EMAIL) -d $(DOMAIN)
 
 $(CERT_DIR):
 	# create certificate directory
