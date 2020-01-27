@@ -27,6 +27,16 @@ export default {
     { src: '@/plugins/localStorage.js', mode: 'client' },
   ],
 
+  meta: {
+    ogType: false,
+    ogSiteName: false,
+    ogTitle: false,
+    ogDescription: false,
+    ogHost: false,
+    ogImage: false,
+    ogUrl: false,
+  },
+
   manifest: {
     name: meta.title,
     short_name: meta.title,

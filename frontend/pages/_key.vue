@@ -50,24 +50,32 @@ export default {
   head() {
     const { key } = this.$store.state.bin;
 
-    return {
-      title: key ? `${meta.title} | ${key}` : meta.title,
+    const head = {
+      title: key
+        ? `${meta.title} | ${key}`
+        : meta.title,
 
       meta: [
         { name: 'description', hid: 'description', content: meta.description },
-
-        // Open Graph
-        { name: 'og:title', content: meta.title },
-        { name: 'og:description', content: meta.description },
-        { name: 'og:type', content: 'website' },
-        { name: 'og:url', content: meta.url },
-        { name: 'og:image', content: meta.image },
       ],
 
       link: [
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap' },
       ],
     };
+
+    // Add OpenGraph if no key is provided
+    if (!key) {
+      head.meta.push(
+        { name: 'og:title', content: meta.title },
+        { name: 'og:description', content: meta.description },
+        { name: 'og:type', content: 'website' },
+        { name: 'og:url', content: meta.url },
+        { name: 'og:image', content: meta.image },
+      );
+    }
+
+    return head;
   },
   validate({ params }) {
     return !params.key || /[0-9A-F]{10}/i.test(params.key);
