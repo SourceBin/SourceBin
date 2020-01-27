@@ -4,7 +4,7 @@ WORKDIR /usr/src
 
 # Install dependences
 COPY packages ../packages
-COPY frontend/package.json .
+COPY frontend/package*.json ./
 RUN npm i
 
 # Copy source
