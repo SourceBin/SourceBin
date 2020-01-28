@@ -38,8 +38,8 @@ services:
       - 443:443
     environment:
       - DOMAIN=${DOMAIN}
-      - FRONTEND_URL=http://frontend:3000/
-      - BACKEND_URL=http://backend:3001/
+      - FRONTEND_URL=frontend:3000
+      - BACKEND_URL=backend:3001
     volumes:
       - ../certbot/certs:/etc/ssl/certs
       - ../certbot/letsencrypt:/etc/letsencrypt

@@ -37,10 +37,10 @@ server {
   proxy_ssl_session_reuse off;
 
   location / {
-    proxy_pass ${FRONTEND_URL};
+    proxy_pass http://${FRONTEND_URL}/;
   }
 
   location /api/ {
-    proxy_pass ${BACKEND_URL};
+    proxy_pass http://${BACKEND_URL}/;
   }
 }
