@@ -42,12 +42,23 @@ export default {
     },
     ...mapState(['bin', 'settings']),
   },
+  mounted() {
+    this.$eventBus.$on('focusEditor', this.focusEditor);
+  },
+  beforeDestroy() {
+    this.$eventBus.$off('focusEditor', this.focusEditor);
+  },
   methods: {
     ready() {
       // Add mousetrap class to editor textarea to allow keybinds
       Array
         .from(this.$refs.editor.$el.getElementsByTagName('textarea'))
         .forEach(el => el.classList.add('mousetrap'));
+
+      this.$eventBus.$emit('focusEditor');
+    },
+    focusEditor() {
+      this.$refs.editor.focus();
     },
   },
 };

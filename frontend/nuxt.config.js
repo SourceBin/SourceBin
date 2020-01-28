@@ -24,6 +24,7 @@ export default {
   ],
 
   plugins: [
+    '@/plugins/eventBus.js',
     { src: '@/plugins/localStorage.js', mode: 'client' },
   ],
 

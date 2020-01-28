@@ -126,6 +126,7 @@ export default {
     },
     close() {
       this.visible = false;
+      this.$emit('close');
     },
   },
 };
