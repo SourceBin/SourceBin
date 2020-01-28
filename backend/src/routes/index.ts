@@ -4,7 +4,7 @@ import bins from './bins';
 
 const router = Router();
 
-router.get('/', (_, res) => res.send('API is up'));
+router.get('/ping', (_, res) => res.send('Pong'));
 router.use('/bins', bins);
 
 export default router;
