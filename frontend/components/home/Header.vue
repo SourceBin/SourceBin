@@ -27,7 +27,10 @@
       title="Language Selector"
     />
 
-    <Settings ref="settings" />
+    <Settings
+      ref="settings"
+      @close="$eventBus.$emit('focusEditor')"
+    />
   </header>
 </template>
 
@@ -102,6 +105,7 @@ export default {
         this.$store.commit('bin/setLanguageId', languageId);
       }
 
+      this.$eventBus.$emit('focusEditor');
       return languageId;
     },
     openSettings() {

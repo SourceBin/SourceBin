@@ -92,6 +92,9 @@ export default {
     setOptions(options) {
       this.editor.setOptions(options);
     },
+    focus() {
+      this.editor.focus();
+    },
   },
 };
 </script>
