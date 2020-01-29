@@ -3,9 +3,14 @@
 </template>
 
 <script>
-const ace = process.browser
-  ? require('brace')
-  : undefined;
+let ace;
+
+if (process.browser) {
+  /* eslint-disable global-require */
+  ace = require('ace-builds');
+  require('ace-builds/webpack-resolver');
+  /* eslint-enable global-require */
+}
 
 export default {
   props: {
@@ -80,12 +85,12 @@ export default {
       this.editor.setValue(value, -1);
     },
     async setLanguage(mode) {
-      await import(`brace/mode/${mode}`);
+      await import(`ace-builds/src-noconflict/mode-${mode}`);
 
       this.editor.session.setMode(`ace/mode/${mode}`);
     },
     async setTheme(theme) {
-      await import(`brace/theme/${theme}`);
+      await import(`ace-builds/src-noconflict/theme-${theme}`);
 
       this.editor.setTheme(`ace/theme/${theme}`);
     },
