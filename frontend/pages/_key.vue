@@ -1,5 +1,5 @@
 <template lang="html">
-  <div>
+  <div class="page-container">
     <Header />
     <Editor />
   </div>
@@ -82,3 +82,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.page-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+</style>

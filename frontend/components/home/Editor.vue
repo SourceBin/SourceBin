@@ -1,14 +1,15 @@
 <template lang="html">
   <client-only>
     <AceEditor
-      id="editor"
       ref="editor"
-
       v-model="content"
+
       :language="language"
       :theme="settings.theme"
       :options="options"
       @ready="ready"
+
+      class="ace-editor"
     />
   </client-only>
 </template>
@@ -65,9 +66,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#editor {
-  width: 100vw;
-  // TODO: Make the editor 100% of the remaining height
-  height: calc(100vh - 30px);
+.ace-editor {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 </style>
