@@ -4,7 +4,7 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "build": "node index.js",
+    "build": "node src/index.js",
     "install": "npm run build"
   },
   "dependencies": {
