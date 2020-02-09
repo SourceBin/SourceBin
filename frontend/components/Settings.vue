@@ -105,7 +105,7 @@ export default {
     async selectTheme() {
       const theme = await this.$refs.themeSelector.promptSelect();
 
-      if (theme) {
+      if (theme !== undefined) {
         this.$store.commit('settings/setTheme', theme);
       }
 
@@ -114,7 +114,7 @@ export default {
     async selectLanguage() {
       const languageId = await this.$parent.$refs.languageSelector.promptSelect();
 
-      if (languageId) {
+      if (languageId !== undefined) {
         this.$store.commit('settings/setDefaultLanguageId', languageId);
       }
 

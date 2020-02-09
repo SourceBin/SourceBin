@@ -28,7 +28,7 @@ export default {
       const url = '/';
 
       // Update URL if the bin is not saved, and the URL is different
-      if (key === null && url !== window.location.pathname) {
+      if (!key && url !== window.location.pathname) {
         window.history.pushState(null, null, url);
       }
     },

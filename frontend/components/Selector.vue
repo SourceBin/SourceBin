@@ -54,7 +54,7 @@ export default {
       search: '',
       visible: false,
       selectedIndex: 0,
-      selectedElement: null,
+      selectedElement: undefined,
     };
   },
   computed: {

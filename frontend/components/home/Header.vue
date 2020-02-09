@@ -101,7 +101,7 @@ export default {
     async selectLanguage() {
       const languageId = await this.$refs.languageSelector.promptSelect();
 
-      if (languageId) {
+      if (languageId !== undefined) {
         this.$store.commit('bin/setLanguageId', languageId);
       }
 

@@ -6,6 +6,10 @@ export const getters = {
     return themes[state.settings.theme];
   },
   language(state) {
-    return linguist[state.bin.languageId || state.settings.defaultLanguageId];
+    if (state.bin.languageId !== undefined) {
+      return linguist[state.bin.languageId];
+    }
+
+    return linguist[state.settings.defaultLanguageId];
   },
 };

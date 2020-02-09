@@ -1,7 +1,7 @@
 export const state = () => ({
-  key: null,
+  key: undefined,
   content: '',
-  languageId: null,
+  languageId: undefined,
 
   saved: false,
 });
@@ -13,7 +13,7 @@ export const mutations = {
   updateContent(state, content) {
     state.content = content;
 
-    state.key = null;
+    state.key = undefined;
     state.saved = false;
   },
   setLanguageId(state, languageId) {
