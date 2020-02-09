@@ -19,6 +19,7 @@ export default {
   loading: { color: meta.themeColor },
 
   modules: [
+    '@nuxtjs/device',
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
   ],

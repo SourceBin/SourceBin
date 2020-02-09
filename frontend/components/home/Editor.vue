@@ -56,7 +56,10 @@ export default {
         .from(this.$refs.editor.$el.getElementsByTagName('textarea'))
         .forEach(el => el.classList.add('mousetrap'));
 
-      this.$eventBus.$emit('focusEditor');
+      // Only focus on desktop or empty bins
+      if (this.$device.isDesktop || !this.bin.key) {
+        this.$eventBus.$emit('focusEditor');
+      }
     },
     focusEditor() {
       this.$refs.editor.focus();

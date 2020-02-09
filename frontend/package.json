@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/device": "^1.2.6",
     "@nuxtjs/pwa": "^3.0.0-0",
     "@packages/linguist": "file:../packages/linguist",
     "@packages/themes": "file:../packages/themes",
