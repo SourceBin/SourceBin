@@ -41,7 +41,7 @@ RUN npm i --production
 COPY --from=builder /usr/src/dist dist
 
 # Copy additional files
-COPY frontend/static static
+COPY --from=builder /usr/src/static static
 COPY frontend/nuxt.config.js frontend/config.js ./
 
 # Set API url
