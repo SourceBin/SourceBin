@@ -3,7 +3,7 @@
     "test": "npm run build && npm run lint",
     "dev": "nuxt",
     "build": "nuxt build",
-    "start": "nuxt start",
+    "start": "nuxt-start",
     "lint": "npm run lint:code && npm run lint:css",
     "lint:code": "eslint --ext .js,.vue --ignore-path ../.gitignore .",
     "lint:css": "stylelint '{**/*,*}.{css,sass,scss,vue}' --syntax scss --ignore-path ../.gitignore"
@@ -19,7 +19,7 @@
     "lodash-es": "^4.17.15",
     "mousetrap": "^1.6.4",
     "normalize.css": "^8.0.1",
-    "nuxt": "^2.0.0",
+    "nuxt-start": "^2.11.0",
     "sass-mq": "^5.0.1",
     "vuex-persistedstate": "^2.7.0"
   },
@@ -36,6 +36,7 @@
     "eslint-plugin-nuxt": ">=0.4.2",
     "eslint-plugin-vue": "^5.2.3",
     "node-sass": "^4.13.0",
+    "nuxt": "^2.11.0",
     "sass-loader": "^8.0.1",
     "stylelint": "^12.0.1",
     "stylelint-config-strict-scss": "^0.5.0",
