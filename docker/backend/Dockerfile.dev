@@ -7,7 +7,7 @@ RUN npm i tsc-watch -g
 
 # Install dependencies
 COPY backend/package*.json ./
-RUN npm i
+RUN npm ci
 
 # Set and expose port
 ENV PORT 3000

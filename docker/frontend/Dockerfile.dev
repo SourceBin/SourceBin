@@ -5,11 +5,10 @@ WORKDIR /usr/src
 # Install dependences
 COPY packages ../packages
 COPY frontend/package*.json ./
-# RUN npm i
 
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
 RUN apk add --no-cache --virtual .gyp python make g++ \
-    && npm i \
+    && npm ci \
     && apk del .gyp
 
 # Set API url

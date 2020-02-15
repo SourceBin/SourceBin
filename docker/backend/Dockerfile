@@ -7,7 +7,7 @@ WORKDIR /usr/src
 
 # Install dependencies
 COPY backend/package*.json ./
-RUN npm i
+RUN npm ci
 
 # Copy source
 COPY backend .
@@ -24,7 +24,7 @@ WORKDIR /usr/src
 
 # Install dependencies
 COPY backend/package*.json ./
-RUN npm i --production
+RUN npm ci --production
 
 # Copy dist
 COPY --from=builder /usr/src/dist dist

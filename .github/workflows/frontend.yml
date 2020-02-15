@@ -3,10 +3,10 @@ name: Frontend
 on:
   push:
     paths:
-    - 'frontend/**'
+    - frontend/**
   pull_request:
     paths:
-    - 'frontend/**'
+    - frontend/**
 
 jobs:
   test:
@@ -25,8 +25,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: npm install
-      run: npm install
+    - name: Install
+      run: npm ci
       working-directory: frontend
 
     - name: Build

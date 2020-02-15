@@ -10,7 +10,7 @@ WORKDIR /usr/src
 RUN apk add --no-cache python make g++
 COPY packages ../packages
 COPY frontend/package*.json ./
-RUN npm i
+RUN npm ci
 
 # Copy source
 COPY frontend .
@@ -35,7 +35,7 @@ WORKDIR /usr/src
 # Install dependencies
 COPY packages ../packages
 COPY frontend/package*.json ./
-RUN npm i --production
+RUN npm ci --production
 
 # Copy dist
 COPY --from=builder /usr/src/dist dist
