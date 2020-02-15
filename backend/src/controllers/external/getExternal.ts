@@ -13,7 +13,7 @@ export async function getExternal(req: Request, res: Response): Promise<void> {
   try {
     const content = await loadExternal(url);
 
-    res.set('Content-Type', 'text/plain').send(content);
+    res.json({ content });
   } catch (err) {
     console.error(err);
     error(500, 'Error loading url', res);
