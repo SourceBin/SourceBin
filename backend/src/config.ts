@@ -1,14 +1,19 @@
-const second = (x: number): number => x * 1000;
-const minute = (x: number): number => x * second(60);
+import { seconds, minutes, days } from './utils/time';
 
 export const rateLimits = {
   bins: {
     get: {
-      windowMs: minute(1),
-      max: minute(1), // every ms
+      windowMs: minutes(1),
+      max: minutes(1), // every ms
     },
     create: {
-      windowMs: minute(10),
+      windowMs: minutes(10),
+      max: 60, // every 10s
+    },
+  },
+  external: {
+    get: {
+      windowMs: minutes(10),
       max: 60, // every 10s
     },
   },
@@ -17,4 +22,9 @@ export const rateLimits = {
 export const bin = {
   maxContentLength: 100_000,
   maxLanguageLength: 100,
+};
+
+export const external = {
+  timeout: seconds(30),
+  expire: days(3),
 };

@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 
+import './redis';
 import routes from './routes';
 
 const app = express();
