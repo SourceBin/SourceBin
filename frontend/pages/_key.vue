@@ -33,8 +33,8 @@ export default {
       }
     },
   },
-  async fetch({ error, store, params }) {
-    await loadBin(params.key, error, store);
+  async fetch({ route, store, error }) {
+    await loadBin(route, store, error);
   },
   mounted() {
     window.addEventListener('popstate', this.handlePopstate);
@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     handlePopstate() {
-      loadBin(this.$route.params.key, this.$nuxt.error, this.$store);
+      loadBin(this.$route, this.$store, this.$nuxt.error);
     },
   },
   head() {

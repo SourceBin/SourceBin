@@ -1,11 +1,12 @@
-export async function loadBin(key, error, store) {
-  if (!key) {
-    store.commit('bin/reset');
-    return;
-  }
-
+export async function loadBin(route, store, error) {
   try {
-    await store.dispatch('bin/load', key);
+    if (route.params.key) {
+      await store.dispatch('bin/loadFromKey', route.params.key);
+    } else if (route.query.src) {
+      await store.dispatch('bin/loadFromQuery', route.query);
+    } else {
+      store.commit('bin/reset');
+    }
   } catch (err) {
     error({
       statusCode: err.response.status,

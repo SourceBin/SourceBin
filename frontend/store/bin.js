@@ -19,10 +19,15 @@ export const mutations = {
   setLanguageId(state, languageId) {
     state.languageId = languageId;
   },
-  loadSuccess(state, bin) {
+  loadFromKeySuccess(state, bin) {
     state.key = bin.key;
     state.content = bin.content;
     state.languageId = bin.languageId;
+
+    state.saved = true;
+  },
+  loadFromQuerySuccess(state, external) {
+    state.content = external.content;
 
     state.saved = true;
   },
@@ -34,10 +39,19 @@ export const mutations = {
 };
 
 export const actions = {
-  async load({ commit }, key) {
+  async loadFromKey({ commit }, key) {
     const bin = await this.$axios.$get(`/bins/${key}`);
 
-    commit('loadSuccess', bin);
+    commit('loadFromKeySuccess', bin);
+  },
+  async loadFromQuery({ commit }, query) {
+    const external = await this.$axios.$get('/external', {
+      params: {
+        q: query.src,
+      },
+    });
+
+    commit('loadFromQuerySuccess', external);
   },
   async save({ commit, state }) {
     const res = await this.$axios.$post('/bins', {
