@@ -65,7 +65,7 @@ export default {
   },
   mounted() {
     // Keybinds
-    Mousetrap.bind('ctrl+s', (e) => {
+    Mousetrap.bind('mod+s', (e) => {
       if (!e.repeat) {
         this.save();
       }
@@ -73,7 +73,7 @@ export default {
       return false;
     });
 
-    Mousetrap.bind('ctrl+l', (e) => {
+    Mousetrap.bind('mod+l', (e) => {
       if (!e.repeat) {
         this.selectLanguage();
       }
