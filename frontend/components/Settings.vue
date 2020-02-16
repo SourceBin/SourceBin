@@ -94,7 +94,7 @@ export default {
       },
     },
     theme() {
-      return this.$store.getters.theme;
+      return this.$store.getters['settings/theme'];
     },
     defaultLanguage() {
       return linguist[this.settings.defaultLanguageId].name;

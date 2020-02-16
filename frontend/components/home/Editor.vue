@@ -4,7 +4,7 @@
       ref="editor"
       v-model="content"
 
-      :language="language"
+      :language="language.aceMode"
       :theme="settings.theme"
       :options="options"
       @ready="ready"
@@ -16,6 +16,8 @@
 
 <script>
 import { mapState } from 'vuex';
+
+import { getActiveLanguage } from '@/assets/language.js';
 
 export default {
   components: {
@@ -33,7 +35,7 @@ export default {
       },
     },
     language() {
-      return this.$store.getters.language.aceMode;
+      return getActiveLanguage(this.$store, this.$route);
     },
     options() {
       return {

@@ -13,7 +13,7 @@
       </NavItem>
 
       <NavItem @click="selectLanguage">
-        Language - {{ $store.getters.language.name }}
+        Language - {{ language.name }}
       </NavItem>
 
       <NavItem @click="openSettings">
@@ -36,14 +36,15 @@
 
 <script>
 import Mousetrap from 'mousetrap';
-import { linguist } from '@packages/linguist';
-
 import clipboardCopy from 'clipboard-copy';
+import { linguist } from '@packages/linguist';
 
 import Navbar from '@/components/nav/Navbar.vue';
 import NavItem from '@/components/nav/NavItem.vue';
 import Selector from '@/components/Selector.vue';
 import Settings from '@/components/Settings.vue';
+
+import { getActiveLanguage } from '@/assets/language.js';
 
 export default {
   components: {
@@ -62,6 +63,11 @@ export default {
           data: Number(id),
         })),
     };
+  },
+  computed: {
+    language() {
+      return getActiveLanguage(this.$store, this.$route);
+    },
   },
   mounted() {
     // Keybinds
