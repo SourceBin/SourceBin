@@ -10,7 +10,8 @@
 
         <input
           ref="search"
-          v-model="searchQuery"
+          :value="searchQuery"
+          @input="searchQuery = $event.target.value"
 
           placeholder="Search"
           type="text"
