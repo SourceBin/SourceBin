@@ -20,17 +20,19 @@
         <a @click="close">X</a>
       </div>
 
-      <ul ref="options">
-        <li
-          v-for="(option, index) in options"
-          v-if="matchesSearch(option)"
+      <client-only>
+        <ul ref="options">
+          <li
+            v-for="(option, index) in options"
+            v-if="matchesSearch(option)"
 
-          :key="index"
-          @click="select(option)"
-        >
-          {{ option.name }}
-        </li>
-      </ul>
+            :key="index"
+            @click="select(option)"
+          >
+            {{ option.name }}
+          </li>
+        </ul>
+      </client-only>
     </div>
   </div>
 </template>

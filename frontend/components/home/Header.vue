@@ -41,8 +41,6 @@ import { linguist } from '@packages/linguist';
 
 import Navbar from '@/components/nav/Navbar.vue';
 import NavItem from '@/components/nav/NavItem.vue';
-import Selector from '@/components/Selector.vue';
-import Settings from '@/components/Settings.vue';
 
 import { getActiveLanguage } from '@/assets/language.js';
 
@@ -50,8 +48,8 @@ export default {
   components: {
     Navbar,
     NavItem,
-    Selector,
-    Settings,
+    Selector: () => import('@/components/Selector.vue'),
+    Settings: () => import('@/components/Settings.vue'),
   },
   data() {
     return {
