@@ -21,7 +21,7 @@ function isPrivateAddress(hostname: string): Promise<boolean> {
   });
 }
 
-export async function loadExternal(url: string): Promise<any> {
+export async function loadExternal(url: string): Promise<{ error: boolean; content: string }> {
   const normalized = normalizeUrl(url, {
     defaultProtocol: 'https:',
     stripHash: true,
@@ -31,26 +31,26 @@ export async function loadExternal(url: string): Promise<any> {
 
   const { hostname } = parse(normalized);
   if (!hostname) {
-    throw new Error('Invalid URL');
+    return { error: true, content: 'Invalid URL' };
   }
 
   const isPrivate = await isPrivateAddress(hostname);
   if (isPrivate) {
-    throw new Error('Private IP');
+    return { error: true, content: 'URL not accessible' };
   }
 
   const key = `external:${normalized}`;
   const cache = await get(key);
   if (cache) {
-    return cache;
+    return { error: false, content: cache };
   }
 
-  const { data } = await axios.get(normalized, {
+  const { data } = await axios.get<string>(normalized, {
     timeout: external.timeout,
     validateStatus: () => true, // allow all status codes
     transformResponse: res => res, // prevent JSON.parse on json
   });
 
   await set(key, data, 'PX', external.expire);
-  return data;
+  return { error: false, content: data };
 }
