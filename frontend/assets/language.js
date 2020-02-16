@@ -11,7 +11,11 @@ export function getLanguageByName(name) {
 
 export function getActiveLanguage(store, route) {
   if (route.query.lang) {
-    return getLanguageByName(route.query.lang);
+    const language = getLanguageByName(route.query.lang);
+
+    if (language) {
+      return language;
+    }
   }
 
   if (store.state.bin.languageId !== undefined) {
