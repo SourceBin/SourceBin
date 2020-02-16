@@ -48,12 +48,7 @@ export default {
     },
   },
   async mounted() {
-    this.editor = ace.edit(this.$el);
-
-    // Automatically scrolling cursor into view after selection change this will
-    // be disabled in the next version set editor.$blockScrolling = Infinity to
-    // disable this message
-    this.editor.$blockScrolling = Infinity;
+    this.editor = ace.edit(this.$el, this.options);
 
     // Settings
     this.setValue(this.value);
@@ -62,8 +57,6 @@ export default {
       this.setLanguage(this.language),
       this.setTheme(this.theme),
     ]);
-
-    this.editor.setOptions(this.options);
 
     // Commands
     this.editor.commands.removeCommand('gotoline');

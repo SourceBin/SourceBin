@@ -39,6 +39,7 @@ export default {
       return {
         fontSize: this.settings.fontSize,
         showPrintMargin: this.settings.printMargin,
+        useWorker: false,
       };
     },
     ...mapState(['bin', 'settings']),
