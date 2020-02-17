@@ -2,6 +2,8 @@
 
 include .env
 
+PWD = $(shell pwd)
+
 DC = docker-compose $(COMPOSE_FILES)
 COMPOSE_FILES = -f docker/docker-compose.yml
 
@@ -11,7 +13,7 @@ else ifeq ($(ENV), prod)
 	COMPOSE_FILES += -f docker/docker-compose.prod.yml
 endif
 
-CERTBOT_DIR = certbot
+CERTBOT_DIR = $(PWD)/certbot
 CERT_DIR = $(CERTBOT_DIR)/letsencrypt/live/$(DOMAIN)
 DHPARAM_DIR = $(CERTBOT_DIR)/certs
 
@@ -64,7 +66,7 @@ cert:
 	# create a certificate
 	docker run --rm -it \
 		-p 80:80 -p 443:443 \
-		-v $(PWD)/certbot/letsencrypt:/etc/letsencrypt \
+		-v $(CERTBOT_DIR)/letsencrypt:/etc/letsencrypt \
 		certbot/certbot \
 		certonly --standalone -n --agree-tos -m $(EMAIL) -d $(DOMAIN)
 
