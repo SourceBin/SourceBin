@@ -104,6 +104,9 @@ export default {
 
       // Reset URL
       window.history.pushState(null, null, '/');
+
+      // Focus editor to continue editing
+      this.$eventBus.$emit('focusEditor');
     },
     async selectLanguage() {
       const languageId = await this.$refs.languageSelector.promptSelect();
