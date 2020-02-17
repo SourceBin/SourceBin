@@ -23,16 +23,6 @@ export default {
       return this.$store.state.bin.key;
     },
   },
-  watch: {
-    key(key) {
-      const url = '/';
-
-      // Update URL if the bin is not saved, and the URL is different
-      if (!key && url !== window.location.pathname) {
-        window.history.pushState(null, null, url);
-      }
-    },
-  },
   async fetch({ route, store, error }) {
     await loadBin(route, store, error);
   },

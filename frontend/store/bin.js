@@ -27,6 +27,7 @@ export const mutations = {
     state.saved = true;
   },
   loadFromQuerySuccess(state, external) {
+    state.key = external.src;
     state.content = external.content;
 
     state.saved = true;
@@ -45,13 +46,16 @@ export const actions = {
     commit('loadFromKeySuccess', bin);
   },
   async loadFromQuery({ commit }, query) {
-    const external = await this.$axios.$get('/external', {
+    const { content } = await this.$axios.$get('/external', {
       params: {
         q: query.src,
       },
     });
 
-    commit('loadFromQuerySuccess', external);
+    commit('loadFromQuerySuccess', {
+      src: query.src,
+      content,
+    });
   },
   async save({ commit, state }) {
     const res = await this.$axios.$post('/bins', {

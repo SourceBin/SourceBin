@@ -101,6 +101,9 @@ export default {
     },
     reset() {
       this.$store.commit('bin/reset');
+
+      // Reset URL
+      window.history.pushState(null, null, '/');
     },
     async selectLanguage() {
       const languageId = await this.$refs.languageSelector.promptSelect();
