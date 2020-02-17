@@ -47,6 +47,7 @@ export async function loadExternal(url: string): Promise<{ error: boolean; conte
 
   const { data } = await axios.get<string>(normalized, {
     timeout: external.timeout,
+    maxContentLength: external.maxContentLength,
     validateStatus: () => true, // allow all status codes
     transformResponse: res => res, // prevent JSON.parse on json
   });

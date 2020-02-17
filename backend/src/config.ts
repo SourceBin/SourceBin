@@ -27,4 +27,5 @@ export const bin = {
 export const external = {
   timeout: seconds(30),
   expire: days(3),
+  maxContentLength: 50_000, // max amount of bytes
 };
