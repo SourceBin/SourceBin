@@ -4,8 +4,8 @@ services:
   certbot:
     image: certbot/certbot
     volumes:
-      - ../certbot/letsencrypt:/etc/letsencrypt
-      - ../certbot/www:/var/www/certbot
+      - ./certbot/letsencrypt:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     depends_on:
       - nginx
     container_name: certbot

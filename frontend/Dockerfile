@@ -8,11 +8,11 @@ WORKDIR /usr/src
 # Install dependences
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
 RUN apk add --no-cache python make g++
-COPY frontend/package*.json ./
+COPY package*.json ./
 RUN npm ci
 
 # Copy source
-COPY frontend .
+COPY . .
 
 # Set API url
 ARG API_URL
@@ -32,7 +32,7 @@ FROM node:12.14-alpine
 WORKDIR /usr/src
 
 # Install dependencies
-COPY frontend/package*.json ./
+COPY package*.json ./
 RUN npm ci --production
 
 # Copy dist
@@ -40,7 +40,7 @@ COPY --from=builder /usr/src/dist dist
 
 # Copy additional files
 COPY --from=builder /usr/src/static static
-COPY frontend/nuxt.config.js frontend/config.js ./
+COPY nuxt.config.js config.js ./
 
 # Set API url
 ARG API_URL

@@ -5,12 +5,12 @@ include .env
 PWD = $(shell pwd)
 
 DC = docker-compose $(COMPOSE_FILES)
-COMPOSE_FILES = -f docker/docker-compose.yml
+COMPOSE_FILES = -f docker-compose.yml
 
 ifeq ($(ENV), dev)
-	COMPOSE_FILES += -f docker/docker-compose.dev.yml
+	COMPOSE_FILES += -f docker-compose.dev.yml
 else ifeq ($(ENV), prod)
-	COMPOSE_FILES += -f docker/docker-compose.prod.yml
+	COMPOSE_FILES += -f docker-compose.prod.yml
 endif
 
 CERTBOT_DIR = $(PWD)/certbot

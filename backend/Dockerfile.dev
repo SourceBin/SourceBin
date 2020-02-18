@@ -6,7 +6,7 @@ WORKDIR /usr/src
 RUN npm i tsc-watch -g
 
 # Install dependencies
-COPY backend/package*.json ./
+COPY package*.json ./
 RUN npm ci
 
 # Set and expose port

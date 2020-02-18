@@ -3,7 +3,7 @@ FROM node:12.14-alpine
 WORKDIR /usr/src
 
 # Install dependences
-COPY frontend/package*.json ./
+COPY package*.json ./
 
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
 RUN apk add --no-cache --virtual .gyp python make g++ \
