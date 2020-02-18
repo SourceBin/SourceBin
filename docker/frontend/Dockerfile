@@ -8,7 +8,6 @@ WORKDIR /usr/src
 # Install dependences
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
 RUN apk add --no-cache python make g++
-COPY packages ../packages
 COPY frontend/package*.json ./
 RUN npm ci
 
@@ -33,7 +32,6 @@ FROM node:12.14-alpine
 WORKDIR /usr/src
 
 # Install dependencies
-COPY packages ../packages
 COPY frontend/package*.json ./
 RUN npm ci --production
 

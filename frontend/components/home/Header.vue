@@ -37,7 +37,7 @@
 <script>
 import Mousetrap from 'mousetrap';
 import clipboardCopy from 'clipboard-copy';
-import { linguist } from '@packages/linguist';
+import { linguist } from '@sourcebin/linguist';
 
 import Navbar from '@/components/nav/Navbar.vue';
 import NavItem from '@/components/nav/NavItem.vue';

@@ -1,4 +1,4 @@
-import { linguist, languages } from '@packages/linguist';
+import { linguist, languages } from '@sourcebin/linguist';
 
 export function getLanguageById(id) {
   return linguist[id];

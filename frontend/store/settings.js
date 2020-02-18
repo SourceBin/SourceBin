@@ -1,5 +1,5 @@
-import themes from '@packages/themes';
-import { languages } from '@packages/linguist';
+import themes from '@sourcebin/themes';
+import { languages } from '@sourcebin/linguist';
 
 export const state = () => ({
   fontSize: 15,

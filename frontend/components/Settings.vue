@@ -56,8 +56,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import themes from '@packages/themes';
-import { linguist } from '@packages/linguist';
+import themes from '@sourcebin/themes';
+import { linguist } from '@sourcebin/linguist';
 
 import Selector from '@/components/Selector.vue';
 

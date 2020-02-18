@@ -3,7 +3,6 @@ FROM node:12.14-alpine
 WORKDIR /usr/src
 
 # Install dependences
-COPY packages ../packages
 COPY frontend/package*.json ./
 
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
