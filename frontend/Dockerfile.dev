@@ -2,14 +2,6 @@ FROM node:12.14-alpine
 
 WORKDIR /usr/src
 
-# Install dependences
-COPY package*.json ./
-
-# https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
-RUN apk add --no-cache --virtual .gyp python make g++ \
-    && npm ci \
-    && apk del .gyp
-
 # Set API url
 ARG API_URL
 ENV API_URL $API_URL
@@ -23,5 +15,13 @@ ENV HOST 0.0.0.0
 # Set and expose port
 ENV PORT 3000
 EXPOSE $PORT
+
+# Install dependences
+COPY package*.json ./
+
+# https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
+RUN apk add --no-cache --virtual .gyp python make g++ \
+    && npm ci \
+    && apk del .gyp
 
 CMD ["npm", "run", "dev"]

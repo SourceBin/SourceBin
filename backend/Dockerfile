@@ -22,15 +22,15 @@ FROM node:12.14-alpine
 
 WORKDIR /usr/src
 
+# Set and expose port
+ENV PORT 3000
+EXPOSE $PORT
+
 # Install dependencies
 COPY package*.json ./
 RUN npm ci --production
 
 # Copy dist
 COPY --from=builder /usr/src/dist dist
-
-# Set and expose port
-ENV PORT 3000
-EXPOSE $PORT
 
 CMD ["npm", "start"]
