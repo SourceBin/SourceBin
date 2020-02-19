@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="page-container">
+  <div class="homepage">
     <Header />
     <Editor />
   </div>
@@ -17,11 +17,6 @@ export default {
   components: {
     Header,
     Editor,
-  },
-  computed: {
-    key() {
-      return this.$store.state.bin.key;
-    },
   },
   async fetch({ route, store, error }) {
     await loadBin(route, store, error);
@@ -74,9 +69,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+@import '@/assets/_globals.scss';
+
+.homepage {
+  min-height: 100vh;
+  background-color: $black;
 }
 </style>
