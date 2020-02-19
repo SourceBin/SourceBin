@@ -56,7 +56,7 @@ ul {
 }
 
 li {
-  display: inline-block;
+  float: left;
   margin-right: 15px;
   line-height: $height;
 

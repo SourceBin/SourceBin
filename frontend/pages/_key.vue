@@ -7,7 +7,7 @@
 
 <script>
 import Header from '@/components/home/Header.vue';
-import Editor from '@/components/home/Editor.vue';
+import Editor from '@/components/editor/Editor.vue';
 
 import { loadBin } from '@/assets/home/loadBin.js';
 
