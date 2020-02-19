@@ -1,126 +1,78 @@
 <template lang="html">
   <header>
-    <Navbar>
-      <NavItem
-        @click="save"
-        :disabled="$store.state.bin.saved"
-      >
-        Save
-      </NavItem>
+    <nav>
+      <ul>
+        <li>
+          <nuxt-link
+            to="/"
+            class="title"
+          >
+            SourceBin
+          </nuxt-link>
+        </li>
+      </ul>
 
-      <NavItem @click="reset">
-        New
-      </NavItem>
-
-      <NavItem @click="selectLanguage">
-        Language - {{ language.name }}
-      </NavItem>
-
-      <NavItem @click="openSettings">
-        Settings
-      </NavItem>
-    </Navbar>
-
-    <Selector
-      ref="languageSelector"
-      :options="languageOptions"
-      title="Language Selector"
-    />
-
-    <Settings
-      ref="settings"
-      @close="$eventBus.$emit('focusEditor')"
-    />
+      <ul>
+        <li>
+          <nuxt-link to="/">
+            <font-awesome-icon icon="plus" />
+          </nuxt-link>
+        </li>
+        <li>
+          <nuxt-link to="/settings">
+            <font-awesome-icon icon="sliders-h" />
+          </nuxt-link>
+        </li>
+        <li>
+          <nuxt-link to="/account">
+            <font-awesome-icon icon="user" />
+          </nuxt-link>
+        </li>
+      </ul>
+    </nav>
   </header>
 </template>
 
-<script>
-import Mousetrap from 'mousetrap';
-import clipboardCopy from 'clipboard-copy';
-import { linguist } from '@sourcebin/linguist';
+<style lang="scss" scoped>
+@import '@/assets/_globals.scss';
 
-import Navbar from '@/components/nav/Navbar.vue';
-import NavItem from '@/components/nav/NavItem.vue';
+$height: 50px;
+$font-size: 20px;
+$font-size-title: 25px;
 
-import { getActiveLanguage } from '@/assets/language.js';
+nav {
+  margin: 0 50px;
+  height: $height;
+  display: flex;
+  justify-content: space-between;
+  font-family: $font-family;
+  font-size: $font-size;
+}
 
-export default {
-  components: {
-    Navbar,
-    NavItem,
-    Selector: () => import('@/components/Selector.vue'),
-    Settings: () => import('@/components/Settings.vue'),
-  },
-  data() {
-    return {
-      languageOptions: Object
-        .entries(linguist)
-        .map(([id, language]) => ({
-          name: language.name,
-          aliases: language.aliases,
-          data: Number(id),
-        })),
-    };
-  },
-  computed: {
-    language() {
-      return getActiveLanguage(this.$store, this.$route);
-    },
-  },
-  mounted() {
-    // Keybinds
-    Mousetrap.bind('mod+s', (e) => {
-      if (!e.repeat) {
-        this.save();
-      }
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 
-      return false;
-    });
+li {
+  display: inline-block;
+  margin-right: 15px;
+  line-height: $height;
 
-    Mousetrap.bind('mod+l', (e) => {
-      if (!e.repeat) {
-        this.selectLanguage();
-      }
+  &:last-child {
+    margin-right: 0;
+  }
+}
 
-      return false;
-    });
-  },
-  methods: {
-    async save() {
-      const languageId = await this.selectLanguage();
+a {
+  color: $white;
+  opacity: 90%;
+  text-decoration: none;
+}
 
-      if (languageId) {
-        await this.$store.dispatch('bin/save');
-
-        // Update URL with key
-        window.history.pushState(null, null, this.$store.state.bin.key);
-
-        // Copy URL to clipboard
-        await clipboardCopy(window.location.href);
-      }
-    },
-    reset() {
-      this.$store.commit('bin/reset');
-
-      // Reset URL
-      window.history.pushState(null, null, '/');
-
-      // Focus editor to continue editing
-      this.$eventBus.$emit('focusEditor');
-    },
-    async selectLanguage() {
-      const languageId = await this.$refs.languageSelector.promptSelect();
-
-      if (languageId !== undefined) {
-        this.$store.commit('bin/setLanguageId', languageId);
-      }
-
-      this.$eventBus.$emit('focusEditor');
-      return languageId;
-    },
-    openSettings() {
-      this.$refs.settings.open();
-    },
-  },
-};
-</script>
+.title {
+  font-weight: 700;
+  font-size: $font-size-title;
+}
+</style>
