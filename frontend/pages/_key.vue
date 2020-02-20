@@ -1,15 +1,15 @@
 <template lang="html">
   <div class="homepage">
     <Header />
-    <Editor />
+    <Editors />
     <Actions />
   </div>
 </template>
 
 <script>
 import Header from '@/components/home/Header.vue';
+import Editors from '@/components/home/Editors.vue';
 import Actions from '@/components/home/Actions.vue';
-import Editor from '@/components/editor/Editor.vue';
 
 import { loadBin } from '@/assets/home/loadBin.js';
 
@@ -18,7 +18,7 @@ import { meta } from '@/config.js';
 export default {
   components: {
     Header,
-    Editor,
+    Editors,
     Actions,
   },
   async fetch({ route, store, error }) {
