@@ -1,12 +1,19 @@
 <template lang="html">
   <div class="actions">
-    <button>Save</button>
+    <button @click="save($store)">
+      Save
+    </button>
     <!-- <button>Add file</button> -->
   </div>
 </template>
 
 <script>
+import { save } from '@/assets/home/save.js';
+
 export default {
+  methods: {
+    save,
+  },
 };
 </script>
 

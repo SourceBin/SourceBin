@@ -10,10 +10,9 @@
 <script>
 import { mapState } from 'vuex';
 import Mousetrap from 'mousetrap';
-import clipboardCopy from 'clipboard-copy';
 
 import { getActiveLanguage } from '@/assets/language.js';
-import { selectLanguage } from '@/assets/home/selectLanguage.js';
+import { save } from '@/assets/home/save.js';
 
 export default {
   components: {
@@ -35,7 +34,7 @@ export default {
   mounted() {
     Mousetrap.bind('mod+s', (e) => {
       if (!e.repeat) {
-        this.save();
+        save(this.$store);
       }
 
       return false;
@@ -43,19 +42,6 @@ export default {
   },
   methods: {
     getActiveLanguage,
-    async save() {
-      const languageId = await selectLanguage(this.$store);
-
-      if (languageId) {
-        await this.$store.dispatch('bin/save');
-
-        // Update URL with key
-        window.history.pushState(null, null, this.$store.state.bin.key);
-
-        // Copy URL to clipboard
-        await clipboardCopy(window.location.href);
-      }
-    },
   },
 };
 </script>
