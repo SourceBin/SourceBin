@@ -15,21 +15,16 @@
       </ul>
     </div>
 
-    <div class="ace-container">
-      <client-only>
-        <AceEditor
-          ref="editor"
-          v-model="content"
+    <client-only>
+      <AceEditor
+        ref="editor"
+        v-model="content"
 
-          :options="{}"
-          @ready="() => {}"
-          language="javascript"
-          theme="dracula"
-
-          class="ace"
-        />
-      </client-only>
-    </div>
+        :options="{ minLines: 10,maxLines: 50 }"
+        language="javascript"
+        theme="dracula"
+      />
+    </client-only>
   </div>
 </template>
 
@@ -58,7 +53,7 @@ export default {
 
 $height: 40px;
 $font-size: 15px;
-$border-radius: 5px;
+$border-radius: 3px;
 
 .editor {
   margin: 0 50px;
@@ -97,19 +92,6 @@ $border-radius: 5px;
       text-align: center;
       border-right: 1px solid $light-gray;
     }
-  }
-}
-
-.ace-container {
-  min-height: 200px;
-  position: relative;
-
-  .ace {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
   }
 }
 </style>
