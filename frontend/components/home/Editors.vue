@@ -1,6 +1,9 @@
 <template lang="html">
   <div>
     <Editor
+      ref="editor"
+      @ready="focus"
+
       v-model="content"
       :language="getActiveLanguage($store, $route)"
     />
@@ -42,6 +45,11 @@ export default {
   },
   methods: {
     getActiveLanguage,
+    focus() {
+      if (!this.bin.saved) {
+        this.$refs.editor.focus();
+      }
+    },
   },
 };
 </script>

@@ -74,7 +74,8 @@ export default {
 
     mousetrap.bind('mod+l', (e) => {
       if (!e.repeat) {
-        selectLanguage(this.$store);
+        selectLanguage(this.$store)
+          .then(() => this.focus());
       }
 
       return false;
@@ -87,6 +88,11 @@ export default {
       Array
         .from(this.$refs.editor.$el.getElementsByTagName('textarea'))
         .forEach(el => el.classList.add('mousetrap'));
+
+      this.$emit('ready');
+    },
+    focus() {
+      this.$refs.editor.focus();
     },
   },
 };
