@@ -56,7 +56,7 @@ $font-size: 15px;
 $border-radius: 3px;
 
 .editor {
-  margin: 0 50px;
+  margin: 25px 50px;
   background: $gray;
   border-radius: $border-radius;
   overflow: hidden;
