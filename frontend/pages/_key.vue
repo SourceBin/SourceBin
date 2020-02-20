@@ -2,11 +2,13 @@
   <div class="homepage">
     <Header />
     <Editor />
+    <Actions />
   </div>
 </template>
 
 <script>
 import Header from '@/components/home/Header.vue';
+import Actions from '@/components/home/Actions.vue';
 import Editor from '@/components/editor/Editor.vue';
 
 import { loadBin } from '@/assets/home/loadBin.js';
@@ -17,6 +19,7 @@ export default {
   components: {
     Header,
     Editor,
+    Actions,
   },
   async fetch({ route, store, error }) {
     await loadBin(route, store, error);
@@ -72,6 +75,7 @@ export default {
 @import '@/assets/_globals.scss';
 
 .homepage {
+  padding-bottom: 25px;
   min-height: 100vh;
   background-color: $black;
 }
