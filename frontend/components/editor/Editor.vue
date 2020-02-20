@@ -3,9 +3,9 @@
     <div class="toolbar">
       <ul>
         <li class="language">
-          JavaScipt
+          {{ language.name }}
         </li>
-        <li>index.js</li>
+        <li>untitled</li>
       </ul>
 
       <ul>
@@ -18,31 +18,57 @@
     <client-only>
       <AceEditor
         ref="editor"
-        v-model="content"
+        :value="value"
+        @input="$emit('input', $event)"
 
-        :options="{ minLines: 10,maxLines: 50 }"
-        language="javascript"
-        theme="dracula"
+        :language="language.aceMode"
+        :theme="settings.theme"
+        :options="options"
+
+        @ready="ready"
       />
     </client-only>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import AceEditor from './AceEditor.vue';
 
 export default {
   components: {
     AceEditor,
   },
+  props: {
+    value: {
+      type: String,
+      required: true,
+    },
+    language: {
+      type: Object,
+      required: true,
+    },
+  },
   computed: {
-    content: {
-      get() {
-        return 'this.bin.content';
-      },
-      set(value) {
-        console.log(value);
-      },
+    options() {
+      return {
+        minLines: 10,
+        maxLines: 50,
+
+        fontSize: this.settings.fontSize,
+        showPrintMargin: this.settings.printMargin,
+        useWorker: false,
+      };
+    },
+    ...mapState(['settings']),
+  },
+  methods: {
+    ready() {
+      // Add mousetrap class to editor textarea to allow keybinds
+      Array
+        .from(this.$refs.editor.$el.getElementsByTagName('textarea'))
+        .forEach(el => el.classList.add('mousetrap'));
     },
   },
 };
