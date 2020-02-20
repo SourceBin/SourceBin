@@ -2,21 +2,22 @@
   <div>
     <Editor
       v-model="content"
-      :language="getLanguageById(bin.languageId)"
+      :language="getActiveLanguage($store, $route)"
     />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import Mousetrap from 'mousetrap';
+import clipboardCopy from 'clipboard-copy';
 
-import Editor from '@/components/editor/Editor.vue';
-
-import { getLanguageById } from '@/assets/language.js';
+import { getActiveLanguage } from '@/assets/language.js';
+import { selectLanguage } from '@/assets/home/selectLanguage.js';
 
 export default {
   components: {
-    Editor,
+    Editor: () => import('@/components/editor/Editor.vue'),
   },
   computed: {
     content: {
@@ -31,8 +32,30 @@ export default {
     },
     ...mapState(['bin']),
   },
+  mounted() {
+    Mousetrap.bind('mod+s', (e) => {
+      if (!e.repeat) {
+        this.save();
+      }
+
+      return false;
+    });
+  },
   methods: {
-    getLanguageById,
+    getActiveLanguage,
+    async save() {
+      const languageId = await selectLanguage(this.$store);
+
+      if (languageId) {
+        await this.$store.dispatch('bin/save');
+
+        // Update URL with key
+        window.history.pushState(null, null, this.$store.state.bin.key);
+
+        // Copy URL to clipboard
+        await clipboardCopy(window.location.href);
+      }
+    },
   },
 };
 </script>

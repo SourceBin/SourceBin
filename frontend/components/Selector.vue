@@ -41,6 +41,8 @@
 import Mousetrap from 'mousetrap';
 import { debounce } from 'lodash-es';
 
+import { eventBus } from '@/assets/eventBus.js';
+
 export default {
   props: {
     title: {
@@ -110,6 +112,12 @@ export default {
 
       return false;
     });
+
+    // Event bus
+    eventBus.$on('selectLanguage', async (callback) => {
+      const languageId = await this.promptSelect();
+      callback(languageId);
+    });
   },
   methods: {
     matchesSearch(option) {
@@ -175,6 +183,8 @@ export default {
 <style lang="scss" scoped>
 @import 'sass-mq';
 @import '@/assets/_globals.scss';
+
+$color: $white;
 
 $container-z-index: 100000;
 

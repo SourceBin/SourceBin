@@ -2,7 +2,10 @@
   <div class="editor">
     <div class="toolbar">
       <ul>
-        <li class="language">
+        <li
+          @click="selectLanguage($store)"
+          class="language"
+        >
           {{ language.name }}
         </li>
         <li>untitled</li>
@@ -33,8 +36,11 @@
 
 <script>
 import { mapState } from 'vuex';
+import Mousetrap from 'mousetrap';
 
 import AceEditor from './AceEditor.vue';
+
+import { selectLanguage } from '@/assets/home/selectLanguage.js';
 
 export default {
   components: {
@@ -63,7 +69,19 @@ export default {
     },
     ...mapState(['settings']),
   },
+  mounted() {
+    const mousetrap = new Mousetrap(this.$el);
+
+    mousetrap.bind('mod+l', (e) => {
+      if (!e.repeat) {
+        selectLanguage(this.$store);
+      }
+
+      return false;
+    });
+  },
   methods: {
+    selectLanguage,
     ready() {
       // Add mousetrap class to editor textarea to allow keybinds
       Array
