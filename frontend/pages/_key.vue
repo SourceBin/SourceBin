@@ -91,11 +91,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'sass-mq';
 @import '@/assets/_globals.scss';
 
 .homepage {
+  display: flex;
+  flex-direction: column;
   padding-bottom: 25px;
   min-height: 100vh;
   background-color: $black;
+
+  @include mq($until: desktop) {
+    padding-bottom: 15px;
+  }
 }
 </style>

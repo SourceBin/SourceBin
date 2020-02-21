@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="editor">
     <div class="toolbar">
-      <ul>
+      <ul class="info">
         <li
           @click="selectLanguage($store)"
           class="language"
@@ -29,6 +29,8 @@
         :options="options"
 
         @ready="ready"
+
+        class="ace"
       />
     </client-only>
   </div>
@@ -59,9 +61,6 @@ export default {
   computed: {
     options() {
       return {
-        minLines: 10,
-        maxLines: 50,
-
         fontSize: this.settings.fontSize,
         showPrintMargin: this.settings.printMargin,
         useWorker: false,
@@ -99,30 +98,54 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'sass-mq';
 @import '@/assets/_globals.scss';
 
 $height: 40px;
+$height-small: 30px;
+
 $font-size: 15px;
-$border-radius: 3px;
+$font-size-small: 13px;
+
+$border-radius: 5px;
+$border: 1px solid $light-gray;
 
 .editor {
-  margin: 25px 50px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: 10px $margin-side 25px;
   background: $gray;
   border-radius: $border-radius;
   overflow: hidden;
+
+  @include mq($until: desktop) {
+    margin: 0 0 15px;
+    border-radius: 0;
+  }
 }
 
 .toolbar {
-  height: $height;
   display: flex;
   justify-content: space-between;
   font-family: $font-family;
   font-size: $font-size;
 
+  @include mq($until: tablet) {
+    font-size: $font-size-small;
+    flex-direction: column;
+  }
+
   ul {
     margin: 0;
     padding: 0;
     list-style: none;
+
+    &.info {
+      @include mq($until: tablet) {
+        border-bottom: $border;
+      }
+    }
   }
 
   li {
@@ -133,6 +156,11 @@ $border-radius: 3px;
     line-height: $height;
     cursor: pointer;
 
+    @include mq($until: tablet) {
+      padding: 0 10px;
+      line-height: $height-small;
+    }
+
     &:hover {
       background-color: $light-gray;
     }
@@ -140,8 +168,12 @@ $border-radius: 3px;
     &.language {
       min-width: 150px;
       text-align: center;
-      border-right: 1px solid $light-gray;
+      border-right: $border;
     }
   }
+}
+
+.ace {
+  flex: 1;
 }
 </style>
