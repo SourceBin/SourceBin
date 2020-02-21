@@ -18,15 +18,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'sass-mq';
 @import '@/assets/_globals.scss';
 
 $font-size: 17px;
+$font-size-small: 15px;
 $border-radius: 3px;
 
 .actions {
-  margin: 0 50px;
+  margin: 0 $margin-side;
   display: flex;
   justify-content: flex-end;
+
+  @include mq($until: desktop) {
+    margin: 0 $margin-side-small;
+  }
 }
 
 button {
@@ -39,6 +45,10 @@ button {
   background-color: $gray;
   border-radius: $border-radius;
   cursor: pointer;
+
+  @include mq($until: tablet) {
+    font-size: $font-size-small;
+  }
 
   &:focus {
     outline-color: $red;

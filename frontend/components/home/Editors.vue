@@ -1,5 +1,5 @@
 <template lang="html">
-  <div>
+  <div class="editors">
     <Editor
       ref="editor"
       @ready="focus"
@@ -53,3 +53,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.editors {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+</style>

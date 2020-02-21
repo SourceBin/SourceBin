@@ -34,19 +34,27 @@
 </template>
 
 <style lang="scss" scoped>
+@import 'sass-mq';
 @import '@/assets/_globals.scss';
 
 $height: 50px;
+
 $font-size: 20px;
 $font-size-title: 25px;
+$font-size-small: 17px;
 
 nav {
-  margin: 0 50px;
+  margin: 0 $margin-side;
   height: $height;
   display: flex;
   justify-content: space-between;
   font-family: $font-family;
   font-size: $font-size;
+
+  @include mq($until: desktop) {
+    margin: 0 $margin-side-small;
+    font-size: $font-size-small;
+  }
 }
 
 ul {
