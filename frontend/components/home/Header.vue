@@ -14,7 +14,10 @@
 
       <ul>
         <li>
-          <nuxt-link to="/">
+          <nuxt-link
+            @click.native="$store.commit('bin/reset')"
+            to="/"
+          >
             <font-awesome-icon icon="plus" />
           </nuxt-link>
         </li>
