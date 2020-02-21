@@ -1,6 +1,5 @@
 <template lang="html">
   <div class="homepage">
-    <Header />
     <Editors />
     <Actions />
 
@@ -14,7 +13,6 @@
 <script>
 import { linguist } from '@sourcebin/linguist';
 
-import Header from '@/components/home/Header.vue';
 import Editors from '@/components/home/Editors.vue';
 import Actions from '@/components/home/Actions.vue';
 
@@ -24,7 +22,6 @@ import { meta } from '@/config.js';
 
 export default {
   components: {
-    Header,
     Editors,
     Actions,
     Selector: () => import('@/components/Selector.vue'),
@@ -95,11 +92,10 @@ export default {
 @import '@/assets/_globals.scss';
 
 .homepage {
+  flex: 1;
   display: flex;
   flex-direction: column;
   padding-bottom: 25px;
-  min-height: 100vh;
-  background-color: $black;
 
   @include mq($until: desktop) {
     padding-bottom: 15px;
