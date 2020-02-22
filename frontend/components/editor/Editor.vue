@@ -8,13 +8,15 @@
         >
           {{ language.name }}
         </li>
-        <li>untitled</li>
+        <!-- <li>untitled</li> -->
       </ul>
 
       <ul>
-        <li>Copy</li>
-        <li>Format</li>
-        <li>Raw</li>
+        <li @click="copy">
+          Copy
+        </li>
+        <!-- <li>Format</li>
+        <li>Raw</li> -->
       </ul>
     </div>
 
@@ -39,6 +41,7 @@
 <script>
 import { mapState } from 'vuex';
 import Mousetrap from 'mousetrap';
+import clipboardCopy from 'clipboard-copy';
 
 import AceEditor from './AceEditor.vue';
 
@@ -92,6 +95,10 @@ export default {
     },
     focus() {
       this.$refs.editor.focus();
+    },
+    async copy() {
+      await clipboardCopy(this.value);
+      this.$toast.global.success('Copied content to clipboard');
     },
   },
 };
