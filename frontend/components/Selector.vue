@@ -119,6 +119,9 @@ export default {
       callback(languageId);
     });
   },
+  beforeDestroy() {
+    eventBus.$off('selectLanguage');
+  },
   methods: {
     matchesSearch(option) {
       const search = this.search.toLowerCase();
@@ -165,12 +168,12 @@ export default {
       return new Promise((resolve) => {
         this.show();
 
-        this.$on('select', (option) => {
+        this.$once('select', (option) => {
           this.hide();
           resolve(option);
         });
 
-        this.$on('close', () => {
+        this.$once('close', () => {
           this.hide();
           resolve();
         });
