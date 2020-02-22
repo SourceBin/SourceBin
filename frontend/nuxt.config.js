@@ -29,6 +29,26 @@ export default {
         icons: ['fas'],
       }],
     }],
+    ['@nuxtjs/toast', {
+      register: [
+        {
+          name: 'success',
+          message: msg => msg,
+          options: {
+            type: 'success',
+            duration: 5000,
+          },
+        },
+        {
+          name: 'error',
+          message: msg => msg,
+          options: {
+            type: 'error',
+            duration: 5000,
+          },
+        },
+      ],
+    }],
   ],
 
   plugins: [

@@ -18,6 +18,7 @@ export default {
 <style lang="scss">
 @import 'normalize.css';
 @import '@/assets/_globals.scss';
+@import '@/assets/_toasted.scss';
 
 *,
 *::before,

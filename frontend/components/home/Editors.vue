@@ -37,7 +37,7 @@ export default {
   mounted() {
     Mousetrap.bind('mod+s', (e) => {
       if (!e.repeat) {
-        save(this.$store);
+        save(this);
       }
 
       return false;
