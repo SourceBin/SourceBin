@@ -2,16 +2,26 @@ import clipboardCopy from 'clipboard-copy';
 
 import { selectLanguage } from './selectLanguage.js';
 
-export async function save(store) {
-  const languageId = await selectLanguage(store);
+export async function save(nuxt) {
+  if (!nuxt.$store.state.bin.content) {
+    nuxt.$toast.global.error("You can't save an empty bin");
+    return;
+  }
 
-  if (languageId !== undefined) {
-    await store.dispatch('bin/save');
+  try {
+    const languageId = await selectLanguage(nuxt.$store);
 
-    // Update URL with key
-    window.history.pushState(null, null, store.state.bin.key);
+    if (languageId !== undefined) {
+      await nuxt.$store.dispatch('bin/save');
 
-    // Copy URL to clipboard
-    await clipboardCopy(window.location.href);
+      // Update URL with key
+      window.history.pushState(null, null, nuxt.$store.state.bin.key);
+
+      // Copy URL to clipboard
+      await clipboardCopy(window.location.href);
+      nuxt.$toast.global.success('Copied link to clipboard');
+    }
+  } catch {
+    nuxt.$toast.global.error('An error occured while saving');
   }
 }

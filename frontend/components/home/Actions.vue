@@ -1,6 +1,9 @@
 <template lang="html">
   <div class="actions">
-    <button @click="save($store)">
+    <button
+      :disabled="$store.state.bin.saved"
+      @click="save"
+    >
       Save
     </button>
     <!-- <button>Add file</button> -->
@@ -12,7 +15,9 @@ import { save } from '@/assets/home/save.js';
 
 export default {
   methods: {
-    save,
+    save() {
+      save(this);
+    },
   },
 };
 </script>
@@ -54,8 +59,16 @@ button {
     outline-color: $red;
   }
 
+  &:hover {
+    background-color: $light-gray;
+  }
+
   &:last-child {
     margin-right: 0;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 }
 </style>
