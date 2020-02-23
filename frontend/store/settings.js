@@ -1,4 +1,3 @@
-import themes from '@sourcebin/themes';
 import { languages } from '@sourcebin/linguist';
 
 export const state = () => ({
@@ -20,11 +19,5 @@ export const mutations = {
   },
   setDefaultLanguageId(state, id) {
     state.defaultLanguageId = id;
-  },
-};
-
-export const getters = {
-  theme(state) {
-    return themes[state.theme];
   },
 };

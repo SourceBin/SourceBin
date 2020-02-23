@@ -45,7 +45,7 @@ import clipboardCopy from 'clipboard-copy';
 
 import AceEditor from './AceEditor.vue';
 
-import { selectLanguage } from '@/assets/home/selectLanguage.js';
+import { selectLanguage } from '@/assets/language.js';
 
 export default {
   components: {

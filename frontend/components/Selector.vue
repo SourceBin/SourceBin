@@ -44,18 +44,10 @@ import { debounce } from 'lodash-es';
 import { eventBus } from '@/assets/eventBus.js';
 
 export default {
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    options: {
-      type: Array,
-      required: true,
-    },
-  },
   data() {
     return {
+      title: '',
+      options: [],
       search: '',
       visible: false,
       selectedIndex: 0,
@@ -114,13 +106,15 @@ export default {
     });
 
     // Event bus
-    eventBus.$on('selectLanguage', async (callback) => {
-      const languageId = await this.promptSelect();
-      callback(languageId);
+    eventBus.$on('promptSelect', async (title, options, callback) => {
+      this.title = title;
+      this.options = options;
+
+      callback(await this.promptSelect());
     });
   },
   beforeDestroy() {
-    eventBus.$off('selectLanguage');
+    eventBus.$off('promptSelect');
   },
   methods: {
     matchesSearch(option) {
@@ -147,6 +141,9 @@ export default {
     show() {
       this.search = '';
       this.visible = true;
+
+      this.selectedIndex = 0;
+      this.updateSelected();
 
       this.$nextTick(() => this.$refs.search.focus());
     },
