@@ -1,6 +1,6 @@
 import clipboardCopy from 'clipboard-copy';
 
-import { selectLanguage } from './selectLanguage.js';
+import { selectLanguage } from '@/assets/language.js';
 
 export async function save(nuxt) {
   if (!nuxt.$store.state.bin.content) {

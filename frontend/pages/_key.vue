@@ -3,21 +3,15 @@
     <Editors />
     <Actions />
 
-    <Selector
-      :options="languageOptions"
-      title="Language Selector"
-    />
+    <Selector />
   </div>
 </template>
 
 <script>
-import { linguist } from '@sourcebin/linguist';
-
 import Editors from '@/components/home/Editors.vue';
 import Actions from '@/components/home/Actions.vue';
 
 import { loadBin } from '@/assets/home/loadBin.js';
-
 import { meta } from '@/config.js';
 
 export default {
@@ -25,17 +19,6 @@ export default {
     Editors,
     Actions,
     Selector: () => import('@/components/Selector.vue'),
-  },
-  data() {
-    return {
-      languageOptions: Object
-        .entries(linguist)
-        .map(([id, language]) => ({
-          name: language.name,
-          aliases: language.aliases,
-          data: Number(id),
-        })),
-    };
   },
   async fetch({ route, store, error }) {
     await loadBin(route, store, error);
