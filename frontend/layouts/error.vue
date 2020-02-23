@@ -1,11 +1,11 @@
 <template lang="html">
-  <div>
-    <h1>{{ error.statusCode }}</h1>
-    <h2>{{ error.message }}</h2>
+  <div class="error">
+    <img
+      :src="`https://http.cat/${error.statusCode}`"
+      :alt="error.statusCode"
+    >
 
-    <nuxt-link to="/">
-      Home page
-    </nuxt-link>
+    <h1>{{ error.message }}</h1>
   </div>
 </template>
 
@@ -19,3 +19,30 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import 'sass-mq';
+@import '@/assets/_globals.scss';
+
+.error {
+  margin: 25px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+img {
+  width: 500px;
+
+  @include mq($until: tablet) {
+    width: 300px;
+  }
+}
+
+h1 {
+  font-family: $font-family;
+  color: $white;
+  opacity: 90%;
+  text-align: center;
+}
+</style>
