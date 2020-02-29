@@ -5,11 +5,22 @@ export default {
   mode: 'universal',
 
   head: {
+    titleTemplate: x => (x ? `${x} | SourceBin` : 'SourceBin'),
     htmlAttrs: { lang: 'en' },
 
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+
+      // Site information
+      { name: 'description', hid: 'description', content: meta.description },
+
+      // Open Graph
+      { name: 'og:title', hid: 'og:title', content: meta.title },
+      { name: 'og:description', hid: 'og:description', content: meta.description },
+      { name: 'og:type', hid: 'og:type', content: 'website' },
+      { name: 'og:url', hid: 'og:url', content: meta.url },
+      { name: 'og:image', hid: 'og:image', content: meta.image },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

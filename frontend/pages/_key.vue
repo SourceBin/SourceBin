@@ -12,7 +12,6 @@ import Editors from '@/components/home/Editors.vue';
 import Actions from '@/components/home/Actions.vue';
 
 import { loadBin } from '@/assets/home/loadBin.js';
-import { meta } from '@/config.js';
 
 export default {
   components: {
@@ -38,28 +37,25 @@ export default {
     const { key } = this.$store.state.bin;
 
     const head = {
-      title: key
-        ? `${meta.title} | ${key}`
-        : meta.title,
-
-      meta: [
-        { name: 'description', hid: 'description', content: meta.description },
-      ],
+      title: key,
 
       link: [
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap' },
       ],
     };
 
-    // Add OpenGraph if no key is provided
-    if (!key) {
-      head.meta.push(
-        { name: 'og:title', content: meta.title },
-        { name: 'og:description', content: meta.description },
-        { name: 'og:type', content: 'website' },
-        { name: 'og:url', content: meta.url },
-        { name: 'og:image', content: meta.image },
-      );
+    // Remove site information when ssr, and a key is provided
+    if (key && process.server) {
+      head.meta = [
+        { hid: 'description', content: null },
+
+        // Open Graph
+        { hid: 'og:title', content: null },
+        { hid: 'og:description', content: null },
+        { hid: 'og:type', content: null },
+        { hid: 'og:url', content: null },
+        { hid: 'og:image', content: null },
+      ];
     }
 
     return head;

@@ -16,6 +16,11 @@ export default {
     EditorSettings,
     Selector: () => import('@/components/Selector.vue'),
   },
+  head() {
+    return {
+      title: 'Settings',
+    };
+  },
 };
 </script>
 
