@@ -2,6 +2,16 @@
   <h1>Coming Soon!</h1>
 </template>
 
+<script>
+export default {
+  head() {
+    return {
+      title: 'Account',
+    };
+  },
+};
+</script>
+
 <style lang="scss" scoped>
 @import 'sass-mq';
 @import '@/assets/_globals.scss';
