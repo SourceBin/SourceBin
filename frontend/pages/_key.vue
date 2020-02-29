@@ -38,10 +38,6 @@ export default {
 
     const head = {
       title: key,
-
-      link: [
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap' },
-      ],
     };
 
     // Remove site information when ssr, and a key is provided

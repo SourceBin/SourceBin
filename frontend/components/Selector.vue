@@ -184,22 +184,14 @@ export default {
 @import 'sass-mq';
 @import '@/assets/_globals.scss';
 
-$color: $white;
-
 $container-z-index: 100000;
 
-$container-background: rgba(255, 255, 255, 0.1);
-$content-background: #2c2f33;
+$font-size-title: 30px;
+$font-size-close: 20px;
+$font-size-option: 18px;
 
-$option-selected-background: lighten($content-background, 4%);
-$option-hover-background: lighten($content-background, 8%);
-
-$title-font: bold 30px $font-family;
-$close-font: 20px Arial, sans-serif;
-$option-font: 18px $font-family;
-
-$input-border: 1px solid $color;
-$option-border: 1px solid darken($content-background, 5%);
+$input-border: 1px solid rgba($white, 0.8);
+$option-border: 1px solid darken($black, 5%);
 
 .container {
   position: fixed;
@@ -211,18 +203,19 @@ $option-border: 1px solid darken($content-background, 5%);
   display: flex;
   justify-content: center;
   align-items: center;
-  background: $container-background;
+  background: rgba($white, 0.1);
 }
 
 .content {
   position: relative;
   display: flex;
   flex-direction: column;
+  font-family: $font-family;
   width: 100%;
   max-width: 1000px;
   height: 100%;
-  background: $content-background;
-  color: $color;
+  background: $black;
+  color: rgba($white, 0.9);
 }
 
 .header {
@@ -239,7 +232,8 @@ $option-border: 1px solid darken($content-background, 5%);
 
 h1 {
   margin: 0;
-  font: $title-font;
+  font-size: $font-size-title;
+  font-weight: 500;
   cursor: default;
   user-select: none;
 }
@@ -248,7 +242,7 @@ input {
   padding: 8px 2px 2px;
   width: 250px;
   background: transparent;
-  color: $color;
+  color: rgba($white, 0.8);
   outline: none;
   border: none;
   border-bottom: $input-border;
@@ -262,7 +256,7 @@ a {
   margin: 15px;
   cursor: pointer;
   user-select: none;
-  font: $close-font;
+  font-size: $font-size-close;
 }
 
 ul {
@@ -274,7 +268,7 @@ ul {
 }
 
 li {
-  font: $option-font;
+  font-size: $font-size-option;
   padding: 10px 20px;
   cursor: pointer;
   user-select: none;
@@ -285,11 +279,11 @@ li {
   }
 
   &.selected {
-    background: $option-selected-background;
+    background: lighten($black, 5%);
   }
 
   &:hover {
-    background: $option-hover-background;
+    background: $gray;
   }
 }
 </style>
