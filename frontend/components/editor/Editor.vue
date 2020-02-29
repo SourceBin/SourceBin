@@ -3,7 +3,7 @@
     <div class="toolbar">
       <ul class="info">
         <li
-          @click="selectLanguage($store)"
+          @click="selectLanguage"
           class="language"
         >
           {{ language.name }}
@@ -84,7 +84,10 @@ export default {
     });
   },
   methods: {
-    selectLanguage,
+    async selectLanguage() {
+      await selectLanguage(this.$store);
+      this.focus();
+    },
     ready() {
       // Add mousetrap class to editor textarea to allow keybinds
       Array
