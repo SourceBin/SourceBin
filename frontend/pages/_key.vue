@@ -19,6 +19,18 @@ export default {
     Actions,
     Selector: () => import('@/components/Selector.vue'),
   },
+  computed: {
+    key() {
+      return this.$store.state.bin.key;
+    },
+  },
+  watch: {
+    key(key) {
+      if (!key && window.location.pathname !== '/') {
+        window.history.pushState(null, null, '/');
+      }
+    },
+  },
   async fetch({ route, store, error }) {
     await loadBin(route, store, error);
   },
@@ -34,14 +46,12 @@ export default {
     },
   },
   head() {
-    const { key } = this.$store.state.bin;
-
     const head = {
-      title: key,
+      title: this.key,
     };
 
     // Remove site information when ssr, and a key is provided
-    if (key && process.server) {
+    if (this.key && process.server) {
       head.meta = [
         { hid: 'description', content: null },
 

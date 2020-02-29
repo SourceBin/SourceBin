@@ -31,6 +31,11 @@ export default {
       default: () => ({}),
     },
   },
+  data() {
+    return {
+      ignoreNextChange: false,
+    };
+  },
   watch: {
     value(value) {
       if (value !== this.editor.getValue()) {
@@ -63,6 +68,11 @@ export default {
 
     // Listeners
     this.editor.on('change', () => {
+      if (this.ignoreNextChange) {
+        this.ignoreNextChange = false;
+        return;
+      }
+
       this.$emit('input', this.editor.getValue());
     });
 
@@ -75,7 +85,20 @@ export default {
   },
   methods: {
     setValue(value) {
+      // Ace sometimes fires the change event twice when the value is changed
+      // programmatically, and sometimes it doesn't fire it at all.
+      //
+      // On the first fire the getValue method returns an empty string, and on the
+      // second fire it returns the new value, which causes issues with updating
+      // the url.
+      //
+      // To work around this behaviour the next change event after changing the
+      // value programmatically is ignored. The ignoreNextChange is set to false
+      // afterwards to make sure it doesn't ignore the next change event when it
+      // isn't fired this time.
+      this.ignoreNextChange = true;
       this.editor.setValue(value, -1);
+      this.ignoreNextChange = false;
     },
     async setLanguage(mode) {
       await import(`ace-builds/src-noconflict/mode-${mode}`);
