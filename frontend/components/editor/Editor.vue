@@ -161,7 +161,7 @@ $border: 1px solid $light-gray;
     float: left;
     padding: 0 15px;
     color: $white;
-    opacity: 80%;
+    opacity: 0.8;
     line-height: $height;
     cursor: pointer;
 

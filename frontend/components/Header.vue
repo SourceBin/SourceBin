@@ -78,7 +78,7 @@ li {
 
 a {
   color: $white;
-  opacity: 90%;
+  opacity: 0.9;
   text-decoration: none;
 }
 

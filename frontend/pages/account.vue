@@ -23,7 +23,7 @@ h1 {
   font-family: $font-family;
   font-size: $font-size;
   color: $white;
-  opacity: 90%;
+  opacity: 0.9;
 
   @include mq($until: desktop) {
     margin: 25px $margin-side-small;

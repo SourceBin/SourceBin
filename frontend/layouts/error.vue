@@ -42,7 +42,7 @@ img {
 h1 {
   font-family: $font-family;
   color: $white;
-  opacity: 90%;
+  opacity: 0.9;
   text-align: center;
 }
 </style>
