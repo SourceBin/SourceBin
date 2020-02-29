@@ -76,8 +76,7 @@ export default {
 
     mousetrap.bind('mod+l', (e) => {
       if (!e.repeat) {
-        selectLanguage(this.$store)
-          .then(() => this.focus());
+        this.selectLanguage();
       }
 
       return false;
