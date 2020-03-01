@@ -3,6 +3,11 @@ import clipboardCopy from 'clipboard-copy';
 import { selectLanguage } from '@/assets/language.js';
 
 export async function save(nuxt) {
+  if (nuxt.$store.state.bin.saved) {
+    nuxt.$toast.global.error('This bin is already saved');
+    return;
+  }
+
   if (!nuxt.$store.state.bin.content) {
     nuxt.$toast.global.error("You can't save an empty bin");
     return;
