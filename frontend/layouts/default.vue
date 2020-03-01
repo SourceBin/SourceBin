@@ -26,10 +26,17 @@ export default {
   box-sizing: border-box;
 }
 
+html,
+body,
+#__nuxt,
+#__layout {
+  height: 100%;
+}
+
 .default-layout {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100%;
   background-color: $black;
 }
 </style>
