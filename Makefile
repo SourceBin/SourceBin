@@ -22,6 +22,11 @@ build:
 	# build images
 	$(DC) build $(SERVICES)
 
+.PHONY: run
+run:
+	# run services in the foreground
+	$(DC) up $(SERVICES)
+
 .PHONY: start
 start:
 	# start services in the background
