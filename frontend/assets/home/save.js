@@ -8,20 +8,28 @@ export async function save(nuxt) {
     return;
   }
 
+  const languageId = await selectLanguage(nuxt.$store);
+  if (languageId === undefined) {
+    return;
+  }
+
   try {
-    const languageId = await selectLanguage(nuxt.$store);
-
-    if (languageId !== undefined) {
-      await nuxt.$store.dispatch('bin/save');
-
-      // Update URL with key
-      window.history.pushState(null, null, nuxt.$store.state.bin.key);
-
-      // Copy URL to clipboard
-      await clipboardCopy(window.location.href);
-      nuxt.$toast.global.success('Copied link to clipboard');
-    }
+    // Save bin
+    await nuxt.$store.dispatch('bin/save');
   } catch {
     nuxt.$toast.global.error('An error occured while saving');
+    return;
+  }
+
+  // Update URL with key
+  window.history.pushState(null, null, nuxt.$store.state.bin.key);
+
+  try {
+    // Copy URL to clipboard
+    await clipboardCopy(window.location.href);
+    nuxt.$toast.global.success('Successfully saved and copied to clipboard');
+  } catch {
+    // If copying to clipboard fails, still display that the bin got saved
+    nuxt.$toast.global.success('Successfully saved');
   }
 }
