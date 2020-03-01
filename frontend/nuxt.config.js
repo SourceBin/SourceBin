@@ -34,12 +34,6 @@ export default {
     '@nuxtjs/device',
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    ['nuxt-fontawesome', {
-      imports: [{
-        set: '@fortawesome/free-solid-svg-icons',
-        icons: ['fas'],
-      }],
-    }],
     ['@nuxtjs/toast', {
       register: [
         {

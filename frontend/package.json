@@ -9,7 +9,6 @@
     "lint:css": "stylelint '{**/*,*}.{css,sass,scss,vue}' --syntax scss --ignore-path ../.gitignore"
   },
   "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/device": "^1.2.6",
     "@nuxtjs/pwa": "^3.0.0-0",
@@ -19,9 +18,9 @@
     "ace-builds": "^1.4.8",
     "clipboard-copy": "^3.1.0",
     "lodash-es": "^4.17.15",
+    "mdi-vue": "^1.4.5",
     "mousetrap": "^1.6.4",
     "normalize.css": "^8.0.1",
-    "nuxt-fontawesome": "^0.4.0",
     "nuxt-start": "^2.11.0",
     "sass-mq": "^5.0.1",
     "vuex-persistedstate": "^2.7.0"

@@ -18,23 +18,37 @@
             @click.native="$store.commit('bin/reset')"
             to="/"
           >
-            <font-awesome-icon icon="plus" />
+            <PlusIcon />
           </nuxt-link>
         </li>
         <li>
           <nuxt-link to="/settings">
-            <font-awesome-icon icon="sliders-h" />
+            <TuneIcon />
           </nuxt-link>
         </li>
         <li>
           <nuxt-link to="/account">
-            <font-awesome-icon icon="user" />
+            <AccountIcon />
           </nuxt-link>
         </li>
       </ul>
     </nav>
   </header>
 </template>
+
+<script>
+import PlusIcon from 'mdi-vue/Plus.vue';
+import TuneIcon from 'mdi-vue/Tune.vue';
+import AccountIcon from 'mdi-vue/Account.vue';
+
+export default {
+  components: {
+    PlusIcon,
+    TuneIcon,
+    AccountIcon,
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 @import 'sass-mq';
@@ -73,6 +87,10 @@ li {
 
   &:last-child {
     margin-right: 0;
+  }
+
+  .mdi {
+    vertical-align: -0.25em;
   }
 }
 
