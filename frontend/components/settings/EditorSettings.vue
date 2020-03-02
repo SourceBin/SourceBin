@@ -25,7 +25,7 @@
       <dd>
         <input
           :value="theme"
-          @click="selectTheme($store)"
+          @click="promptThemeSelect($store)"
           type="button"
         >
       </dd>
@@ -36,7 +36,7 @@
       <dd>
         <input
           :value="defaultLanguage"
-          @click="selectLanguage($store, true)"
+          @click="promptLanguageSelect($store, true)"
           type="button"
         >
       </dd>
@@ -47,8 +47,8 @@
 <script>
 import { mapState } from 'vuex';
 
-import { getThemeName, selectTheme } from '@/assets/theme.js';
-import { getLanguageById, selectLanguage } from '@/assets/language.js';
+import { getThemeName, promptThemeSelect } from '@/assets/theme.js';
+import { getLanguageById, promptLanguageSelect } from '@/assets/language.js';
 
 export default {
   computed: {
@@ -77,8 +77,8 @@ export default {
     ...mapState(['settings']),
   },
   methods: {
-    selectLanguage,
-    selectTheme,
+    promptLanguageSelect,
+    promptThemeSelect,
   },
 };
 </script>

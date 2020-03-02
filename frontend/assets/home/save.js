@@ -1,6 +1,10 @@
 import clipboardCopy from 'clipboard-copy';
 
-import { selectLanguage } from '@/assets/language.js';
+function setLanguageId(store) {
+  if (store.state.bin.languageId === undefined) {
+    store.commit('bin/setLanguageId', store.state.settings.defaultLanguageId);
+  }
+}
 
 export async function save(nuxt) {
   if (nuxt.$store.state.bin.saved) {
@@ -13,10 +17,7 @@ export async function save(nuxt) {
     return;
   }
 
-  const languageId = await selectLanguage(nuxt.$store);
-  if (languageId === undefined) {
-    return;
-  }
+  setLanguageId(nuxt.$store);
 
   try {
     // Save bin

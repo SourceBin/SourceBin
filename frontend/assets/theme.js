@@ -7,7 +7,7 @@ export function getThemeName(theme) {
   return themes[theme];
 }
 
-export function selectTheme(store) {
+export function promptThemeSelect(store) {
   return new Promise((res) => {
     eventBus.$emit('promptSelect', 'Theme Selector', themeOptions, (theme) => {
       if (theme !== undefined) {

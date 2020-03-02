@@ -3,7 +3,7 @@
     <div class="toolbar">
       <ul class="info">
         <li
-          @click="selectLanguage"
+          @click="promptLanguageSelect"
           class="language"
         >
           {{ language.name }}
@@ -45,7 +45,7 @@ import clipboardCopy from 'clipboard-copy';
 
 import AceEditor from './AceEditor.vue';
 
-import { selectLanguage } from '@/assets/language.js';
+import { promptLanguageSelect } from '@/assets/language.js';
 
 export default {
   components: {
@@ -76,15 +76,15 @@ export default {
 
     mousetrap.bind('mod+l', (e) => {
       if (!e.repeat) {
-        this.selectLanguage();
+        this.promptLanguageSelect();
       }
 
       return false;
     });
   },
   methods: {
-    async selectLanguage() {
-      await selectLanguage(this.$store);
+    async promptLanguageSelect() {
+      await promptLanguageSelect(this.$store);
       this.focus();
     },
     ready() {

@@ -28,7 +28,7 @@ export function getActiveLanguage(store, route) {
   return getLanguageById(store.state.settings.defaultLanguageId);
 }
 
-export function selectLanguage(store, defaultLanguage = false) {
+export function promptLanguageSelect(store, defaultLanguage = false) {
   return new Promise((res) => {
     eventBus.$emit('promptSelect', 'Language Selector', languageOptions, (languageId) => {
       if (languageId !== undefined) {
