@@ -30,6 +30,7 @@
         :theme="settings.theme"
         :options="options"
 
+        v-show="editorReady"
         @ready="ready"
 
         class="ace"
@@ -60,6 +61,11 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  data() {
+    return {
+      editorReady: false,
+    };
   },
   computed: {
     options() {
@@ -93,6 +99,7 @@ export default {
         .from(this.$refs.editor.$el.getElementsByTagName('textarea'))
         .forEach(el => el.classList.add('mousetrap'));
 
+      this.editorReady = true;
       this.$emit('ready');
     },
     focus() {
@@ -139,6 +146,7 @@ $border: 1px solid $light-gray;
   justify-content: space-between;
   font-family: $font-family;
   font-size: $font-size;
+  border-bottom: $border;
 
   @include mq($until: tablet) {
     font-size: $font-size-small;
