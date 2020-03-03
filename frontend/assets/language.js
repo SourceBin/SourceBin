@@ -1,7 +1,6 @@
 import { linguist, languages } from '@sourcebin/linguist';
 
 import { eventBus } from '@/assets/eventBus.js';
-import { languageOptions } from '@/assets/selector/options.js';
 
 export function getLanguageById(id) {
   return linguist[id];
@@ -30,7 +29,7 @@ export function getActiveLanguage(store, route) {
 
 export function promptLanguageSelect(store, defaultLanguage = false) {
   return new Promise((res) => {
-    eventBus.$emit('promptSelect', 'Language Selector', languageOptions, (languageId) => {
+    eventBus.$emit('promptLanguageSelect', (languageId) => {
       if (languageId !== undefined) {
         if (defaultLanguage) {
           store.commit('settings/setDefaultLanguageId', languageId);

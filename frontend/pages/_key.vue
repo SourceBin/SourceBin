@@ -3,7 +3,11 @@
     <Editors />
     <Actions />
 
-    <Selector />
+    <Selector
+      :options="languageOptions"
+      event-name="promptLanguageSelect"
+      title="Language Selector"
+    />
   </div>
 </template>
 
@@ -12,12 +16,18 @@ import Editors from '@/components/home/Editors.vue';
 import Actions from '@/components/home/Actions.vue';
 
 import { loadBin } from '@/assets/home/loadBin.js';
+import { languageOptions } from '@/assets/selector/options.js';
 
 export default {
   components: {
     Editors,
     Actions,
     Selector: () => import('@/components/Selector.vue'),
+  },
+  data() {
+    return {
+      languageOptions,
+    };
   },
   computed: {
     key() {

@@ -4,17 +4,34 @@
 
     <EditorSettings />
 
-    <Selector />
+    <Selector
+      :options="languageOptions"
+      event-name="promptLanguageSelect"
+      title="Language Selector"
+    />
+    <Selector
+      :options="themeOptions"
+      event-name="promptThemeSelect"
+      title="Theme Selector"
+    />
   </div>
 </template>
 
 <script>
 import EditorSettings from '@/components/settings/EditorSettings.vue';
 
+import { languageOptions, themeOptions } from '@/assets/selector/options.js';
+
 export default {
   components: {
     EditorSettings,
     Selector: () => import('@/components/Selector.vue'),
+  },
+  data() {
+    return {
+      languageOptions,
+      themeOptions,
+    };
   },
   head() {
     return {

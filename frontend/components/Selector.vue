@@ -23,8 +23,7 @@
       <client-only>
         <ul ref="options">
           <li
-            v-for="(option, index) in options"
-            v-if="matchesSearch(option)"
+            v-for="(option, index) in searchResults"
 
             :key="index"
             @click="select(option)"
@@ -38,20 +37,34 @@
 </template>
 
 <script>
+import Fuse from 'fuse.js';
 import Mousetrap from 'mousetrap';
 import { debounce } from 'lodash-es';
 
 import { eventBus } from '@/assets/eventBus.js';
 
 export default {
+  props: {
+    eventName: {
+      type: String,
+      required: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    options: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
     return {
-      title: '',
-      options: [],
       search: '',
       visible: false,
       selectedIndex: 0,
       selectedElement: undefined,
+      fuse: this.buildFuse(),
     };
   },
   computed: {
@@ -62,6 +75,11 @@ export default {
       set: debounce(function (value) {
         this.search = value;
       }, 100),
+    },
+    searchResults() {
+      const results = this.fuse.search(this.search);
+
+      return results.length > 0 ? results : this.options;
     },
   },
   watch: {
@@ -106,23 +124,25 @@ export default {
     });
 
     // Event bus
-    eventBus.$on('promptSelect', async (title, options, callback) => {
-      this.title = title;
-      this.options = options;
-
+    eventBus.$on(this.eventName, async (callback) => {
       callback(await this.promptSelect());
     });
   },
   beforeDestroy() {
-    eventBus.$off('promptSelect');
+    eventBus.$off(this.eventName);
   },
   methods: {
-    matchesSearch(option) {
-      const search = this.search.toLowerCase();
-      const isMatch = value => value.toLowerCase().includes(search);
-
-      return isMatch(option.name) || (option.aliases || []).some(isMatch);
+    buildFuse() {
+      return new Fuse(this.options, {
+        keys: [
+          { name: 'name', weight: 0.7 },
+          { name: 'aliases', weight: 0.3 },
+        ],
+        shouldSort: true,
+        threshold: 0.5,
+      });
     },
+
     updateSelected() {
       if (this.selectedElement) {
         this.selectedElement.classList.remove('selected');
