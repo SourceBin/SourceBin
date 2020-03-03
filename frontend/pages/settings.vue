@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import Mousetrap from 'mousetrap';
+
 import EditorSettings from '@/components/settings/EditorSettings.vue';
 
 import { languageOptions, themeOptions } from '@/assets/selector/options.js';
@@ -32,6 +34,12 @@ export default {
       languageOptions,
       themeOptions,
     };
+  },
+  mounted() {
+    Mousetrap.bind('esc', () => this.$router.push('/'));
+  },
+  beforeDestroy() {
+    Mousetrap.unbind('esc');
   },
   head() {
     return {

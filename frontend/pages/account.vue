@@ -3,7 +3,15 @@
 </template>
 
 <script>
+import Mousetrap from 'mousetrap';
+
 export default {
+  mounted() {
+    Mousetrap.bind('esc', () => this.$router.push('/'));
+  },
+  beforeDestroy() {
+    Mousetrap.unbind('esc');
+  },
   head() {
     return {
       title: 'Account',
