@@ -1,26 +1,35 @@
 <template lang="html">
-  <div class="editor">
-    <div class="toolbar">
-      <ul class="info">
-        <li
-          @click="promptLanguageSelect"
-          class="language"
-        >
-          {{ language.name }}
-        </li>
-        <!-- <li>untitled</li> -->
-      </ul>
+  <client-only>
+    <div class="editor">
+      <div class="toolbar">
+        <ul class="info">
+          <li
+            @click="promptLanguageSelect"
+            class="language"
+          >
+            {{ language.name }}
+          </li>
 
-      <ul>
-        <li @click="copy">
-          Copy
-        </li>
-        <!-- <li>Format</li>
-        <li>Raw</li> -->
-      </ul>
-    </div>
+          <!-- <li>untitled</li> -->
+        </ul>
 
-    <client-only>
+        <ul>
+          <li
+            v-if="isMarkdown"
+            @click="displayMarkdown = !displayMarkdown"
+          >
+            Display {{ displayMarkdown ? 'source' : 'rendered' }}
+          </li>
+
+          <li @click="copy">
+            Copy
+          </li>
+
+          <!-- <li>Format</li>
+          <li>Raw</li> -->
+        </ul>
+      </div>
+
       <AceEditor
         ref="editor"
         :value="value"
@@ -30,13 +39,22 @@
         :theme="settings.theme"
         :options="options"
 
-        v-show="editorReady"
+        v-show="editorReady && !displayMarkdown"
         @ready="ready"
 
         class="ace"
       />
-    </client-only>
-  </div>
+
+      <Markdown
+        v-if="isMarkdown"
+        v-show="displayMarkdown"
+
+        :markdown="value"
+
+        class="markdown"
+      />
+    </div>
+  </client-only>
 </template>
 
 <script>
@@ -45,12 +63,15 @@ import Mousetrap from 'mousetrap';
 import clipboardCopy from 'clipboard-copy';
 
 import AceEditor from './AceEditor.vue';
+import Markdown from './Markdown.vue';
 
 import { promptLanguageSelect } from '@/assets/language.js';
+import { isMarkdown } from '@/assets/markdown/markdown.js';
 
 export default {
   components: {
     AceEditor,
+    Markdown,
   },
   props: {
     value: {
@@ -65,9 +86,13 @@ export default {
   data() {
     return {
       editorReady: false,
+      displayMarkdown: false,
     };
   },
   computed: {
+    isMarkdown() {
+      return isMarkdown(this.language);
+    },
     options() {
       return {
         fontSize: this.settings.fontSize,
@@ -76,6 +101,11 @@ export default {
       };
     },
     ...mapState(['settings']),
+  },
+  watch: {
+    language() {
+      this.displayMarkdown = false;
+    },
   },
   mounted() {
     const mousetrap = new Mousetrap(this.$el);
@@ -190,7 +220,8 @@ $border: 1px solid $light-gray;
   }
 }
 
-.ace {
+.ace,
+.markdown {
   flex: 1;
 }
 </style>

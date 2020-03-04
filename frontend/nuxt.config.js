@@ -77,6 +77,12 @@ export default {
   },
 
   build: {
+    extend(config) {
+      config.module.rules.push({
+        test: /\.worker\.js$/,
+        loader: 'worker-loader',
+      });
+    },
     transpile: [
       'lodash-es',
     ],
