@@ -1,10 +1,5 @@
-import DOMPurify from 'dompurify';
-
+import { sanitize } from './dompurify.js';
 import MarkedWorker from './marked.worker.js';
-
-function sanitize(html) {
-  return DOMPurify.sanitize(html);
-}
 
 export function render(markdown) {
   return new Promise((res, rej) => {
