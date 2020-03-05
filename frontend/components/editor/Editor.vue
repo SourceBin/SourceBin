@@ -62,16 +62,13 @@ import { mapState } from 'vuex';
 import Mousetrap from 'mousetrap';
 import clipboardCopy from 'clipboard-copy';
 
-import AceEditor from './AceEditor.vue';
-import Markdown from './Markdown.vue';
-
 import { promptLanguageSelect } from '@/assets/language.js';
 import { isMarkdown } from '@/assets/markdown/markdown.js';
 
 export default {
   components: {
-    AceEditor,
-    Markdown,
+    AceEditor: () => import('./AceEditor.vue'),
+    Markdown: () => import('./Markdown.vue'),
   },
   props: {
     value: {
