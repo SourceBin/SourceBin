@@ -43,6 +43,7 @@ services:
       - DOMAIN=${DOMAIN}
       - FRONTEND_URL=frontend:3000
       - BACKEND_URL=backend:3001
+      - PROXY_URL=proxy:3002
     volumes:
       - ./certbot/certs:/etc/ssl/certs
       - ./certbot/letsencrypt:/etc/letsencrypt
