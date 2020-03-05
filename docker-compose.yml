@@ -27,6 +27,13 @@ services:
     container_name: backend
     restart: always
 
+  proxy:
+    build: proxy
+    ports:
+      - 3002:3002
+    environment:
+      - PORT=3002
+
   nginx:
     build: nginx
     ports:
