@@ -46,8 +46,7 @@
       />
 
       <Markdown
-        v-if="isMarkdown"
-        v-show="displayMarkdown"
+        v-if="isMarkdown && displayMarkdown"
 
         :markdown="value"
 
