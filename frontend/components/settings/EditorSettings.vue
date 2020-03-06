@@ -41,6 +41,16 @@
         >
       </dd>
     </dl>
+
+    <dl>
+      <dt>Prompt language select on save</dt>
+      <dd>
+        <input
+          v-model="promptLanguageSelectOnSave"
+          type="checkbox"
+        >
+      </dd>
+    </dl>
   </div>
 </template>
 
@@ -73,6 +83,14 @@ export default {
     },
     defaultLanguage() {
       return getLanguageById(this.settings.defaultLanguageId).name;
+    },
+    promptLanguageSelectOnSave: {
+      get() {
+        return this.settings.promptLanguageSelectOnSave;
+      },
+      set(promptLanguageSelectOnSave) {
+        this.$store.commit('settings/promptLanguageSelectOnSave', promptLanguageSelectOnSave);
+      },
     },
     ...mapState(['settings']),
   },

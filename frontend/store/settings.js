@@ -5,6 +5,7 @@ export const state = () => ({
   printMargin: true,
   theme: 'dracula',
   defaultLanguageId: languages.Text,
+  promptLanguageSelectOnSave: true,
 });
 
 export const mutations = {
@@ -19,5 +20,8 @@ export const mutations = {
   },
   setDefaultLanguageId(state, id) {
     state.defaultLanguageId = id;
+  },
+  promptLanguageSelectOnSave(state, promptLanguageSelectOnSave) {
+    state.promptLanguageSelectOnSave = promptLanguageSelectOnSave;
   },
 };

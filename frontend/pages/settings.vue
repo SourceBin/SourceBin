@@ -54,7 +54,7 @@ export default {
 @import '@/assets/_globals.scss';
 
 .settings {
-  width: 500px;
+  width: 750px;
   font-family: $font-family;
   color: rgba($white, 0.9);
   margin: 0 auto;

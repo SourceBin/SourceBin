@@ -1,23 +1,35 @@
 import clipboardCopy from 'clipboard-copy';
 
-function setLanguageId(store) {
+import { promptLanguageSelect } from '@/assets/language.js';
+
+function setLanguageIdFromDefault(store) {
   if (store.state.bin.languageId === undefined) {
     store.commit('bin/setLanguageId', store.state.settings.defaultLanguageId);
   }
 }
 
 export async function save(nuxt) {
-  if (nuxt.$store.state.bin.saved) {
+  const { bin, settings } = nuxt.$store.state;
+
+  if (bin.saved) {
     nuxt.$toast.global.error('This bin is already saved');
     return;
   }
 
-  if (!nuxt.$store.state.bin.content) {
+  if (!bin.content) {
     nuxt.$toast.global.error("You can't save an empty bin");
     return;
   }
 
-  setLanguageId(nuxt.$store);
+  if (settings.promptLanguageSelectOnSave) {
+    const language = await promptLanguageSelect(nuxt.$store);
+
+    if (language === undefined) {
+      return;
+    }
+  } else {
+    setLanguageIdFromDefault(nuxt.$store);
+  }
 
   try {
     // Save bin
@@ -28,7 +40,7 @@ export async function save(nuxt) {
   }
 
   // Update URL with key
-  window.history.pushState(null, null, nuxt.$store.state.bin.key);
+  window.history.pushState(null, null, bin.key);
 
   try {
     // Copy URL to clipboard
