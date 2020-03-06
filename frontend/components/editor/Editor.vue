@@ -149,22 +149,15 @@ $height-small: 30px;
 $font-size: 15px;
 $font-size-small: 13px;
 
-$border-radius: 5px;
 $border: 1px solid $light-gray;
 
 .editor {
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin: 10px $margin-side 25px;
+  margin: 0 0 15px;
   background: $gray;
-  border-radius: $border-radius;
   overflow: hidden;
-
-  @include mq($until: desktop) {
-    margin: 0 0 15px;
-    border-radius: 0;
-  }
 }
 
 .toolbar {
