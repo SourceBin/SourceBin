@@ -14,7 +14,7 @@ ENV API_URL_BROWSER $API_URL_BROWSER
 
 # Install dependences
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
-RUN apk add --no-cache python make g++
+RUN apk add --no-cache python make g++ git
 COPY package*.json ./
 RUN npm ci
 
@@ -46,6 +46,7 @@ ENV PORT 3000
 EXPOSE $PORT
 
 # Install dependencies
+RUN apk add --no-cache git
 COPY package*.json ./
 RUN npm ci --production
 
