@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 import { meta } from './config.js';
 
 export default {
@@ -78,6 +80,8 @@ export default {
 
   build: {
     extend(config) {
+      config.output.globalObject = 'this';
+
       config.module.rules.push({
         test: /\.worker\.js$/,
         loader: 'worker-loader',
