@@ -21,12 +21,18 @@
             Display {{ displayMarkdown ? 'source' : 'rendered' }}
           </li>
 
+          <li
+            v-if="canBeautify"
+            @click="beautify"
+          >
+            Format
+          </li>
+
           <li @click="copy">
             Copy
           </li>
 
-          <!-- <li>Format</li>
-          <li>Raw</li> -->
+          <!-- <li>Raw</li> -->
         </ul>
       </div>
 
@@ -63,6 +69,7 @@ import clipboardCopy from 'clipboard-copy';
 
 import { promptLanguageSelect } from '@/assets/language.js';
 import { isMarkdown } from '@/assets/markdown/markdown.js';
+import { beautify, canBeautify } from '@/assets/beautify/beautify.js';
 
 export default {
   components: {
@@ -88,6 +95,9 @@ export default {
   computed: {
     isMarkdown() {
       return isMarkdown(this.language);
+    },
+    canBeautify() {
+      return canBeautify(this.language);
     },
     options() {
       return {
@@ -117,6 +127,20 @@ export default {
   methods: {
     async promptLanguageSelect() {
       await promptLanguageSelect(this.$store);
+      this.focus();
+    },
+    async beautify() {
+      const toast = this.$toast.show('Formatting');
+
+      try {
+        const beautified = await beautify(this.value, this.language);
+
+        this.$refs.editor.setValue(beautified);
+      } catch (err) {
+        this.$toast.global.error(err.message);
+      }
+
+      toast.goAway(0);
       this.focus();
     },
     ready() {
