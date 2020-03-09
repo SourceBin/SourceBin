@@ -17,9 +17,11 @@ ENV PORT 3000
 EXPOSE $PORT
 
 # Install dependences
-# https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
-RUN apk add --no-cache --virtual .gyp python make g++ git
 COPY package*.json ./
-RUN npm ci
+
+# https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
+RUN apk add --no-cache --virtual .gyp python make g++ \
+    && npm ci \
+    && apk del .gyp
 
 CMD ["npm", "run", "dev"]
