@@ -1,20 +1,26 @@
+import { languages } from '@sourcebin/linguist';
+
 import BeautifyWorker from './beautify.worker.js';
 
-const supportedLanguages = [
-  'javascript',
-  'typescript',
-  'css',
-  'scss',
-  'less',
-  'json',
-  'json5',
-  'graphql',
-  'markdown',
-  'html',
-  'vue',
-  'yaml',
-  'php',
-];
+const parsers = {
+  [languages.JavaScript]: 'babel',
+  [languages.TypeScript]: 'typescript',
+  [languages.CSS]: 'css',
+  [languages.SCSS]: 'scss',
+  [languages.Less]: 'less',
+  [languages.JSON]: 'json',
+  [languages.JSON5]: 'json5',
+  [languages.GraphQL]: 'graphql',
+  [languages.Markdown]: 'markdown',
+  [languages.HTML]: 'html',
+  [languages.Vue]: 'vue',
+  [languages.YAML]: 'yaml',
+  [languages.Handlebars]: 'glimmer',
+};
+
+export function getParser(language) {
+  return parsers[languages[language.name]];
+}
 
 export function beautify(source, language) {
   return new Promise((res, rej) => {
@@ -30,7 +36,7 @@ export function beautify(source, language) {
       worker.terminate();
 
       if (e.data.error) {
-        rej(new Error('Unable to format this file!'));
+        rej(new Error(e.data.error));
       } else {
         res(e.data.result);
       }
@@ -38,11 +44,7 @@ export function beautify(source, language) {
 
     worker.postMessage({
       source,
-      language: language.name.toLowerCase(),
+      language: getParser(language),
     });
   });
-}
-
-export function canBeautify(language) {
-  return supportedLanguages.includes(language.name.toLowerCase());
 }
