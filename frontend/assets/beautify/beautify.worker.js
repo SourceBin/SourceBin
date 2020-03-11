@@ -5,6 +5,6 @@ onmessage = async (e) => {
     const beautified = await beautify(e.data.source, e.data.language);
     postMessage({ result: beautified });
   } catch (err) {
-    postMessage({ error: err.message });
+    postMessage({ error: err.message.split('\n')[0] });
   }
 };

@@ -69,7 +69,7 @@ import clipboardCopy from 'clipboard-copy';
 
 import { promptLanguageSelect } from '@/assets/language.js';
 import { isMarkdown } from '@/assets/markdown/markdown.js';
-import { beautify, canBeautify } from '@/assets/beautify/beautify.js';
+import { beautify, getParser } from '@/assets/beautify/beautify.js';
 
 export default {
   components: {
@@ -97,7 +97,7 @@ export default {
       return isMarkdown(this.language);
     },
     canBeautify() {
-      return canBeautify(this.language);
+      return getParser(this.language) !== undefined;
     },
     options() {
       return {
