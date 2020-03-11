@@ -41,12 +41,12 @@ export const mutations = {
 
 export const actions = {
   async loadFromKey({ commit }, key) {
-    const bin = await this.$axios.$get(`/bins/${key}`);
+    const bin = await this.$axios.$get(`/api/bins/${key}`);
 
     commit('loadFromKeySuccess', bin);
   },
   async loadFromQuery({ commit }, query) {
-    const { content } = await this.$axios.$get('/external', {
+    const content = await this.$axios.$get('/proxy', {
       params: {
         q: query.src,
       },
@@ -58,7 +58,7 @@ export const actions = {
     });
   },
   async save({ commit, state }) {
-    const res = await this.$axios.$post('/bins', {
+    const res = await this.$axios.$post('/api/bins', {
       content: state.content,
       languageId: state.languageId,
     });

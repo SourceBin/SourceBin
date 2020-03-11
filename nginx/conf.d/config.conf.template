@@ -1,20 +1,9 @@
-# Redirect HTTP to HTTPS
 server {
+  # HTTP
   listen 80;
   listen [::]:80 default_server ipv6only=on;
 
-  location /.well-known/acme-challenge/ {
-    root /var/www/certbot;
-  }
-
-  location / {
-    return 301 https://$host$request_uri;
-  }
-}
-
-# HTTPS
-server {
-  # Enable HTTP/2
+  # HTTPS + HTTP/2
   listen 443 ssl http2;
   listen [::]:443 ssl http2;
   server_name ${DOMAIN};
@@ -46,5 +35,10 @@ server {
 
   location /proxy/ {
     proxy_pass http://${PROXY_URL}/;
+  }
+
+  # Let's Encrypt
+  location /.well-known/acme-challenge/ {
+    root /var/www/certbot;
   }
 }

@@ -5,8 +5,8 @@ services:
     build:
       context: frontend
       args:
-        - API_URL=http://backend:3001/
-        - API_URL_BROWSER=/api
+        - API_URL=http://nginx:80/
+        - API_URL_BROWSER=/
     ports:
       - 3000:3000
     environment:
