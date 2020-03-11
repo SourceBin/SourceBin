@@ -23,9 +23,6 @@ services:
     environment:
       - PORT=3001
       - MONGODB_URI=${MONGODB_URI}
-      - REDIS_URL=redis://redis
-    depends_on:
-      - redis
     container_name: backend
     restart: always
 
@@ -59,8 +56,3 @@ services:
     container_name: nginx
     restart: always
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-
-  redis:
-    image: redis:alpine
-    container_name: redis
-    restart: always
