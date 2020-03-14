@@ -1,36 +1,47 @@
 import { Request, Response } from 'express';
+import Joi from '@hapi/joi';
 
-import { Bin } from '../../models/Bin';
+import { BinModel } from '../../models/Bin';
 
-import { isValidContent, isValidLanguageId, generateKey } from '../../utils/bins';
-import { error } from '../../utils/errors';
+import { replyError, replyJoiError } from '../../utils/errors';
+
+import * as config from '../../config';
+
+const schema = Joi.object({
+  files: Joi.array()
+    .min(1)
+    .max(2) // TODO: check max amount of files based on user
+    .required()
+    .items({
+      name: Joi.string()
+        .max(config.bin.maxNameLength),
+
+      content: Joi.string()
+        .max(config.bin.maxContentLength)
+        .required(),
+
+      languageId: Joi.number()
+        .integer()
+        .positive()
+        .required(),
+    }),
+});
 
 export async function createBin(req: Request, res: Response): Promise<void> {
-  const { content, languageId } = req.body;
+  const { error } = schema.validate(req.body);
 
-  if (!isValidContent(content)) {
-    error(400, 'Content is invalid', res);
+  if (error) {
+    replyJoiError(error, res);
     return;
   }
-
-  if (!isValidLanguageId(languageId)) {
-    error(400, 'Language is invalid', res);
-    return;
-  }
-
-  const key = generateKey();
-
-  const bin = new Bin({
-    key,
-    content,
-    languageId,
-  });
 
   try {
-    await bin.save();
-    res.json({ key });
+    const bin = await BinModel.create({ files: req.body.files });
+
+    res.json({ key: bin.key });
   } catch (err) {
     console.error(err);
-    error(500, 'Error saving bin', res);
+
+    replyError(500, 'Error saving bin', res);
   }
 }
