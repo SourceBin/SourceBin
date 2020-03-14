@@ -7,6 +7,7 @@
     "lint": "eslint --ext .js,.ts --ignore-path ../.gitignore ."
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -18,6 +19,7 @@
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.2",
     "@types/express-rate-limit": "^3.3.3",
+    "@types/hapi__joi": "^16.0.12",
     "@types/mongoose": "^5.5.38",
     "@types/node": "^13.1.4",
     "@typescript-eslint/eslint-plugin": "^1.13.0",

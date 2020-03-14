@@ -20,6 +20,6 @@ export const rateLimits = {
 };
 
 export const bin = {
+  maxNameLength: 1000,
   maxContentLength: 100_000,
-  maxLanguageLength: 100,
 };
