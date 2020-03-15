@@ -1,18 +1,9 @@
 <template lang="html">
   <div class="editors">
     <Editor
-      ref="editors"
-
-      v-for="(file, index) in bin.files"
-      :key="index"
-
-      :value="file.content"
-      @input="updateContent($event, index)"
-
-      :language="getActiveLanguage($store, $route, index)"
-
-      @ready="index === 0 && !bin.saved ? focus(0) : null"
-      @promptLanguageSelect="promptLanguageSelect(index)"
+      v-for="(_, fileIndex) in bin.files"
+      :key="fileIndex"
+      :fileIndex="fileIndex"
     />
   </div>
 </template>
@@ -21,7 +12,6 @@
 import { mapState } from 'vuex';
 import Mousetrap from 'mousetrap';
 
-import { getActiveLanguage, promptLanguageSelect } from '@/assets/language.js';
 import { save } from '@/assets/home/save.js';
 
 export default {
@@ -37,27 +27,6 @@ export default {
 
       return false;
     });
-  },
-  methods: {
-    getActiveLanguage,
-
-    async promptLanguageSelect(file) {
-      await promptLanguageSelect(this.$store, file);
-      this.focus(file);
-    },
-
-    updateContent(content, file) {
-      if (content !== this.bin.files[file].content) {
-        this.$store.commit('bin/updateContent', {
-          content,
-          file,
-        });
-      }
-    },
-
-    focus(file) {
-      this.$refs.editors[file].focus();
-    },
   },
 };
 </script>

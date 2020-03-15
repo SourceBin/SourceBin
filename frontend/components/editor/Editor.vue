@@ -1,87 +1,63 @@
 <template lang="html">
-  <client-only>
-    <div class="editor">
-      <div class="toolbar">
-        <ul class="info">
-          <li
-            @click="$emit('promptLanguageSelect')"
-            class="language"
-          >
-            {{ language.name }}
-          </li>
+  <div class="editor">
+    <Toolbar
+      ref="toolbar"
 
-          <!-- <li>untitled</li> -->
-        </ul>
+      :fileIndex="fileIndex"
+      :language="language"
+      :displayMarkdown="displayMarkdown"
 
-        <ul>
-          <li
-            v-if="isMarkdown"
-            @click="displayMarkdown = !displayMarkdown"
-          >
-            Display {{ displayMarkdown ? 'source' : 'rendered' }}
-          </li>
+      @toggleMarkdown="displayMarkdown = !displayMarkdown"
+      @beautify="beautify"
+      @focus="focus"
+    />
 
-          <li
-            v-if="canBeautify"
-            @click="beautify"
-          >
-            Format
-          </li>
-
-          <li @click="copy">
-            Copy
-          </li>
-
-          <!-- <li>Raw</li> -->
-        </ul>
-      </div>
-
+    <client-only>
       <AceEditor
         ref="editor"
-        :value="value"
-        @input="$emit('input', $event)"
+        v-show="editorReady && !displayMarkdown"
+
+        :value="file.content"
+        @input="updateContent"
 
         :language="language.aceMode"
         :theme="settings.theme"
         :options="options"
 
-        v-show="editorReady && !displayMarkdown"
         @ready="ready"
 
         class="ace"
       />
 
       <Markdown
-        v-if="isMarkdown && displayMarkdown"
+        v-if="displayMarkdown"
 
-        :markdown="value"
+        :markdown="file.content"
 
         class="markdown"
       />
-    </div>
-  </client-only>
+    </client-only>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import Mousetrap from 'mousetrap';
-import clipboardCopy from 'clipboard-copy';
 
-import { isMarkdown } from '@/assets/markdown/markdown.js';
-import { beautify, getParser } from '@/assets/beautify/beautify.js';
+import Toolbar from './Toolbar.vue';
+
+import { beautify } from '@/assets/beautify/beautify.js';
+import { getActiveLanguage } from '@/assets/language.js';
 
 export default {
   components: {
+    Toolbar,
     AceEditor: () => import('./AceEditor.vue'),
     Markdown: () => import('./Markdown.vue'),
   },
   props: {
-    value: {
-      type: String,
-      required: true,
-    },
-    language: {
-      type: Object,
+    fileIndex: {
+      type: Number,
       required: true,
     },
   },
@@ -92,11 +68,11 @@ export default {
     };
   },
   computed: {
-    isMarkdown() {
-      return isMarkdown(this.language);
+    file() {
+      return this.bin.files[this.fileIndex];
     },
-    canBeautify() {
-      return getParser(this.language) !== undefined;
+    language() {
+      return getActiveLanguage(this.$store, this.$route, this.fileIndex);
     },
     options() {
       return {
@@ -105,7 +81,7 @@ export default {
         useWorker: false,
       };
     },
-    ...mapState(['settings']),
+    ...mapState(['bin', 'settings']),
   },
   watch: {
     language() {
@@ -117,18 +93,26 @@ export default {
 
     mousetrap.bind('mod+l', (e) => {
       if (!e.repeat) {
-        this.promptLanguageSelect();
+        this.$refs.toolbar.promptLanguageSelect();
       }
 
       return false;
     });
   },
   methods: {
+    updateContent(content) {
+      if (content !== this.file.content) {
+        this.$store.commit('bin/updateContent', {
+          content,
+          file: this.fileIndex,
+        });
+      }
+    },
     async beautify() {
       const toast = this.$toast.show('Formatting');
 
       try {
-        const beautified = await beautify(this.value, this.language);
+        const beautified = await beautify(this.file.content, this.language);
 
         this.$refs.editor.setValue(beautified);
       } catch (err) {
@@ -139,36 +123,22 @@ export default {
       this.focus();
     },
     ready() {
-      // Add mousetrap class to editor textarea to allow keybinds
-      Array
-        .from(this.$refs.editor.$el.getElementsByTagName('textarea'))
-        .forEach(el => el.classList.add('mousetrap'));
-
       this.editorReady = true;
-      this.$emit('ready');
+
+      // Focus the first editor when the editor is ready
+      if (this.fileIndex === 0 && !this.bin.saved) {
+        this.focus();
+      }
     },
     focus() {
       this.$refs.editor.focus();
-    },
-    async copy() {
-      await clipboardCopy(this.value);
-      this.$toast.global.success('Copied content to clipboard');
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import 'sass-mq';
 @import '@/assets/_globals.scss';
-
-$height: 40px;
-$height-small: 30px;
-
-$font-size: 15px;
-$font-size-small: 13px;
-
-$border: 1px solid $light-gray;
 
 .editor {
   flex: 1;
@@ -177,55 +147,6 @@ $border: 1px solid $light-gray;
   margin: 0 0 15px;
   background: $gray;
   overflow: hidden;
-}
-
-.toolbar {
-  display: flex;
-  justify-content: space-between;
-  font-family: $font-family;
-  font-size: $font-size;
-  border-bottom: $border;
-
-  @include mq($until: tablet) {
-    font-size: $font-size-small;
-    flex-direction: column;
-  }
-
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-
-    &.info {
-      @include mq($until: tablet) {
-        border-bottom: $border;
-      }
-    }
-  }
-
-  li {
-    float: left;
-    padding: 0 15px;
-    color: $white;
-    opacity: 0.8;
-    line-height: $height;
-    cursor: pointer;
-
-    @include mq($until: tablet) {
-      padding: 0 10px;
-      line-height: $height-small;
-    }
-
-    &:hover {
-      background-color: $light-gray;
-    }
-
-    &.language {
-      min-width: 150px;
-      text-align: center;
-      border-right: $border;
-    }
-  }
 }
 
 .ace,
