@@ -1,7 +1,10 @@
 export const state = () => ({
   key: undefined,
-  content: '',
-  languageId: undefined,
+
+  files: [{
+    content: '',
+    languageId: undefined,
+  }],
 
   saved: false,
 });
@@ -10,25 +13,28 @@ export const mutations = {
   reset(s) {
     Object.assign(s, state());
   },
-  updateContent(state, content) {
-    state.content = content;
+  updateContent(state, { content, file }) {
+    state.files[file].content = content;
 
     state.key = undefined;
     state.saved = false;
   },
-  setLanguageId(state, languageId) {
-    state.languageId = languageId;
+  setLanguageId(state, { languageId, file }) {
+    state.files[file].languageId = languageId;
   },
   loadFromKeySuccess(state, bin) {
     state.key = bin.key;
-    state.content = bin.content;
-    state.languageId = bin.languageId;
+    state.files = bin.files;
 
     state.saved = true;
   },
   loadFromQuerySuccess(state, external) {
     state.key = external.src;
-    state.content = external.content;
+
+    state.files = [{
+      content: external.content,
+      languageId: undefined,
+    }];
 
     state.saved = true;
   },
@@ -59,8 +65,7 @@ export const actions = {
   },
   async save({ commit, state }) {
     const res = await this.$axios.$post('/api/bins', {
-      content: state.content,
-      languageId: state.languageId,
+      files: state.files,
     });
 
     commit('saveSuccess', res.key);

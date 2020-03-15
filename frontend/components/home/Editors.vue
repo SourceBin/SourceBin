@@ -1,11 +1,18 @@
 <template lang="html">
   <div class="editors">
     <Editor
-      ref="editor"
-      @ready="focus"
+      ref="editors"
 
-      v-model="content"
-      :language="getActiveLanguage($store, $route)"
+      v-for="(file, index) in bin.files"
+      :key="index"
+
+      :value="file.content"
+      @input="updateContent($event, index)"
+
+      :language="getActiveLanguage($store, $route, index)"
+
+      @ready="index === 0 && !bin.saved ? focus(0) : null"
+      @promptLanguageSelect="promptLanguageSelect(index)"
     />
   </div>
 </template>
@@ -14,26 +21,14 @@
 import { mapState } from 'vuex';
 import Mousetrap from 'mousetrap';
 
-import { getActiveLanguage } from '@/assets/language.js';
+import { getActiveLanguage, promptLanguageSelect } from '@/assets/language.js';
 import { save } from '@/assets/home/save.js';
 
 export default {
   components: {
     Editor: () => import('@/components/editor/Editor.vue'),
   },
-  computed: {
-    content: {
-      get() {
-        return this.bin.content;
-      },
-      set(value) {
-        if (value !== this.bin.content) {
-          this.$store.commit('bin/updateContent', value);
-        }
-      },
-    },
-    ...mapState(['bin']),
-  },
+  computed: mapState(['bin']),
   mounted() {
     Mousetrap.bind('mod+s', (e) => {
       if (!e.repeat) {
@@ -45,10 +40,23 @@ export default {
   },
   methods: {
     getActiveLanguage,
-    focus() {
-      if (!this.bin.saved) {
-        this.$refs.editor.focus();
+
+    async promptLanguageSelect(file) {
+      await promptLanguageSelect(this.$store, file);
+      this.focus(file);
+    },
+
+    updateContent(content, file) {
+      if (content !== this.bin.files[file].content) {
+        this.$store.commit('bin/updateContent', {
+          content,
+          file,
+        });
       }
+    },
+
+    focus(file) {
+      this.$refs.editors[file].focus();
     },
   },
 };
