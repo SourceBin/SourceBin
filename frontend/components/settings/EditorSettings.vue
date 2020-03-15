@@ -36,7 +36,7 @@
       <dd>
         <input
           :value="defaultLanguage"
-          @click="promptLanguageSelect($store, true)"
+          @click="promptDefaultLanguageSelect($store)"
           type="button"
         >
       </dd>
@@ -58,7 +58,7 @@
 import { mapState } from 'vuex';
 
 import { getThemeName, promptThemeSelect } from '@/assets/theme.js';
-import { getLanguageById, promptLanguageSelect } from '@/assets/language.js';
+import { getLanguageById, promptDefaultLanguageSelect } from '@/assets/language.js';
 
 export default {
   computed: {
@@ -95,7 +95,7 @@ export default {
     ...mapState(['settings']),
   },
   methods: {
-    promptLanguageSelect,
+    promptDefaultLanguageSelect,
     promptThemeSelect,
   },
 };

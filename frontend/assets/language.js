@@ -11,7 +11,7 @@ export function getLanguageByName(name) {
   return getLanguageById(id);
 }
 
-export function getActiveLanguage(store, route) {
+export function getActiveLanguage(store, route, file) {
   if (route.query.lang) {
     const language = getLanguageByName(route.query.lang);
 
@@ -20,22 +20,33 @@ export function getActiveLanguage(store, route) {
     }
   }
 
-  if (store.state.bin.languageId !== undefined) {
-    return getLanguageById(store.state.bin.languageId);
+  if (store.state.bin.files[file].languageId !== undefined) {
+    return getLanguageById(store.state.bin.files[file].languageId);
   }
 
   return getLanguageById(store.state.settings.defaultLanguageId);
 }
 
-export function promptLanguageSelect(store, defaultLanguage = false) {
+export function promptLanguageSelect(store, file) {
   return new Promise((res) => {
     eventBus.$emit('promptLanguageSelect', (languageId) => {
       if (languageId !== undefined) {
-        if (defaultLanguage) {
-          store.commit('settings/setDefaultLanguageId', languageId);
-        } else {
-          store.commit('bin/setLanguageId', languageId);
-        }
+        store.commit('bin/setLanguageId', {
+          languageId,
+          file,
+        });
+      }
+
+      res(languageId);
+    });
+  });
+}
+
+export function promptDefaultLanguageSelect(store) {
+  return new Promise((res) => {
+    eventBus.$emit('promptLanguageSelect', (languageId) => {
+      if (languageId !== undefined) {
+        store.commit('settings/setDefaultLanguageId', languageId);
       }
 
       res(languageId);

@@ -4,7 +4,7 @@
       <div class="toolbar">
         <ul class="info">
           <li
-            @click="promptLanguageSelect"
+            @click="$emit('promptLanguageSelect')"
             class="language"
           >
             {{ language.name }}
@@ -67,7 +67,6 @@ import { mapState } from 'vuex';
 import Mousetrap from 'mousetrap';
 import clipboardCopy from 'clipboard-copy';
 
-import { promptLanguageSelect } from '@/assets/language.js';
 import { isMarkdown } from '@/assets/markdown/markdown.js';
 import { beautify, getParser } from '@/assets/beautify/beautify.js';
 
@@ -125,10 +124,6 @@ export default {
     });
   },
   methods: {
-    async promptLanguageSelect() {
-      await promptLanguageSelect(this.$store);
-      this.focus();
-    },
     async beautify() {
       const toast = this.$toast.show('Formatting');
 

@@ -3,9 +3,18 @@ import clipboardCopy from 'clipboard-copy';
 import { promptLanguageSelect } from '@/assets/language.js';
 
 function setLanguageIdFromDefault(store) {
-  if (store.state.bin.languageId === undefined) {
-    store.commit('bin/setLanguageId', store.state.settings.defaultLanguageId);
-  }
+  store.state.bin.files.forEach((file, index) => {
+    if (file.languageId === undefined) {
+      store.commit('bin/setLanguageId', {
+        languageId: store.state.settings.defaultLanguageId,
+        file: index,
+      });
+    }
+  });
+}
+
+function isEmptyBin(bin) {
+  return bin.files.some(file => file.content === '');
 }
 
 export async function save(nuxt) {
@@ -16,13 +25,14 @@ export async function save(nuxt) {
     return;
   }
 
-  if (!bin.content) {
+  if (isEmptyBin(bin)) {
     nuxt.$toast.global.error("You can't save an empty bin");
     return;
   }
 
   if (settings.promptLanguageSelectOnSave) {
-    const language = await promptLanguageSelect(nuxt.$store);
+    // TODO: properly handle multiple files
+    const language = await promptLanguageSelect(nuxt.$store, 0);
 
     if (language === undefined) {
       return;
