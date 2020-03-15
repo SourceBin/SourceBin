@@ -76,6 +76,11 @@ export default {
       this.$emit('input', this.editor.getValue());
     });
 
+    // Add mousetrap class to editor textarea to allow keybinds
+    Array
+      .from(this.$el.getElementsByTagName('textarea'))
+      .forEach(el => el.classList.add('mousetrap'));
+
     // Emit ready event
     this.$emit('ready');
   },
