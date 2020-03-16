@@ -33,6 +33,10 @@ server {
     proxy_pass http://${BACKEND_URL}/;
   }
 
+  location /raw {
+    proxy_pass http://${BACKEND_URL};
+  }
+
   location /proxy/ {
     proxy_pass http://${PROXY_URL}/;
   }
