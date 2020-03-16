@@ -30,12 +30,18 @@
         Copy
       </li>
 
-      <!-- <li>Raw</li> -->
+      <li
+        v-if="bin.saved"
+        @click="raw"
+      >
+        Raw
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import clipboardCopy from 'clipboard-copy';
 
 import { getParser } from '@/assets/beautify/beautify.js';
@@ -64,6 +70,7 @@ export default {
     canBeautify() {
       return getParser(this.language) !== undefined;
     },
+    ...mapState(['bin']),
   },
   methods: {
     async promptLanguageSelect() {
@@ -76,6 +83,9 @@ export default {
       this.$toast.global.success('Copied content to clipboard');
 
       this.$emit('focus');
+    },
+    raw() {
+      window.location.href = `/raw/${this.bin.key}/${this.fileIndex}`;
     },
   },
 };
