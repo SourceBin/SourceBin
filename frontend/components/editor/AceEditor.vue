@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import themes from '@sourcebin/themes';
+
 let ace;
 
 if (process.browser) {
@@ -111,7 +113,13 @@ export default {
       this.editor.session.setMode(`ace/mode/${mode}`);
     },
     async setTheme(theme) {
-      await import(`ace-builds/src-noconflict/theme-${theme}`);
+      const custom = themes[theme][1];
+
+      if (custom) {
+        await import(`@sourcebin/themes/dist/${theme}.js`);
+      } else {
+        await import(`ace-builds/src-noconflict/theme-${theme}.js`);
+      }
 
       this.editor.setTheme(`ace/theme/${theme}`);
     },

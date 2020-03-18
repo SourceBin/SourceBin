@@ -3,7 +3,7 @@ import themes from '@sourcebin/themes';
 import { eventBus } from '@/assets/eventBus.js';
 
 export function getThemeName(theme) {
-  return themes[theme];
+  return themes[theme][0];
 }
 
 export function promptThemeSelect(store) {

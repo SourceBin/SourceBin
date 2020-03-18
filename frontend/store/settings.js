@@ -3,7 +3,7 @@ import { languages } from '@sourcebin/linguist';
 export const state = () => ({
   fontSize: 15,
   printMargin: true,
-  theme: 'dracula',
+  theme: 'one_dark',
   defaultLanguageId: languages.Text,
   promptLanguageSelectOnSave: true,
 });
