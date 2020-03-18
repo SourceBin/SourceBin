@@ -1,7 +1,5 @@
 <template lang="html">
   <div class="settings">
-    <h1>Settings</h1>
-
     <EditorSettings />
 
     <Selector
@@ -50,18 +48,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import 'sass-mq';
 @import '@/assets/_globals.scss';
 
 .settings {
-  width: 750px;
   font-family: $font-family;
-  color: rgba($white, 0.9);
-  margin: 0 auto;
-
-  @include mq($until: tablet) {
-    width: auto;
-    margin: 0 $margin-side-small;
-  }
 }
 </style>
