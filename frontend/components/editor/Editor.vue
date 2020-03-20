@@ -78,6 +78,7 @@ export default {
       return {
         fontSize: this.settings.fontSize,
         showPrintMargin: this.settings.printMargin,
+        fontFamily: this.settings.font,
         useWorker: false,
       };
     },

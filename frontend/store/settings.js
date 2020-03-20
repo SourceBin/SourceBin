@@ -4,6 +4,8 @@ export const state = () => ({
   fontSize: 15,
   printMargin: true,
   theme: 'one_dark',
+  font: 'Ubuntu Mono',
+
   defaultLanguageId: languages.Text,
   promptLanguageSelectOnSave: true,
 });
@@ -18,6 +20,10 @@ export const mutations = {
   setTheme(state, theme) {
     state.theme = theme;
   },
+  setFont(state, font) {
+    state.font = font;
+  },
+
   setDefaultLanguageId(state, id) {
     state.defaultLanguageId = id;
   },

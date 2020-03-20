@@ -2,6 +2,17 @@
   <div class="editor-settings">
     <div class="options">
       <dl>
+        <dt>Font family</dt>
+        <dd>
+          <input
+            :value="font"
+            @click="promptFontSelect($store)"
+            type="button"
+          >
+        </dd>
+      </dl>
+
+      <dl>
         <dt>Font size</dt>
         <dd>
           <input
@@ -77,8 +88,9 @@
 <script>
 import { mapState } from 'vuex';
 
-import { getThemeName, promptThemeSelect } from '@/assets/theme.js';
 import { getLanguageById, promptDefaultLanguageSelect } from '@/assets/language.js';
+import { getThemeName, promptThemeSelect } from '@/assets/theme.js';
+import { promptFontSelect } from '@/assets/fonts/fonts.js';
 
 export default {
   components: {
@@ -104,6 +116,10 @@ export default {
     theme() {
       return getThemeName(this.settings.theme);
     },
+    font() {
+      return this.settings.font;
+    },
+
     defaultLanguage() {
       return getLanguageById(this.settings.defaultLanguageId).name;
     },
@@ -120,6 +136,8 @@ export default {
       return {
         fontSize: this.settings.fontSize,
         showPrintMargin: this.settings.printMargin,
+        fontFamily: this.settings.font,
+
         useWorker: false,
         readOnly: true,
         maxLines: 10,
@@ -131,6 +149,7 @@ export default {
   methods: {
     promptDefaultLanguageSelect,
     promptThemeSelect,
+    promptFontSelect,
   },
 };
 </script>

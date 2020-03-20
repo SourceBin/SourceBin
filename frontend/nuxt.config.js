@@ -32,6 +32,10 @@ export default {
 
   loading: { color: meta.themeColor },
 
+  css: [
+    '@/assets/fonts/fonts.scss',
+  ],
+
   modules: [
     '@nuxtjs/device',
     '@nuxtjs/axios',

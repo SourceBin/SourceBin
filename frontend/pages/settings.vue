@@ -7,10 +7,17 @@
       event-name="promptLanguageSelect"
       title="Language Selector"
     />
+
     <Selector
       :options="themeOptions"
       event-name="promptThemeSelect"
       title="Theme Selector"
+    />
+
+    <Selector
+      :options="fontOptions"
+      event-name="promptFontSelect"
+      title="Font Selector"
     />
   </div>
 </template>
@@ -20,7 +27,7 @@ import Mousetrap from 'mousetrap';
 
 import EditorSettings from '@/components/settings/EditorSettings.vue';
 
-import { languageOptions, themeOptions } from '@/assets/selector/options.js';
+import { languageOptions, themeOptions, fontOptions } from '@/assets/selector/options.js';
 
 export default {
   components: {
@@ -31,6 +38,7 @@ export default {
     return {
       languageOptions,
       themeOptions,
+      fontOptions,
     };
   },
   mounted() {
