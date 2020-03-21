@@ -1,6 +1,6 @@
 import { linguist } from '@sourcebin/linguist';
 import themes from '@sourcebin/themes';
-import { fonts } from '@/assets/fonts/fonts.js';
+import fonts from '@sourcebin/fonts';
 
 export const languageOptions = Object
   .entries(linguist)

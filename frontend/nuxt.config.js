@@ -33,7 +33,7 @@ export default {
   loading: { color: meta.themeColor },
 
   css: [
-    '@/assets/fonts/fonts.scss',
+    '@sourcebin/fonts/dist/index.css',
   ],
 
   modules: [

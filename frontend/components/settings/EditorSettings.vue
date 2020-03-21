@@ -90,7 +90,7 @@ import { mapState } from 'vuex';
 
 import { getLanguageById, promptDefaultLanguageSelect } from '@/assets/language.js';
 import { getThemeName, promptThemeSelect } from '@/assets/theme.js';
-import { promptFontSelect } from '@/assets/fonts/fonts.js';
+import { promptFontSelect } from '@/assets/font.js';
 
 export default {
   components: {
