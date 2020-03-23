@@ -234,7 +234,7 @@ $option-border: 1px solid darken($black, 5%);
   width: 100%;
   max-width: 1000px;
   height: 100%;
-  background: $black;
+  background: $gray;
   color: rgba($white, 0.9);
 }
 
@@ -284,7 +284,7 @@ ul {
   padding: 0;
   height: 100%;
   list-style: none;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 li {
@@ -299,11 +299,7 @@ li {
   }
 
   &.selected {
-    background: lighten($black, 5%);
-  }
-
-  &:hover {
-    background: $gray;
+    background: $light-gray;
   }
 }
 </style>

@@ -108,7 +108,6 @@ $border: 1px solid $light-gray;
   justify-content: space-between;
   font-family: $font-family;
   font-size: $font-size;
-  border-bottom: $border;
 
   @include mq($until: tablet) {
     font-size: $font-size-small;
