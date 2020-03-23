@@ -217,8 +217,8 @@ $option-border: 1px solid darken($black, 5%);
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: $container-z-index;
   display: flex;
   justify-content: center;
@@ -234,7 +234,7 @@ $option-border: 1px solid darken($black, 5%);
   width: 100%;
   max-width: 1000px;
   height: 100%;
-  background: $gray;
+  background: $black;
   color: rgba($white, 0.9);
 }
 
@@ -299,7 +299,7 @@ li {
   }
 
   &.selected {
-    background: $light-gray;
+    background: $gray;
   }
 }
 </style>

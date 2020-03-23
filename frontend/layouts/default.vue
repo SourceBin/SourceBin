@@ -45,11 +45,11 @@ body,
 
 body {
   scrollbar-width: thin;
-  scrollbar-color: $scrollbar-background $scrollbar-color;
+  scrollbar-color: $scrollbar-color $scrollbar-background;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
   height: 10px;
 }
 
@@ -57,14 +57,19 @@ body {
   background: $scrollbar-background;
 }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  border: 3px solid $scrollbar-background;
-  background: $scrollbar-color;
-  background-clip: content-box;
-}
-
 ::-webkit-scrollbar-track {
   background: $scrollbar-background;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 4px solid $scrollbar-background;
+  border-radius: 7px;
+  background: $scrollbar-color;
+  background-clip: content-box;
+
+  &:active {
+    border: none;
+    border-radius: 0;
+  }
 }
 </style>
