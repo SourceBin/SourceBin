@@ -1,8 +1,7 @@
 <template lang="html">
-  <div
-    v-show="visible"
-    @click.self="close"
-    class="container"
+  <Overlay
+    :visible="visible"
+    @close="close"
   >
     <div class="content">
       <div class="header">
@@ -33,7 +32,7 @@
         </ul>
       </client-only>
     </div>
-  </div>
+  </Overlay>
 </template>
 
 <script>
@@ -41,9 +40,14 @@ import Fuse from 'fuse.js';
 import Mousetrap from 'mousetrap';
 import { debounce } from 'lodash-es';
 
+import Overlay from '@/components/Overlay.vue';
+
 import { eventBus } from '@/assets/eventBus.js';
 
 export default {
+  components: {
+    Overlay,
+  },
   props: {
     eventName: {
       type: String,
@@ -204,27 +208,12 @@ export default {
 @import 'sass-mq';
 @import '@/assets/_globals.scss';
 
-$container-z-index: 100000;
-
 $font-size-title: 30px;
 $font-size-close: 20px;
 $font-size-option: 18px;
 
 $input-border: 1px solid rgba($white, 0.8);
 $option-border: 1px solid darken($black, 5%);
-
-.container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: $container-z-index;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba($white, 0.1);
-}
 
 .content {
   position: relative;
