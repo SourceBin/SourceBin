@@ -16,7 +16,7 @@
           type="text"
         >
 
-        <a @click="close">X</a>
+        <a @click="close"><CloseIcon /></a>
       </div>
 
       <client-only>
@@ -40,12 +40,14 @@ import Fuse from 'fuse.js';
 import Mousetrap from 'mousetrap';
 import { debounce } from 'lodash-es';
 
+import CloseIcon from 'mdi-vue/Close.vue';
 import Overlay from '@/components/Overlay.vue';
 
 import { eventBus } from '@/assets/eventBus.js';
 
 export default {
   components: {
+    CloseIcon,
     Overlay,
   },
   props: {
