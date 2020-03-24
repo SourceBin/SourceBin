@@ -2,6 +2,7 @@ export const state = () => ({
   key: undefined,
 
   files: [{
+    name: undefined,
     content: '',
     languageId: undefined,
   }],
@@ -13,6 +14,10 @@ export const mutations = {
   reset(s) {
     Object.assign(s, state());
   },
+
+  setName(state, { name, file }) {
+    state.files[file].name = name;
+  },
   updateContent(state, { content, file }) {
     state.files[file].content = content;
 
@@ -22,9 +27,15 @@ export const mutations = {
   setLanguageId(state, { languageId, file }) {
     state.files[file].languageId = languageId;
   },
+
   loadFromKeySuccess(state, bin) {
     state.key = bin.key;
-    state.files = bin.files;
+
+    state.files = bin.files.map(file => ({
+      name: file.name,
+      content: file.content,
+      languageId: file.languageId,
+    }));
 
     state.saved = true;
   },
@@ -32,12 +43,14 @@ export const mutations = {
     state.key = external.src;
 
     state.files = [{
+      name: external.src.substring(external.src.lastIndexOf('/') + 1),
       content: external.content,
       languageId: undefined,
     }];
 
     state.saved = true;
   },
+
   saveSuccess(state, key) {
     state.key = key;
 

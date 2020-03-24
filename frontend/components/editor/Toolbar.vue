@@ -8,7 +8,9 @@
         {{ language.name }}
       </li>
 
-      <!-- <li>untitled</li> -->
+      <li @click="showNameOverlay">
+        {{ file.name || 'untitled' }}
+      </li>
     </ul>
 
     <ul>
@@ -37,6 +39,21 @@
         Raw
       </li>
     </ul>
+
+    <Overlay
+      :visible="nameOverlay"
+      @close="nameOverlay = false"
+    >
+      <div>
+        <input
+          ref="nameInput"
+          @keyup.enter="nameOverlay = false"
+          v-model="fileName"
+          type="text"
+          spellcheck="false"
+        >
+      </div>
+    </Overlay>
   </div>
 </template>
 
@@ -44,11 +61,16 @@
 import { mapState } from 'vuex';
 import clipboardCopy from 'clipboard-copy';
 
+import Overlay from '@/components/overlay/Overlay.vue';
+
 import { getParser } from '@/assets/beautify/beautify.js';
 import { isMarkdown } from '@/assets/markdown/markdown.js';
 import { promptLanguageSelect } from '@/assets/language.js';
 
 export default {
+  components: {
+    Overlay,
+  },
   props: {
     fileIndex: {
       type: Number,
@@ -60,10 +82,24 @@ export default {
     },
     displayMarkdown: Boolean,
   },
+  data() {
+    return {
+      nameOverlay: false,
+    };
+  },
   computed: {
     file() {
-      return this.$store.state.bin.files[this.fileIndex];
+      return this.bin.files[this.fileIndex];
     },
+    fileName: {
+      get() {
+        return this.file.name;
+      },
+      set(name) {
+        this.$store.commit('bin/setName', { name, file: this.fileIndex });
+      },
+    },
+
     isMarkdown() {
       return isMarkdown(this.language);
     },
@@ -77,6 +113,10 @@ export default {
       await promptLanguageSelect(this.$store, this.fileIndex);
 
       this.$emit('focus');
+    },
+    showNameOverlay() {
+      this.nameOverlay = true;
+      this.$nextTick(() => this.$refs.nameInput.focus());
     },
     async copy() {
       await clipboardCopy(this.file.content);
@@ -148,6 +188,28 @@ $border: 1px solid $light-gray;
       text-align: center;
       border-right: $border;
     }
+  }
+}
+
+.overlay div {
+  border-radius: 5px;
+  padding: 25px;
+  width: 100%;
+  max-width: 500px;
+  background-color: $black;
+
+  @include mq($until: tablet) {
+    padding: 10px;
+  }
+
+  input {
+    padding: 10px;
+    width: 100%;
+    background-color: $gray;
+    color: rgba($white, 0.9);
+    border: none;
+    border-radius: 3px;
+    outline: none;
   }
 }
 </style>

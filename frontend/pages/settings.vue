@@ -32,7 +32,7 @@ import { languageOptions, themeOptions, fontOptions } from '@/assets/selector/op
 export default {
   components: {
     EditorSettings,
-    Selector: () => import('@/components/Selector.vue'),
+    Selector: () => import('@/components/overlay/Selector.vue'),
   },
   data() {
     return {

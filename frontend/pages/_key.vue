@@ -22,7 +22,7 @@ export default {
   components: {
     Editors,
     Actions,
-    Selector: () => import('@/components/Selector.vue'),
+    Selector: () => import('@/components/overlay/Selector.vue'),
   },
   data() {
     return {
