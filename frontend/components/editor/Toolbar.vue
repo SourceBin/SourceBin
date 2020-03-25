@@ -45,10 +45,12 @@
       @close="nameOverlay = false"
     >
       <div>
+        <h1>Enter a filename</h1>
+
         <input
           ref="nameInput"
           @keyup.enter="nameOverlay = false"
-          v-model="fileName"
+          v-model="filename"
           type="text"
           spellcheck="false"
         >
@@ -91,7 +93,7 @@ export default {
     file() {
       return this.bin.files[this.fileIndex];
     },
-    fileName: {
+    filename: {
       get() {
         return this.file.name;
       },
@@ -202,11 +204,16 @@ $border: 1px solid $light-gray;
     padding: 10px;
   }
 
+  h1 {
+    margin: 0 0 15px;
+    color: rgba($white, 0.9);
+  }
+
   input {
     padding: 10px;
     width: 100%;
     background-color: $gray;
-    color: rgba($white, 0.9);
+    color: rgba($white, 0.8);
     border: none;
     border-radius: 3px;
     outline: none;

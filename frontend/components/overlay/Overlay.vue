@@ -9,9 +9,16 @@
 </template>
 
 <script>
+import Mousetrap from 'mousetrap';
+
 export default {
   props: {
     visible: Boolean,
+  },
+  mounted() {
+    const mousetrap = new Mousetrap(this.$el);
+
+    mousetrap.bind('esc', () => this.$emit('close'));
   },
 };
 </script>

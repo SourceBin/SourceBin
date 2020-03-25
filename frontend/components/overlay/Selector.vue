@@ -103,8 +103,6 @@ export default {
     // Keybinds
     const mousetrap = new Mousetrap(this.$el);
 
-    mousetrap.bind('esc', this.close);
-
     mousetrap.bind('up', () => {
       if (this.selectedIndex > 0) {
         this.selectedIndex -= 1;
