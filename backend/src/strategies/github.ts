@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy } from 'passport-github2';
 
-import { upsertUser } from '../utils/auth';
+import { createOrGetUser } from '../utils/auth';
 
 passport.use(new Strategy(
   {
@@ -12,11 +12,14 @@ passport.use(new Strategy(
   },
   async (_accessToken: string, _refreshToken: string, profile: any, done: any) => {
     try {
-      const user = await upsertUser({
-        email: profile.emails[0].value,
-        username: profile.username,
-        'oauth.github': true,
-      });
+      const user = await createOrGetUser(
+        { 'oauth.github': profile.id },
+        {
+          email: profile.emails[0].value,
+          username: profile.username,
+          'oauth.github': profile.id,
+        },
+      );
 
       done(undefined, user);
     } catch (err) {
