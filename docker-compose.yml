@@ -23,7 +23,8 @@ services:
       - 3001:3001
     environment:
       - PORT=3001
-      - MONGODB_URI=${MONGODB_URI}
+    env_file:
+      - .env
     container_name: backend
     restart: always
 
