@@ -19,7 +19,7 @@ passport.use(new Strategy(
       const user = await upsertUser({
         email: profile.email,
         username: profile.username,
-        oauth: { discord: true },
+        'oauth.discord': true,
       });
 
       done(undefined, user);
