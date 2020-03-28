@@ -1,11 +1,11 @@
 import { User, UserModel } from '../models/User';
 
-export function upsertUser(user: any): Promise<User> {
-  return UserModel
-    .findOneAndUpdate(
-      { email: user.email },
-      user,
-      { upsert: true, new: true, runValidators: true },
-    )
-    .exec();
+export async function createOrGetUser(conditions: any, data: any): Promise<User> {
+  const user = await UserModel.findOne(conditions);
+
+  if (user) {
+    return user;
+  }
+
+  return UserModel.create(data);
 }

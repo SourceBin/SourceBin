@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy } from 'passport-discord';
 
-import { upsertUser } from '../utils/auth';
+import { createOrGetUser } from '../utils/auth';
 
 passport.use(new Strategy(
   {
@@ -12,15 +12,14 @@ passport.use(new Strategy(
   },
   async (_accessToken, _refreshToken, profile, done) => {
     try {
-      if (typeof profile.email !== 'string') {
-        throw new Error('Email must be a string');
-      }
-
-      const user = await upsertUser({
-        email: profile.email,
-        username: profile.username,
-        'oauth.discord': true,
-      });
+      const user = await createOrGetUser(
+        { 'oauth.discord': profile.id },
+        {
+          email: profile.email as string,
+          username: profile.username,
+          'oauth.discord': profile.id,
+        },
+      );
 
       done(undefined, user);
     } catch (err) {

@@ -1,11 +1,11 @@
 import passport from 'passport';
-import { Strategy, ExtractJwt } from 'passport-jwt';
+import { Strategy } from 'passport-jwt';
 
 import { UserModel } from '../models/User';
 
 passport.use(new Strategy(
   {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: req => req.cookies.jwt,
     secretOrKey: process.env.JWT_SECRET,
   },
   async (payload, done) => {

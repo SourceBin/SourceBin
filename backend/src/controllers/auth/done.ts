@@ -15,6 +15,7 @@ export function done(req: Request, res: Response): void {
     secure: true,
     httpOnly: true,
     sameSite: 'strict',
+    expires: new Date(2147483647000), // Tue, 19 Jan 2038 03:14:07 GMT
   });
 
   res.redirect('/account');
