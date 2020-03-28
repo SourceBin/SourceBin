@@ -1,8 +1,6 @@
 import { User, UserModel } from '../models/User';
 
-type UserData = Pick<User, 'email' | 'username' | 'oauth'>;
-
-export function upsertUser(user: UserData): Promise<User> {
+export function upsertUser(user: any): Promise<User> {
   return UserModel
     .findOneAndUpdate(
       { email: user.email },

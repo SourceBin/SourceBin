@@ -5,7 +5,8 @@ export interface User extends mongoose.Document {
   username: string;
 
   oauth: {
-    discord: boolean;
+    discord?: boolean;
+    github?: boolean;
   };
 }
 
@@ -23,6 +24,7 @@ const userSchema = new mongoose.Schema({
 
   oauth: {
     discord: Boolean,
+    github: Boolean,
   },
 });
 

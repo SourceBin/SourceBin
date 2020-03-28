@@ -15,4 +15,7 @@ const router = Router();
 router.get('/discord', authenticate('discord'));
 router.get('/discord/callback', authenticate('discord'), done);
 
+router.get('/github', authenticate('github'));
+router.get('/github/callback', authenticate('github'), done);
+
 export default router;
