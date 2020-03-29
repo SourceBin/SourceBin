@@ -1,4 +1,4 @@
-import { minutes } from './utils/time';
+import { minutes, weeks } from './utils/time';
 
 export const rateLimits = {
   bins: {
@@ -22,4 +22,9 @@ export const rateLimits = {
 export const bin = {
   maxNameLength: 1000,
   maxContentLength: 100_000,
+};
+
+export const auth = {
+  accessTokenTTL: minutes(15),
+  refreshTokenTTL: weeks(4),
 };
