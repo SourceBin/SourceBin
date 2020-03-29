@@ -17,13 +17,21 @@ export async function createOrGetUser(conditions: any, data: any): Promise<User>
   return UserModel.create(data);
 }
 
-export function generateRefreshToken(): string {
-  return crypto.randomBytes(32).toString('hex');
+export function generateRefreshToken(): Promise<string> {
+  return new Promise((res, rej) => {
+    crypto.randomBytes(32, (err, buffer) => {
+      if (err) {
+        rej(err);
+      } else {
+        res(buffer.toString('hex'));
+      }
+    });
+  });
 }
 
 export async function setAccessRefreshTokens(res: Response, user: User): Promise<void> {
   const refreshToken = await RefreshTokenModel.create({
-    token: generateRefreshToken(),
+    token: await generateRefreshToken(),
     user: user._id, // eslint-disable-line no-underscore-dangle
   });
 

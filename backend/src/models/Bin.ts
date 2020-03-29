@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-import { generateKey } from '../utils/bins';
-
 export interface File extends mongoose.Document {
   name: string;
   content: string;
@@ -19,7 +17,6 @@ const binSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true,
-    default: generateKey,
   },
 
   created: {
