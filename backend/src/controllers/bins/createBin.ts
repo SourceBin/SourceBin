@@ -3,6 +3,7 @@ import Joi from '@hapi/joi';
 
 import { BinModel } from '../../models/Bin';
 
+import { generateKey } from '../../utils/bins';
 import { replyError, replyJoiError } from '../../utils/errors';
 
 import * as config from '../../config';
@@ -36,7 +37,10 @@ export async function createBin(req: Request, res: Response): Promise<void> {
   }
 
   try {
-    const bin = await BinModel.create({ files: req.body.files });
+    const bin = await BinModel.create({
+      key: await generateKey(),
+      files: req.body.files,
+    });
 
     res.json({ key: bin.key });
   } catch (err) {
