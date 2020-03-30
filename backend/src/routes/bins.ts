@@ -4,6 +4,7 @@ import { rateLimits } from '../config';
 
 import { rateLimit } from '../middleware/rateLimit';
 import { jsonParser } from '../middleware/jsonParser';
+import { optionalAuth } from '../middleware/authenticate';
 
 import { getBin } from '../controllers/bins/getBin';
 import { createBin } from '../controllers/bins/createBin';
@@ -18,6 +19,7 @@ router.get(
 
 router.post(
   '/',
+  optionalAuth,
   rateLimit(rateLimits.bins.create),
   jsonParser,
   createBin,

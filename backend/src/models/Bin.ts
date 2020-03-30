@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import { User } from './User';
+
 export interface File extends mongoose.Document {
   name: string;
   content: string;
@@ -8,6 +10,7 @@ export interface File extends mongoose.Document {
 
 export interface Bin extends mongoose.Document {
   key: string;
+  owner?: User;
   files: File[];
   created: Date;
 }
@@ -17,6 +20,11 @@ const binSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true,
+  },
+
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
 
   created: {
