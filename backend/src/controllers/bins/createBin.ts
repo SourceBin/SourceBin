@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import Joi from '@hapi/joi';
 
 import { BinModel } from '../../models/Bin';
-import { User } from '../../models/User';
 
 import { generateKey } from '../../utils/bins';
 import { replyError, replyJoiError } from '../../utils/errors';
@@ -41,7 +40,7 @@ export async function createBin(req: Request, res: Response): Promise<void> {
     const bin = await BinModel.create({
       key: await generateKey(),
       owner: req.user
-        ? (req.user as User)._id // eslint-disable-line no-underscore-dangle
+        ? req.user._id
         : undefined,
       files: req.body.files,
     });
