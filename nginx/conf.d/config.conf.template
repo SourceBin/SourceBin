@@ -42,7 +42,7 @@ server {
   }
 
   # Let's Encrypt
-  location /.well-known/acme-challenge/ {
-    root /var/www/certbot;
+  location ^~ /.well-known/acme-challenge/ {
+    alias /var/www/certbot/;
   }
 }
