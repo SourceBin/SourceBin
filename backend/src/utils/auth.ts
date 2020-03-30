@@ -41,7 +41,7 @@ export async function setAccessRefreshTokens(res: Response, user: User): Promise
 
   await RefreshTokenModel.create({
     token: hashRefreshToken(refreshToken),
-    user: user._id, // eslint-disable-line no-underscore-dangle
+    user: user._id,
   });
 
   const accessToken = jwt.sign(
