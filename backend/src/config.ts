@@ -1,4 +1,4 @@
-import { minutes, weeks } from './utils/time';
+import { seconds, minutes, weeks } from './utils/time';
 
 export const rateLimits = {
   bins: {
@@ -13,6 +13,10 @@ export const rateLimits = {
     delete: {
       windowMs: minutes(10),
       max: 60, // every 10s
+    },
+    list: {
+      windowMs: minutes(1),
+      max: seconds(1), // every s
     },
   },
   external: {
