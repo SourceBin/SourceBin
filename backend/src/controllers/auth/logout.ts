@@ -2,14 +2,14 @@ import { Request, Response } from 'express';
 
 import { RefreshTokenModel } from '../../models/RefreshToken';
 
-import { unsetAccessRefreshTokens } from '../../utils/auth';
+import { hashRefreshToken, unsetAccessRefreshTokens } from '../../utils/auth';
 
 export async function logout(req: Request, res: Response): Promise<void> {
   const refreshToken = req.cookies.refresh_token;
 
   if (refreshToken) {
     await RefreshTokenModel
-      .deleteOne({ token: refreshToken })
+      .deleteOne({ token: hashRefreshToken(refreshToken) })
       .exec();
   }
 
