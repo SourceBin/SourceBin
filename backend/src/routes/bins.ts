@@ -4,10 +4,11 @@ import { rateLimits } from '../config';
 
 import { rateLimit } from '../middleware/rateLimit';
 import { jsonParser } from '../middleware/jsonParser';
-import { optionalAuth } from '../middleware/authenticate';
+import { requiredAuth, optionalAuth } from '../middleware/authenticate';
 
 import { getBin } from '../controllers/bins/getBin';
 import { createBin } from '../controllers/bins/createBin';
+import { disownBin } from '../controllers/bins/disownBin';
 
 const router = Router();
 
@@ -23,6 +24,13 @@ router.post(
   rateLimit(rateLimits.bins.create),
   jsonParser,
   createBin,
+);
+
+router.delete(
+  '/:key',
+  requiredAuth,
+  rateLimit(rateLimits.bins.delete),
+  disownBin,
 );
 
 export default router;

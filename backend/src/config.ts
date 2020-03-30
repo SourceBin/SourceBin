@@ -10,6 +10,10 @@ export const rateLimits = {
       windowMs: minutes(10),
       max: 60, // every 10s
     },
+    delete: {
+      windowMs: minutes(10),
+      max: 60, // every 10s
+    },
   },
   external: {
     get: {
