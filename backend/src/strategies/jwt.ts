@@ -5,7 +5,7 @@ import { Strategy } from 'passport-jwt';
 import { UserModel } from '../models/User';
 import { RefreshTokenModel } from '../models/RefreshToken';
 
-import { setAccessRefreshTokens, unsetAccessRefreshTokens } from '../utils/auth';
+import { hashRefreshToken, setAccessRefreshTokens, unsetAccessRefreshTokens } from '../utils/auth';
 
 passport.use(new Strategy(
   {
@@ -46,7 +46,7 @@ passport.use(new Strategy(
       // Find the refresh token in the database
       // This can only be done once per refresh token, as it's deleted afterwards
       const token = await RefreshTokenModel
-        .findOneAndDelete({ token: refreshToken })
+        .findOneAndDelete({ token: hashRefreshToken(refreshToken) })
         .select('-_id token user')
         .populate('user')
         .exec();
