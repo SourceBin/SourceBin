@@ -12,5 +12,5 @@ export async function listBins(req: Request, res: Response): Promise<void> {
     .select('-_id key')
     .exec();
 
-  res.json({ bins: bins.map(bin => bin.key) });
+  res.json({ bins });
 }
