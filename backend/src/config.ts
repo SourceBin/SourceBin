@@ -19,7 +19,7 @@ export const rateLimits = {
       max: seconds(1), // every s
     },
   },
-  external: {
+  user: {
     get: {
       windowMs: minutes(10),
       max: 60, // every 10s
