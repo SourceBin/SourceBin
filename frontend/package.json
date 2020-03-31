@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@mapbox/stylelint-processor-arbitrary-tags": "^0.3.0",
+    "@nuxtjs/google-analytics": "^2.2.3",
     "@syntek/eslint-config-syntek": "^2.0.2",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.8.0",

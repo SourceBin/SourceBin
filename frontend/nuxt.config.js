@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import { meta } from './config.js';
+import { meta, GA_ID } from './config.js';
 
 export default {
   buildDir: 'dist',
@@ -59,6 +59,12 @@ export default {
           },
         },
       ],
+    }],
+  ],
+
+  buildModules: [
+    ['@nuxtjs/google-analytics', {
+      id: GA_ID,
     }],
   ],
 
