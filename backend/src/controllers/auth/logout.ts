@@ -9,7 +9,7 @@ export async function logout(req: Request, res: Response): Promise<void> {
 
   if (refreshToken) {
     await RefreshTokenModel
-      .deleteOne({ token: hashRefreshToken(refreshToken) })
+      .deleteOne({ _id: hashRefreshToken(refreshToken) })
       .exec();
   }
 

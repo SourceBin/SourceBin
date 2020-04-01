@@ -5,28 +5,28 @@ import { User } from './User';
 import * as config from '../config';
 
 export interface RefreshToken extends mongoose.Document {
-  token: string;
+  _id: string;
   user: User;
   createdAt: Date;
 }
 
 const refreshTokenSchema = new mongoose.Schema({
-  token: {
+  _id: {
     type: String,
-    unique: true,
     required: true,
   },
 
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'User',
     required: true,
   },
 
   createdAt: {
     type: Date,
-    expires: config.auth.refreshTokenTTL / 1000,
+    required: true,
     default: Date.now,
+    expires: config.auth.refreshTokenTTL / 1000,
   },
 });
 

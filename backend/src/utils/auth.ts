@@ -40,12 +40,12 @@ export async function setAccessRefreshTokens(res: Response, user: User): Promise
   const refreshToken = await generateRefreshToken();
 
   await RefreshTokenModel.create({
-    token: hashRefreshToken(refreshToken),
+    _id: hashRefreshToken(refreshToken),
     user: user._id,
   });
 
   const accessToken = jwt.sign(
-    { sub: user.email },
+    { sub: user._id },
     process.env.JWT_SECRET || '',
     { expiresIn: config.auth.accessTokenTTL / 1000 },
   );
