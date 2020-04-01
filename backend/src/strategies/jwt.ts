@@ -21,7 +21,7 @@ passport.use(new Strategy(
       // If the access token is valid get the user
       if (!isExpired) {
         const user = await UserModel
-          .findOne({ email: payload.sub })
+          .findOne({ _id: payload.sub })
           .exec();
 
         done(undefined, user);
@@ -46,13 +46,13 @@ passport.use(new Strategy(
       // Find the refresh token in the database
       // This can only be done once per refresh token, as it's deleted afterwards
       const token = await RefreshTokenModel
-        .findOneAndDelete({ token: hashRefreshToken(refreshToken) })
-        .select('-_id token user')
+        .findOneAndDelete({ _id: hashRefreshToken(refreshToken) })
+        .select('_id user')
         .populate('user')
         .exec();
 
       // If the token was found and the user matches new tokens are created
-      if (token && token.user.email === payload.sub) {
+      if (token && token.user._id === payload.sub) {
         await setAccessRefreshTokens(req.res, token.user);
         done(undefined, token.user);
         return;

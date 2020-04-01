@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
+import * as uuid from 'uuid';
 
 export interface User extends mongoose.Document {
+  _id: string;
   email: string;
   username: string;
 
@@ -11,6 +13,12 @@ export interface User extends mongoose.Document {
 }
 
 const userSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    required: true,
+    default: uuid.v4,
+  },
+
   email: {
     type: String,
     unique: true,
@@ -25,6 +33,12 @@ const userSchema = new mongoose.Schema({
   oauth: {
     discord: String,
     github: String,
+  },
+
+  createdAt: {
+    type: Date,
+    required: true,
+    default: Date.now,
   },
 });
 
