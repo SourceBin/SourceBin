@@ -22,8 +22,8 @@ passport.use(new Strategy(
       );
 
       done(undefined, user);
-    } catch (err) {
-      done(err);
+    } catch {
+      done(undefined, undefined, { error: 'Email is already used' });
     }
   },
 ));
