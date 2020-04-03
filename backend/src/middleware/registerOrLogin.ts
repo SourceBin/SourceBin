@@ -24,8 +24,8 @@ export function registerOrLogin(strategy: string): RequestHandler {
           return;
         }
 
-        if (info && info.error) {
-          redirectError(res, info.error);
+        if (info instanceof Error) {
+          redirectError(res, info.message);
           return;
         }
 
