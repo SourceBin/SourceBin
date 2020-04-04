@@ -1,11 +1,18 @@
 <template lang="html">
-  <h1>Coming Soon!</h1>
+  <div class="account">
+    <Login />
+  </div>
 </template>
 
 <script>
 import Mousetrap from 'mousetrap';
 
+import Login from '@/components/account/Login.vue';
+
 export default {
+  components: {
+    Login,
+  },
   mounted() {
     Mousetrap.bind('esc', () => this.$router.push('/'));
   },
@@ -21,20 +28,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import 'sass-mq';
-@import '@/assets/_globals.scss';
-
-$font-size: 50px;
-
-h1 {
-  margin: 25px $margin-side;
-  font-family: $font-family;
-  font-size: $font-size;
-  color: $white;
-  opacity: 0.9;
-
-  @include mq($until: desktop) {
-    margin: 25px $margin-side-small;
-  }
+.account {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 </style>
