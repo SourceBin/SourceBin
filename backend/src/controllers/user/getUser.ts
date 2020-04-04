@@ -6,7 +6,6 @@ export function getUser(req: Request, res: Response): void {
   }
 
   res.json({
-    email: req.user.email,
     username: req.user.username,
     oauth: {
       discord: req.user.oauth.discord,
