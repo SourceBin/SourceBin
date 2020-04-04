@@ -12,5 +12,5 @@ export async function getBins(req: Request, res: Response): Promise<void> {
     .select('-_id key files.languageId')
     .exec();
 
-  res.json({ bins });
+  res.json(bins);
 }
