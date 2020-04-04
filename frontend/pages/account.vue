@@ -1,18 +1,13 @@
 <template lang="html">
   <div class="account">
-    <Login />
+    Profile
   </div>
 </template>
 
 <script>
 import Mousetrap from 'mousetrap';
 
-import Login from '@/components/account/Login.vue';
-
 export default {
-  components: {
-    Login,
-  },
   mounted() {
     Mousetrap.bind('esc', () => this.$router.push('/'));
   },
