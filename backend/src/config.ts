@@ -14,15 +14,15 @@ export const rateLimits = {
       windowMs: minutes(10),
       max: 60, // every 10s
     },
-    list: {
-      windowMs: minutes(1),
-      max: seconds(1), // every s
-    },
   },
   user: {
     get: {
       windowMs: minutes(10),
       max: 60, // every 10s
+    },
+    bins: {
+      windowMs: minutes(1),
+      max: seconds(1), // every s
     },
   },
 };
