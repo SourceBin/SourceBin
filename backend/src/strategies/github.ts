@@ -12,11 +12,21 @@ passport.use(new Strategy(
   },
   async (_accessToken: string, _refreshToken: string, profile: any, done: any) => {
     try {
+      const info = profile._json; // eslint-disable-line no-underscore-dangle
+
       const user = await createOrGetUser(
         { 'oauth.github': profile.id },
         {
           email: profile.emails[0].value,
           username: profile.username,
+
+          about: {
+            avatarURL: info.avatar_url,
+            bio: info.bio,
+            website: info.blog,
+            location: info.location,
+          },
+
           'oauth.github': profile.id,
         },
       );
