@@ -12,6 +12,9 @@ ENV API_URL $API_URL
 ARG API_URL_BROWSER
 ENV API_URL_BROWSER $API_URL_BROWSER
 
+ARG SHARE_DOMAIN
+ENV SHARE_DOMAIN $SHARE_DOMAIN
+
 # Install dependences
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
 RUN apk add --no-cache python make g++ git

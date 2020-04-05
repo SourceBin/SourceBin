@@ -88,6 +88,10 @@ export default {
     description: meta.description,
   },
 
+  env: {
+    SHARE_DOMAIN: process.env.SHARE_DOMAIN,
+  },
+
   build: {
     extend(config) {
       config.output.globalObject = 'this';

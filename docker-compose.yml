@@ -7,6 +7,7 @@ services:
       args:
         - API_URL=http://nginx:80/
         - API_URL_BROWSER=/
+        - SHARE_DOMAIN=${SHARE_DOMAIN}
     ports:
       - 3000:3000
     environment:

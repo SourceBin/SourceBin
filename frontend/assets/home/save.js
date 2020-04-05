@@ -53,8 +53,10 @@ export async function save(nuxt) {
   window.history.pushState(null, null, bin.key);
 
   try {
-    // Copy URL to clipboard
-    await clipboardCopy(window.location.href);
+    // Create short URL and copy to clipboard
+    const shortURL = new URL(bin.key, `https://${process.env.SHARE_DOMAIN}`);
+    await clipboardCopy(shortURL);
+
     nuxt.$toast.global.success('Successfully saved and copied to clipboard');
   } catch {
     // If copying to clipboard fails, still display that the bin got saved
