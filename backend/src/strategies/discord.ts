@@ -2,6 +2,7 @@ import passport from 'passport';
 import { Strategy } from 'passport-discord';
 
 import { createOrGetUser } from '../utils/auth';
+import { getAvatarURL } from '../utils/discord';
 
 passport.use(new Strategy(
   {
@@ -17,6 +18,11 @@ passport.use(new Strategy(
         {
           email: profile.email as string,
           username: profile.username,
+
+          about: {
+            avatarURL: getAvatarURL(profile),
+          },
+
           'oauth.discord': profile.id,
         },
       );

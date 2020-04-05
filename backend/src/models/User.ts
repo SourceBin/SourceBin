@@ -6,6 +6,13 @@ export interface User extends mongoose.Document {
   email: string;
   username: string;
 
+  about: {
+    avatarURL?: string;
+    bio?: string;
+    website?: string;
+    location?: string;
+  };
+
   oauth: {
     discord?: string;
     github?: string;
@@ -28,6 +35,13 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
+  },
+
+  about: {
+    avatarURL: String,
+    bio: String,
+    website: String,
+    location: String,
   },
 
   oauth: {
