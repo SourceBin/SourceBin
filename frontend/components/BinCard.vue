@@ -27,6 +27,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/_globals.scss';
 
+$name-font-size: 18px;
+
 .bin-card {
   padding: 10px 15px;
   display: inline-block;
@@ -36,7 +38,7 @@ export default {
   border-radius: 3px;
 
   a {
-    font-size: 18px;
+    font-size: $name-font-size;
     font-weight: 500;
     color: rgba($blue, 0.9);
     text-decoration: none;
