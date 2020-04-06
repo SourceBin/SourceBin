@@ -2,7 +2,12 @@
   <div class="bin-card">
     <a :href="`/${bin.key}`">{{ bin.key }}</a>
 
-    <p>{{ language.name }}</p>
+    <p>
+      <span
+        :style="{ backgroundColor: `#${language.color || 'fff'}` }"
+        class="language-color"
+      />{{ language.name }}
+    </p>
   </div>
 </template>
 
@@ -32,7 +37,7 @@ $name-font-size: 18px;
 .bin-card {
   padding: 10px 15px;
   display: inline-block;
-  min-width: 300px;
+  max-width: 400px;
   font-family: $font-family;
   border: 1px solid rgba($white, 0.5);
   border-radius: 3px;
@@ -47,6 +52,14 @@ $name-font-size: 18px;
   p {
     margin: 15px 0 0;
     color: rgba($white, 0.7);
+
+    .language-color {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
   }
 }
 </style>
