@@ -4,7 +4,7 @@ import { format } from 'url';
 
 function redirectError(res: Response, error: string): void {
   res.redirect(format({
-    pathname: '/account',
+    pathname: '/login',
     query: {
       error,
     },

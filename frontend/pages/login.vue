@@ -1,5 +1,12 @@
 <template lang="html">
   <div class="login-container">
+    <h1
+      v-if="$route.query.error"
+      class="error"
+    >
+      {{ $route.query.error }}
+    </h1>
+
     <div class="login">
       <h1>Get started by logging in</h1>
 
@@ -32,15 +39,24 @@ $provider-font-size: 20px;
 $provider-icon-font-size: 25px;
 
 .login-container {
-  margin: 100px $margin-side-small;
+  margin: 75px $margin-side-small;
   align-self: center;
   font-family: $font-family;
+}
+
+.error {
+  padding: 20px 25px;
+  color: rgba($white, 0.9);
+  background-color: $red;
+  text-align: center;
+  border-radius: 3px;
 }
 
 .login {
   h1 {
     margin: 0 0 15px;
     color: rgba($white, 0.9);
+    text-align: center;
   }
 }
 
