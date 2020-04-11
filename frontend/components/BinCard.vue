@@ -1,6 +1,8 @@
 <template lang="html">
   <div class="bin-card">
-    <a :href="`/${bin.key}`">{{ bin.key }}</a>
+    <nuxt-link :to="`/${bin.key}`">
+      {{ bin.key }}
+    </nuxt-link>
 
     <p>
       <span
