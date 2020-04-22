@@ -31,7 +31,7 @@ router.post(
 router.delete(
   `/:key(${KEY_PATTERN})`,
   requiredAuth,
-  rateLimit(rateLimits.bins.delete),
+  rateLimit(rateLimits.bins.disown),
   disownBin,
 );
 

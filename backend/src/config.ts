@@ -1,29 +1,20 @@
-import { seconds, minutes, weeks } from './utils/time';
+import {
+  seconds, minutes, weeks,
+  limit,
+} from './utils/time';
 
 export const rateLimits = {
   bins: {
-    get: {
-      windowMs: minutes(1),
-      max: minutes(1), // every ms
-    },
-    create: {
-      windowMs: minutes(10),
-      max: 60, // every 10s
-    },
-    delete: {
-      windowMs: minutes(10),
-      max: 60, // every 10s
-    },
+    get: limit({ window: minutes(1), every: seconds(1) }),
+    create: limit({ window: minutes(10), every: seconds(30) }),
+    disown: limit({ window: minutes(10), every: seconds(10) }),
+  },
+  code: {
+    classify: limit({ window: minutes(10), every: seconds(10) }),
   },
   user: {
-    get: {
-      windowMs: minutes(10),
-      max: 60, // every 10s
-    },
-    bins: {
-      windowMs: minutes(1),
-      max: seconds(1), // every s
-    },
+    get: limit({ window: minutes(10), every: seconds(10) }),
+    bins: limit({ window: minutes(1), every: seconds(1) }),
   },
 };
 
