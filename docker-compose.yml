@@ -8,10 +8,6 @@ services:
         - API_URL=http://nginx:80/
         - API_URL_BROWSER=/
         - SHARE_DOMAIN=${SHARE_DOMAIN}
-    ports:
-      - 3000:3000
-    environment:
-      - PORT=3000
     depends_on:
       - backend
     container_name: frontend
@@ -19,10 +15,6 @@ services:
 
   backend:
     build: backend
-    ports:
-      - 3001:3001
-    environment:
-      - PORT=3001
     env_file:
       - .env
     container_name: backend
@@ -30,10 +22,6 @@ services:
 
   proxy:
     build: proxy
-    ports:
-      - 3002:3002
-    environment:
-      - PORT=3002
     container_name: proxy
     restart: always
 
@@ -45,8 +33,8 @@ services:
     environment:
       - DOMAIN=${DOMAIN}
       - FRONTEND_URL=frontend:3000
-      - BACKEND_URL=backend:3001
-      - PROXY_URL=proxy:3002
+      - BACKEND_URL=backend:3000
+      - PROXY_URL=proxy:3000
     volumes:
       - ./certbot/certs:/etc/ssl/certs
       - ./certbot/letsencrypt:/etc/letsencrypt
