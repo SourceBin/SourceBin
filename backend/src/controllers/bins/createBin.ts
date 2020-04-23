@@ -10,8 +10,7 @@ import * as config from '../../config';
 
 const schema = Joi.object({
   files: Joi.array()
-    .min(1)
-    .max(2) // TODO: check max amount of files based on user
+    .length(1)
     .required()
     .items({
       name: Joi.string()
