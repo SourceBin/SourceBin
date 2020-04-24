@@ -6,8 +6,8 @@ export const state = () => ({
   theme: 'one_dark',
   font: 'Ubuntu Mono',
 
+  languageDetection: true,
   defaultLanguageId: languages.Text,
-  promptLanguageSelectOnSave: true,
 });
 
 export const mutations = {
@@ -24,10 +24,10 @@ export const mutations = {
     state.font = font;
   },
 
+  setLanguageDetection(state, languageDetection) {
+    state.languageDetection = languageDetection;
+  },
   setDefaultLanguageId(state, id) {
     state.defaultLanguageId = id;
-  },
-  promptLanguageSelectOnSave(state, promptLanguageSelectOnSave) {
-    state.promptLanguageSelectOnSave = promptLanguageSelectOnSave;
   },
 };

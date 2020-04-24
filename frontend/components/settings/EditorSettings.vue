@@ -44,22 +44,23 @@
       </dl>
 
       <dl>
-        <dt>Default language</dt>
+        <dt>Language detection</dt>
         <dd>
           <input
-            :value="defaultLanguage"
-            @click="promptDefaultLanguageSelect($store)"
-            type="button"
+            v-model="languageDetection"
+            type="checkbox"
           >
         </dd>
       </dl>
 
       <dl>
-        <dt>Prompt language select on save</dt>
+        <dt>Default language</dt>
         <dd>
           <input
-            v-model="promptLanguageSelectOnSave"
-            type="checkbox"
+            :value="defaultLanguage"
+            @click="promptDefaultLanguageSelect($store)"
+            :disabled="languageDetection"
+            type="button"
           >
         </dd>
       </dl>
@@ -120,16 +121,16 @@ export default {
       return this.settings.font;
     },
 
+    languageDetection: {
+      get() {
+        return this.settings.languageDetection;
+      },
+      set(languageDetection) {
+        this.$store.commit('settings/setLanguageDetection', languageDetection);
+      },
+    },
     defaultLanguage() {
       return getLanguageById(this.settings.defaultLanguageId).name;
-    },
-    promptLanguageSelectOnSave: {
-      get() {
-        return this.settings.promptLanguageSelectOnSave;
-      },
-      set(promptLanguageSelectOnSave) {
-        this.$store.commit('settings/promptLanguageSelectOnSave', promptLanguageSelectOnSave);
-      },
     },
 
     editorOptions() {

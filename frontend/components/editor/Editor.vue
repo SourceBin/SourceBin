@@ -4,7 +4,7 @@
       ref="toolbar"
 
       :fileIndex="fileIndex"
-      :language="language"
+      :languageName="language ? language.name : undefined"
       :displayMarkdown="displayMarkdown"
 
       @toggleMarkdown="displayMarkdown = !displayMarkdown"
@@ -20,7 +20,7 @@
         :value="file.content"
         @input="updateContent"
 
-        :language="language.aceMode"
+        :language="language && language.aceMode"
         :theme="settings.theme"
         :options="options"
 

@@ -19,7 +19,7 @@ const parsers = {
 };
 
 export function getParser(language) {
-  return parsers[languages[language.name]];
+  return parsers[languages[language]];
 }
 
 export function beautify(source, language) {

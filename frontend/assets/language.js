@@ -20,11 +20,17 @@ export function getActiveLanguage(store, route, file) {
     }
   }
 
+  // File has language explicitly set
   if (store.state.bin.files[file].languageId !== undefined) {
     return getLanguageById(store.state.bin.files[file].languageId);
   }
 
-  return getLanguageById(store.state.settings.defaultLanguageId);
+  // Language detection is disabled
+  if (!store.state.settings.languageDetection) {
+    return getLanguageById(store.state.settings.defaultLanguageId);
+  }
+
+  return undefined;
 }
 
 export function promptLanguageSelect(store, file) {

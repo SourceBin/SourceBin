@@ -2,6 +2,29 @@ import clipboardCopy from 'clipboard-copy';
 
 import { promptLanguageSelect } from '@/assets/language.js';
 
+async function setLanguageIdFromDetect(store, axios) {
+  const files = [];
+
+  store.state.bin.files.forEach((file, i) => {
+    if (file.languageId === undefined) {
+      files.push({ content: file.content, index: i });
+    }
+  });
+
+  if (files.length < 1) {
+    return;
+  }
+
+  const languages = await axios.$post('/api/code/classify', files.map(file => file.content));
+
+  files.forEach((file, i) => {
+    store.commit('bin/setLanguageId', {
+      languageId: languages[i],
+      file: file.index,
+    });
+  });
+}
+
 function setLanguageIdFromDefault(store) {
   store.state.bin.files.forEach((file, index) => {
     if (file.languageId === undefined) {
@@ -30,11 +53,11 @@ export async function save(nuxt) {
     return;
   }
 
-  if (settings.promptLanguageSelectOnSave) {
-    // TODO: properly handle multiple files
-    const language = await promptLanguageSelect(nuxt.$store, 0);
-
-    if (language === undefined) {
+  if (settings.languageDetection) {
+    try {
+      await setLanguageIdFromDetect(nuxt.$store, nuxt.$axios);
+    } catch {
+      nuxt.$toast.global.error('Failed to detect languages');
       return;
     }
   } else {
@@ -53,9 +76,9 @@ export async function save(nuxt) {
   window.history.pushState(null, null, bin.key);
 
   try {
-    // Create short URL and copy to clipboard
-    const shortURL = new URL(bin.key, `https://${process.env.SHARE_DOMAIN}`);
-    await clipboardCopy(shortURL);
+    // Create share URL and copy to clipboard
+    const shareURL = new URL(bin.key, `https://${process.env.SHARE_DOMAIN}`);
+    await clipboardCopy(shareURL);
 
     nuxt.$toast.global.success('Successfully saved and copied to clipboard');
   } catch {

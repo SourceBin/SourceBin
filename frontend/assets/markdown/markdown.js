@@ -22,5 +22,5 @@ export function render(markdown) {
 }
 
 export function isMarkdown(language) {
-  return language.name === 'Markdown';
+  return language === 'Markdown';
 }

@@ -22,7 +22,7 @@ export default {
     },
     language: {
       type: String,
-      required: true,
+      default: 'text',
     },
     theme: {
       type: String,

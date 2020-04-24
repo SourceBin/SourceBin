@@ -5,7 +5,7 @@
         @click="promptLanguageSelect"
         class="language"
       >
-        {{ language.name }}
+        {{ languageName || 'None' }}
       </li>
 
       <li @click="showNameOverlay">
@@ -78,9 +78,9 @@ export default {
       type: Number,
       required: true,
     },
-    language: {
-      type: Object,
-      required: true,
+    languageName: {
+      type: String,
+      default: undefined,
     },
     displayMarkdown: Boolean,
   },
@@ -103,10 +103,10 @@ export default {
     },
 
     isMarkdown() {
-      return isMarkdown(this.language);
+      return isMarkdown(this.languageName);
     },
     canBeautify() {
-      return getParser(this.language) !== undefined;
+      return !!getParser(this.languageName);
     },
     ...mapState(['bin']),
   },
