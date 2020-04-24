@@ -44,7 +44,7 @@ export function beautify(source, language) {
 
     worker.postMessage({
       source,
-      language: getParser(language),
+      language: getParser(language.name),
     });
   });
 }

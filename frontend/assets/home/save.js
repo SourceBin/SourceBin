@@ -1,7 +1,5 @@
 import clipboardCopy from 'clipboard-copy';
 
-import { promptLanguageSelect } from '@/assets/language.js';
-
 async function setLanguageIdFromDetect(store, axios) {
   const files = [];
 
