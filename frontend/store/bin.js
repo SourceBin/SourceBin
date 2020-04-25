@@ -51,8 +51,12 @@ export const mutations = {
     state.saved = true;
   },
 
-  saveSuccess(state, key) {
+  saveSuccess(state, { key, languages }) {
     state.key = key;
+
+    for (let i = 0; i < languages.length; i += 1) {
+      state.files[i].languageId = languages[i];
+    }
 
     state.saved = true;
   },
@@ -81,6 +85,6 @@ export const actions = {
       files: state.files,
     });
 
-    commit('saveSuccess', res.key);
+    commit('saveSuccess', res);
   },
 };

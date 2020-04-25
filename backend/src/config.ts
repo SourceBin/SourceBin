@@ -10,7 +10,7 @@ export const rateLimits = {
     disown: limit({ window: minutes(10), every: seconds(10) }),
   },
   code: {
-    classify: limit({ window: minutes(10), every: seconds(10) }),
+    classify: limit({ window: minutes(10), every: minutes(10) }),
   },
   user: {
     get: limit({ window: minutes(10), every: seconds(10) }),

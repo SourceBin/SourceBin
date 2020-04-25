@@ -1,28 +1,5 @@
 import clipboardCopy from 'clipboard-copy';
 
-async function setLanguageIdFromDetect(store, axios) {
-  const files = [];
-
-  store.state.bin.files.forEach((file, i) => {
-    if (file.languageId === undefined) {
-      files.push({ content: file.content, index: i });
-    }
-  });
-
-  if (files.length < 1) {
-    return;
-  }
-
-  const languages = await axios.$post('/api/code/classify', files.map(file => file.content));
-
-  files.forEach((file, i) => {
-    store.commit('bin/setLanguageId', {
-      languageId: languages[i],
-      file: file.index,
-    });
-  });
-}
-
 function setLanguageIdFromDefault(store) {
   store.state.bin.files.forEach((file, index) => {
     if (file.languageId === undefined) {
@@ -51,14 +28,7 @@ export async function save(nuxt) {
     return;
   }
 
-  if (settings.languageDetection) {
-    try {
-      await setLanguageIdFromDetect(nuxt.$store, nuxt.$axios);
-    } catch {
-      nuxt.$toast.global.error('Failed to detect languages');
-      return;
-    }
-  } else {
+  if (!settings.languageDetection) {
     setLanguageIdFromDefault(nuxt.$store);
   }
 
