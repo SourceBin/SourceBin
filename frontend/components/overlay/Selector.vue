@@ -19,18 +19,19 @@
         <a @click="close"><CloseIcon /></a>
       </div>
 
-      <client-only>
-        <ul ref="options">
-          <li
-            v-for="(option, index) in searchResults"
+      <ul
+        ref="options"
+        v-if="visible"
+      >
+        <li
+          v-for="(option, index) in searchResults"
 
-            :key="index"
-            @click="select(option)"
-          >
-            {{ option.name }}
-          </li>
-        </ul>
-      </client-only>
+          :key="index"
+          @click="select(option)"
+        >
+          {{ option.name }}
+        </li>
+      </ul>
     </div>
   </Overlay>
 </template>
@@ -98,8 +99,6 @@ export default {
     },
   },
   mounted() {
-    this.updateSelected();
-
     // Keybinds
     const mousetrap = new Mousetrap(this.$el);
 
