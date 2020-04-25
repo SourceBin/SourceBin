@@ -19,6 +19,8 @@ services:
       - GENUS_CODICE_URL=genus-codice:5000
     env_file:
       - .env
+    depends_on:
+      - genus-codice
     container_name: backend
     restart: always
 
