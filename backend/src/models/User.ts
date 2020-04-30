@@ -17,6 +17,11 @@ export interface User extends mongoose.Document {
     discord?: string;
     github?: string;
   };
+
+  subscription: {
+    stripeId?: string;
+    plan: 'Free' | 'Pro';
+  };
 }
 
 const userSchema = new mongoose.Schema({
@@ -47,6 +52,16 @@ const userSchema = new mongoose.Schema({
   oauth: {
     discord: String,
     github: String,
+  },
+
+  subscription: {
+    stripeId: String,
+    plan: {
+      type: String,
+      enum: ['Free', 'Pro'],
+      required: true,
+      default: 'Free',
+    },
   },
 
   createdAt: {

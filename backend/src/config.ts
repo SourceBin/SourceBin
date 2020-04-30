@@ -4,6 +4,10 @@ import {
 } from './utils/time';
 
 export const rateLimits = {
+  billing: {
+    subscribe: limit({ window: minutes(10), every: seconds(10) }),
+    cancel: limit({ window: minutes(10), every: seconds(10) }),
+  },
   bins: {
     get: limit({ window: minutes(1), every: seconds(1) }),
     create: limit({ window: minutes(10), every: seconds(30) }),

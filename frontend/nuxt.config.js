@@ -78,6 +78,7 @@ export default {
 
   plugins: [
     { src: '@/plugins/localStorage.js', mode: 'client' },
+    { src: '@/plugins/stripe.js', mode: 'client' },
   ],
 
   meta: {
@@ -98,6 +99,7 @@ export default {
 
   env: {
     SHARE_DOMAIN: process.env.SHARE_DOMAIN,
+    STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
   },
 
   build: {

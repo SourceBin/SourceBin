@@ -8,6 +8,7 @@ services:
         - API_URL=http://nginx:80/
         - API_URL_BROWSER=/
         - SHARE_DOMAIN=${SHARE_DOMAIN}
+        - STRIPE_PUBLIC_KEY=${STRIPE_PUBLIC_KEY}
     depends_on:
       - backend
     container_name: frontend
