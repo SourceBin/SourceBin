@@ -88,6 +88,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* stylelint-disable */
+
 .checkout {
   color: white;
 }

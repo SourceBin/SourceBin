@@ -2,6 +2,8 @@
   <div class="billing">
     <h1>Add payment method</h1>
 
+    <div ref="paymentRequest" />
+
     <form @submit.prevent="addCard">
       <div
         ref="card"
@@ -27,8 +29,39 @@ export default {
       cardElement: undefined,
     };
   },
-  mounted() {
-    this.cardElement = this.$stripe.elements().create('card', {
+  async mounted() {
+    const elements = this.$stripe.elements();
+
+    const paymentRequest = this.$stripe.paymentRequest({
+      country: 'NL',
+      currency: 'usd',
+      total: {
+        label: 'Add Payment',
+        amount: 0,
+      },
+      requestPayerName: true,
+    });
+
+    const prButton = elements.create('paymentRequestButton', { paymentRequest });
+
+    const result = await paymentRequest.canMakePayment();
+    if (result) {
+      prButton.mount(this.$refs.paymentRequest);
+    } else {
+      this.$refs.paymentRequest.style.display = 'none';
+    }
+
+    paymentRequest.on('paymentmethod', async (event) => {
+      const paymentMethod = await this.addPaymentMethod(event.paymentMethod.id);
+
+      if (paymentMethod) {
+        event.complete('success');
+      } else {
+        event.complete('fail');
+      }
+    });
+
+    this.cardElement = elements.create('card', {
       style: {
         base: {
           color: '#32325d',
@@ -63,17 +96,24 @@ export default {
         card: this.cardElement,
       });
 
-      const paymentMethod = await this.$axios.$post('/api/billing/payment-method', {
-        paymentMethod: result.paymentMethod.id,
-      });
+      const paymentMethod = await this.addPaymentMethod(result.paymentMethod.id);
 
       console.log(paymentMethod);
+    },
+    async addPaymentMethod(id) {
+      const paymentMethod = await this.$axios.$post('/api/billing/payment-method', {
+        paymentMethod: id,
+      });
+
+      return paymentMethod;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+/* stylelint-disable */
+
 .billing {
   color: white;
 }
