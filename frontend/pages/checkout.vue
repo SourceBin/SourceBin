@@ -38,25 +38,27 @@ export default {
       paymentMethods: undefined,
     };
   },
+  middleware: 'authenticated',
   async asyncData({ $axios, query, redirect }) {
     if (!query.plan) {
       redirect('/pricing');
       return {};
     }
 
+    let plan;
     try {
-      const plan = await $axios.$get(`/api/billing/plan/${query.plan}`);
-
-      return {
-        plan,
-      };
+      plan = await $axios.$get(`/api/billing/plan/${query.plan}`);
     } catch {
       redirect('/pricing');
       return {};
     }
-  },
-  async beforeMount() {
-    this.paymentMethods = await this.$axios.$get('/api/billing/payment-methods');
+
+    const paymentMethods = await $axios.$get('/api/billing/payment-methods');
+
+    return {
+      plan,
+      paymentMethods,
+    };
   },
   methods: {
     async purchase() {
