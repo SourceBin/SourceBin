@@ -79,6 +79,8 @@ export default {
   plugins: [
     { src: '@/plugins/localStorage.js', mode: 'client' },
     { src: '@/plugins/stripe.js', mode: 'client' },
+
+    { src: '@/plugins/ssr-cookie-proxy.js', mode: 'server' },
   ],
 
   meta: {
