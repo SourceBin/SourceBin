@@ -15,23 +15,20 @@ export const state = () => ({
       discord: undefined,
       github: undefined,
     },
-
-    bins: [],
   },
 });
 
 export const mutations = {
-  loadUserSuccess(state, { user, bins }) {
+  loadUserSuccess(state, user) {
     state.loggedIn = true;
-    state.user = { ...user, bins };
+    state.user = user;
   },
 };
 
 export const actions = {
   async loadUser({ commit }) {
     const user = await this.$axios.$get('/api/user');
-    const bins = await this.$axios.$get('/api/user/bins');
 
-    commit('loadUserSuccess', { user, bins });
+    commit('loadUserSuccess', user);
   },
 };

@@ -14,7 +14,7 @@
 
     <div class="bins">
       <BinCard
-        v-for="(bin, i) in auth.user.bins"
+        v-for="(bin, i) in bins"
         :key="i"
         :bin="bin"
       />
@@ -32,13 +32,14 @@ export default {
   components: {
     BinCard,
   },
+  middleware: 'authenticated',
   computed: mapState(['auth']),
-  async beforeMount() {
-    try {
-      await this.$store.dispatch('auth/loadUser');
-    } catch {
-      this.$router.push('/login');
-    }
+  async asyncData({ $axios }) {
+    const bins = await $axios.$get('/api/user/bins');
+
+    return {
+      bins,
+    };
   },
   mounted() {
     Mousetrap.bind('esc', () => this.$router.push('/'));
