@@ -29,6 +29,6 @@ export async function cancel(req: Request, res: Response): Promise<void> {
   } catch (err) {
     console.error(err);
 
-    replyError(500, 'Error cancelling subscription', res);
+    replyError(400, err.message, res);
   }
 }

@@ -16,14 +16,13 @@ export async function getCustomer(id: string): Promise<Stripe.Customer> {
   }
 }
 
-export async function createOrGetCustomer(user: User): Promise<Stripe.Customer> {
-  if (user.subscription.stripeId) {
-    return getCustomer(user.subscription.stripeId);
-  }
-
+export async function createCustomer(user: User, paymentMethod: string): Promise<Stripe.Customer> {
+  /* eslint-disable @typescript-eslint/camelcase */
   const customer = await stripe.customers.create({
+    payment_method: paymentMethod,
     email: user.email,
   });
+  /* eslint-enable @typescript-eslint/camelcase */
 
   user.subscription.stripeId = customer.id; // eslint-disable-line no-param-reassign
   await user.save();

@@ -1,26 +1,50 @@
 import { Request, Response } from 'express';
 
 import { replyError } from '../../utils/errors';
-import { stripe, getCustomer, hasSubscription } from '../../utils/stripe';
+import {
+  stripe, getCustomer, createCustomer, hasSubscription,
+} from '../../utils/stripe';
 
 export async function subscribe(req: Request, res: Response): Promise<void> {
   if (!req.user) {
     throw new Error('User unavailable after authentication');
   }
 
-  if (!req.user.subscription.stripeId) {
-    replyError(400, 'No customer', res);
+  const { stripeId } = req.user.subscription;
+
+  if (stripeId) {
+    try {
+      await stripe.paymentMethods.attach(req.body.paymentMethod, {
+        customer: stripeId,
+      });
+    } catch (err) {
+      console.error(err);
+
+      replyError(400, err.message, res);
+      return;
+    }
+  }
+
+  let customer;
+  try {
+    if (stripeId) {
+      customer = await getCustomer(stripeId);
+    } else {
+      customer = await createCustomer(req.user, req.body.paymentMethod);
+    }
+  } catch (err) {
+    console.error(err);
+
+    replyError(400, err.message, res);
+    return;
+  }
+
+  if (hasSubscription(customer)) {
+    replyError(400, 'You already have a subscription', res);
     return;
   }
 
   try {
-    const customer = await getCustomer(req.user.subscription.stripeId);
-
-    if (hasSubscription(customer)) {
-      replyError(400, 'Customer already has a subscription', res);
-      return;
-    }
-
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
       items: [{ plan: req.body.plan }],
@@ -33,6 +57,6 @@ export async function subscribe(req: Request, res: Response): Promise<void> {
   } catch (err) {
     console.error(err);
 
-    replyError(500, 'Error creating subscription', res);
+    replyError(400, err.message, res);
   }
 }

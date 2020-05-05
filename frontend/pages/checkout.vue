@@ -6,22 +6,20 @@
     </div>
 
     <div class="payment-method">
-      <h1>Pay with</h1>
+      <div ref="paymentRequest" />
 
-      <select
-        ref="paymentMethod"
-        v-if="paymentMethods"
-      >
-        <option
-          v-for="paymentMethod in paymentMethods.data"
-        >
-          {{ paymentMethod.card.last4 }}
-        </option>
-      </select>
+      <p>{{ `${displayPaymentRequest ? 'or ' : ''}enter your card` | capitalize }}</p>
+
+      <div
+        ref="card"
+        class="MyCardElement"
+      />
+
+      <h1>{{ error }}</h1>
     </div>
 
     <button @click="purchase">
-      Get {{ plan.nickname }}
+      Purchase
     </button>
   </div>
 </template>
@@ -33,57 +31,133 @@ export default {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
   },
+  middleware: 'authenticated',
   data() {
     return {
-      paymentMethods: undefined,
+      error: '',
+      cardElement: undefined,
+      displayPaymentRequest: false,
     };
   },
-  middleware: 'authenticated',
   async asyncData({ $axios, query, redirect }) {
     if (!query.plan) {
       redirect('/pricing');
       return {};
     }
 
-    let plan;
     try {
-      plan = await $axios.$get(`/api/billing/plan/${query.plan}`);
+      const plan = await $axios.$get(`/api/billing/plan/${query.plan}`);
+
+      return {
+        plan,
+      };
     } catch {
       redirect('/pricing');
       return {};
     }
+  },
+  async mounted() {
+    const elements = this.$stripe.elements();
 
-    const paymentMethods = await $axios.$get('/api/billing/payment-methods');
+    const paymentRequest = this.$stripe.paymentRequest({
+      country: 'NL',
+      currency: 'usd',
+      total: {
+        label: this.plan.nickname,
+        amount: this.plan.amount,
+      },
+      requestPayerName: true,
+    });
 
-    return {
-      plan,
-      paymentMethods,
-    };
+    const prButton = elements.create('paymentRequestButton', { paymentRequest });
+
+    this.displayPaymentRequest = await paymentRequest.canMakePayment();
+    if (this.displayPaymentRequest) {
+      prButton.mount(this.$refs.paymentRequest);
+    } else {
+      this.$refs.paymentRequest.style.display = 'none';
+    }
+
+    paymentRequest.on('paymentmethod', async (event) => {
+      const result = await this.purchaseSubscription(event.paymentMethod);
+
+      if (result.error) {
+        event.complete('fail');
+        return;
+      }
+
+      event.complete('success');
+    });
+
+    this.cardElement = elements.create('card', {
+      style: {
+        base: {
+          color: '#32325d',
+          fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+          fontSmoothing: 'antialiased',
+          fontSize: '16px',
+          '::placeholder': {
+            color: '#aab7c4',
+          },
+        },
+        invalid: {
+          color: '#fa755a',
+          iconColor: '#fa755a',
+        },
+      },
+    });
+
+    this.cardElement.mount(this.$refs.card);
+
+    this.cardElement.addEventListener('change', ({ error }) => {
+      if (error) {
+        this.error = error.message;
+      } else {
+        this.error = '';
+      }
+    });
   },
   methods: {
     async purchase() {
-      const paymentMethod = this.paymentMethods.data[this.$refs.paymentMethod.selectedIndex];
-
-      const subscription = await this.$axios.$post('/api/billing/subscribe', {
-        plan: this.plan.id,
-        paymentMethod: paymentMethod.id,
+      const result = await this.$stripe.createPaymentMethod({
+        type: 'card',
+        card: this.cardElement,
       });
 
-      const { payment_intent: paymentIntent } = subscription.latest_invoice;
+      if (result.error) {
+        this.error = result.error;
+        return;
+      }
+
+      await this.purchaseSubscription(result.paymentMethod);
+    },
+    async purchaseSubscription(paymentMethod) {
+      let subscription;
+
+      try {
+        subscription = await this.$axios.$post('/api/billing/subscribe', {
+          plan: this.plan.id,
+          paymentMethod: paymentMethod.id,
+        });
+      } catch (err) {
+        return { error: err.response.data.message };
+      }
+
+      const paymentIntent = subscription.latest_invoice.payment_intent;
 
       if (paymentIntent) {
-        if (paymentIntent.status === 'requires_action') {
-          const result = this.$stripe.confirmCardPayment(paymentIntent.client_secret);
+        if (paymentIntent.status !== 'requires_action') {
+          return subscription;
+        }
 
-          if (result.error) {
-            alert(result.error.message);
-          } else {
-            alert('Successful confirmation');
-          }
-        } else {
-          alert('Successful payment');
+        const result = await this.$stripe.confirmCardPayment(paymentIntent.client_secret);
+
+        if (result.error) {
+          return { error: result.error.messag };
         }
       }
+
+      return { subscription };
     },
   },
 };
@@ -94,5 +168,31 @@ export default {
 
 .checkout {
   color: white;
+}
+
+.MyCardElement {
+  height: 40px;
+  padding: 10px 12px;
+  width: 100%;
+  color: #32325d;
+  background-color: white;
+  border: 1px solid transparent;
+  border-radius: 4px;
+
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.MyCardElement--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.MyCardElement--invalid {
+  border-color: #fa755a;
+}
+
+.MyCardElement--webkit-autofill {
+  background-color: #fefde5 !important;
 }
 </style>
