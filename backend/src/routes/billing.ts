@@ -9,6 +9,7 @@ import { requiredAuth } from '../middleware/authenticate';
 
 import { getCustomer } from '../controllers/billing/getCustomer';
 import { getPlan } from '../controllers/billing/getPlan';
+import { getCoupon } from '../controllers/billing/getCoupon';
 import { subscribe } from '../controllers/billing/subscribe';
 import { cancel } from '../controllers/billing/cancel';
 import { webhook } from '../controllers/billing/webhook';
@@ -26,6 +27,12 @@ router.get(
   '/plan/:plan',
   // TODO: ratelimit
   getPlan,
+);
+
+router.get(
+  '/coupon/:coupon',
+  // TODO: ratelimit
+  getCoupon,
 );
 
 router.post(

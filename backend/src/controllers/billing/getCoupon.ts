@@ -3,11 +3,11 @@ import { Request, Response } from 'express';
 import { replyError } from '../../utils/errors';
 import { stripe } from '../../utils/stripe';
 
-export async function getPlan(req: Request, res: Response): Promise<void> {
+export async function getCoupon(req: Request, res: Response): Promise<void> {
   try {
-    const plan = await stripe.plans.retrieve(req.params.plan);
+    const coupon = await stripe.coupons.retrieve(req.params.coupon);
 
-    res.json(plan);
+    res.json(coupon);
   } catch (err) {
     console.error(err);
 

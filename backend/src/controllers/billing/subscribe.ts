@@ -48,6 +48,7 @@ export async function subscribe(req: Request, res: Response): Promise<void> {
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
       items: [{ plan: req.body.plan }],
+      coupon: req.body.coupon,
       expand: ['latest_invoice.payment_intent'],
       // eslint-disable-next-line @typescript-eslint/camelcase
       default_payment_method: req.body.paymentMethod,
