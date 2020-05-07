@@ -2,7 +2,23 @@
   <div class="checkout">
     <div class="details">
       <h1>{{ plan.nickname }}</h1>
-      <p>${{ plan.amount / 100 }} / {{ plan.interval | capitalize }}</p>
+      <p>{{ plan.amount | currency }} / {{ plan.interval | capitalize }}</p>
+
+      <div>
+        <input
+          ref="coupon"
+          @input="updateCoupon"
+        >
+
+        <p v-if="errors.coupon">
+          {{ errors.coupon }}
+        </p>
+        <p v-else-if="couponDuration">
+          This coupon applies {{ couponDuration }}
+        </p>
+      </div>
+
+      <p>Total: {{ total | currency }}</p>
     </div>
 
     <div class="payment-method">
@@ -15,7 +31,7 @@
         class="MyCardElement"
       />
 
-      <h1>{{ error }}</h1>
+      <h1>{{ errors.card }}</h1>
     </div>
 
     <button @click="purchase">
@@ -25,19 +41,56 @@
 </template>
 
 <script>
+import { debounce } from 'lodash-es';
+
 export default {
   filters: {
     capitalize(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
+    currency(value) {
+      return `$${value / 100}`;
+    },
   },
   middleware: 'authenticated',
   data() {
     return {
-      error: '',
+      errors: {
+        coupon: '',
+        card: '',
+      },
+      coupon: undefined,
       cardElement: undefined,
       displayPaymentRequest: false,
     };
+  },
+  computed: {
+    total() {
+      let amount;
+
+      if (!this.coupon) {
+        amount = this.plan.amount;
+      } else if (this.coupon.amount_off) {
+        amount = this.plan.amount - this.coupon.amount_off;
+      } else if (this.coupon.percent_off) {
+        amount = this.plan.amount * (1 - this.coupon.percent_off / 100);
+      }
+
+      return Math.floor(amount);
+    },
+    couponDuration() {
+      if (!this.coupon) {
+        return undefined;
+      }
+
+      if (this.coupon.duration === 'repeating') {
+        const duration = this.coupon.duration_in_months;
+
+        return `for ${duration} month${duration === 1 ? '' : 's'}`;
+      }
+
+      return this.coupon.duration;
+    },
   },
   async asyncData({ $axios, query, redirect }) {
     if (!query.plan) {
@@ -60,11 +113,11 @@ export default {
     const elements = this.$stripe.elements();
 
     const paymentRequest = this.$stripe.paymentRequest({
-      country: 'NL',
+      country: 'US',
       currency: 'usd',
       total: {
         label: this.plan.nickname,
-        amount: this.plan.amount,
+        amount: this.total,
       },
       requestPayerName: true,
     });
@@ -111,13 +164,29 @@ export default {
 
     this.cardElement.addEventListener('change', ({ error }) => {
       if (error) {
-        this.error = error.message;
+        this.errors.card = error.message;
       } else {
-        this.error = '';
+        this.errors.card = '';
       }
     });
   },
   methods: {
+    updateCoupon: debounce(async function () {
+      try {
+        const coupon = await this.$axios.$get(`/api/billing/coupon/${this.$refs.coupon.value}`);
+
+        if (coupon.valid) {
+          this.coupon = coupon;
+          this.errors.coupon = '';
+        } else {
+          this.coupon = undefined;
+          this.errors.coupon = `The coupon ${coupon.id} is expired`;
+        }
+      } catch (err) {
+        this.coupon = undefined;
+        this.errors.coupon = err.response.data.message;
+      }
+    }, 250),
     async purchase() {
       const result = await this.$stripe.createPaymentMethod({
         type: 'card',
@@ -125,7 +194,7 @@ export default {
       });
 
       if (result.error) {
-        this.error = result.error;
+        this.errors.card = result.error;
         return;
       }
 
@@ -137,6 +206,7 @@ export default {
       try {
         subscription = await this.$axios.$post('/api/billing/subscribe', {
           plan: this.plan.id,
+          coupon: this.coupon.id,
           paymentMethod: paymentMethod.id,
         });
       } catch (err) {
