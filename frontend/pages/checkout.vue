@@ -1,8 +1,12 @@
 <template lang="html">
   <div class="checkout">
     <div class="details">
-      <h1>{{ plan.nickname }}</h1>
-      <p>{{ plan.amount | currency }} / {{ plan.interval | capitalize }}</p>
+      <h1>Purchase Details</h1>
+
+      <div>
+        <p>{{ plan.nickname }}</p>
+        <p>{{ plan.amount | currency }} / {{ plan.interval | capitalize }}</p>
+      </div>
 
       <div>
         <input
@@ -10,6 +14,12 @@
           @input="updateCoupon"
         >
 
+        <p v-if="amountOff">
+          {{ amountOff }}
+        </p>
+      </div>
+
+      <div>
         <p v-if="errors.coupon">
           {{ errors.coupon }}
         </p>
@@ -18,7 +28,10 @@
         </p>
       </div>
 
-      <p>Total: {{ total | currency }}</p>
+      <div>
+        <p>Today's Total</p>
+        <p>{{ total | currency }}</p>
+      </div>
     </div>
 
     <div class="payment-method">
@@ -31,7 +44,9 @@
         class="MyCardElement"
       />
 
-      <h1>{{ errors.card }}</h1>
+      <p v-if="errors.card">
+        {{ errors.card }}
+      </p>
     </div>
 
     <button @click="purchase">
@@ -49,15 +64,15 @@ export default {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
     currency(value) {
-      return `$${value / 100}`;
+      return `$${(value / 100).toFixed(2)}`;
     },
   },
   middleware: 'authenticated',
   data() {
     return {
       errors: {
-        coupon: '',
-        card: '',
+        card: undefined,
+        coupon: undefined,
       },
       coupon: undefined,
       cardElement: undefined,
@@ -90,6 +105,17 @@ export default {
       }
 
       return this.coupon.duration;
+    },
+    amountOff() {
+      if (!this.coupon) {
+        return undefined;
+      }
+
+      if (this.coupon.amount_off) {
+        return `- ${this.$options.filters.currency(this.coupon.amount_off)}`;
+      }
+
+      return `- ${this.coupon.percent_off}%`;
     },
   },
   async asyncData({ $axios, query, redirect }) {
@@ -166,18 +192,26 @@ export default {
       if (error) {
         this.errors.card = error.message;
       } else {
-        this.errors.card = '';
+        this.errors.card = undefined;
       }
     });
   },
   methods: {
     updateCoupon: debounce(async function () {
+      const code = this.$refs.coupon.value;
+
+      if (!code) {
+        this.coupon = undefined;
+        this.errors.coupon = undefined;
+        return;
+      }
+
       try {
-        const coupon = await this.$axios.$get(`/api/billing/coupon/${this.$refs.coupon.value}`);
+        const coupon = await this.$axios.$get(`/api/billing/coupon/${code}`);
 
         if (coupon.valid) {
           this.coupon = coupon;
-          this.errors.coupon = '';
+          this.errors.coupon = undefined;
         } else {
           this.coupon = undefined;
           this.errors.coupon = `The coupon ${coupon.id} is expired`;
