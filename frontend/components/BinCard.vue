@@ -4,16 +4,24 @@
       {{ bin.key }}
     </nuxt-link>
 
-    <p>
-      <span
-        :style="{ backgroundColor: `#${language.color || 'fff'}` }"
-        class="language-color"
-      />{{ language.name }}
-    </p>
+    <div class="about">
+      <p>
+        <span
+          :style="{ backgroundColor: `#${language.color || 'fff'}` }"
+          class="language-color"
+        />{{ language.name }}
+      </p>
+
+      <p>
+        <font-awesome-icon :icon="['fas', 'calendar-day']" />
+        {{ createdDate }}
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
+import { formatDate } from '@/assets/utils/date.js';
 import { getLanguageById } from '@/assets/language.js';
 
 export default {
@@ -27,6 +35,9 @@ export default {
     language() {
       return getLanguageById(this.bin.files[0].languageId);
     },
+    createdDate() {
+      return formatDate(new Date(this.bin.created));
+    },
   },
 };
 </script>
@@ -35,12 +46,13 @@ export default {
 @import '@/assets/styles/_variables.scss';
 
 .bin-card {
-  padding: 10px 15px;
-  display: inline-block;
-  max-width: 400px;
+  padding: 15px var(--margin-side);
   font-family: var(--font-family);
-  border: 1px solid var(--background-light);
-  border-radius: 3px;
+  border-bottom: 1px solid var(--background-dark);
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   a {
     font-size: var(--font-size-big);
@@ -49,16 +61,26 @@ export default {
     text-decoration: none;
   }
 
+  .about {
+    display: flex;
+    margin-top: 15px;
+  }
+
   p {
-    margin: 15px 0 0;
+    margin: 0 15px 0 0;
+    font-size: var(--font-size-regular);
     color: var(--text-700);
+
+    svg,
+    .language-color {
+      margin-right: 5px;
+    }
 
     .language-color {
       display: inline-block;
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      margin-right: 5px;
     }
   }
 }

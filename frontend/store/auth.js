@@ -15,6 +15,9 @@ export const state = () => ({
       discord: undefined,
       github: undefined,
     },
+
+    subscription: undefined,
+    createdAt: undefined,
   },
 });
 

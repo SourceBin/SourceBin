@@ -22,6 +22,8 @@ export interface User extends mongoose.Document {
     stripeId?: string;
     plan: 'Free' | 'Pro';
   };
+
+  createdAt: Date;
 }
 
 const userSchema = new mongoose.Schema({

@@ -9,5 +9,7 @@ export function getUser(req: Request, res: Response): void {
     username: req.user.username,
     about: req.user.about,
     oauth: req.user.oauth,
+    subscription: req.user.subscription.plan,
+    createdAt: req.user.createdAt,
   });
 }
