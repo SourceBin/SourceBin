@@ -7,9 +7,29 @@
         class="avatar"
       >
 
-      <h1 class="username">
-        {{ auth.user.username }}
-      </h1>
+      <div class="info">
+        <p class="username">
+          {{ auth.user.username }}
+
+          <font-awesome-icon
+            :icon="['fas', 'crown']"
+            v-if="auth.user.subscription === 'Pro'"
+            class="crown"
+          />
+        </p>
+
+        <div class="stats">
+          <div>
+            <font-awesome-icon :icon="['fas', 'calendar-day']" />
+            {{ joinDate }}
+          </div>
+
+          <div>
+            <font-awesome-icon :icon="['fas', 'file']" />
+            {{ bins.length }}
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="bins">
@@ -28,12 +48,19 @@ import Mousetrap from 'mousetrap';
 
 import BinCard from '@/components/BinCard.vue';
 
+import { formatDate } from '@/assets/utils/date.js';
+
 export default {
   components: {
     BinCard,
   },
   middleware: 'auth',
-  computed: mapState(['auth']),
+  computed: {
+    joinDate() {
+      return formatDate(new Date(this.auth.user.createdAt));
+    },
+    ...mapState(['auth']),
+  },
   async asyncData({ $axios }) {
     const bins = await $axios.$get('/api/user/bins');
 
@@ -56,55 +83,88 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import 'sass-mq';
+@import '@/assets/styles/_variables.scss';
+
+$border-radius: 5px;
 
 .account {
-  display: flex;
-  align-items: flex-start;
-  align-self: center;
   margin: 0 var(--margin-side);
   padding-bottom: 15px;
   font-family: var(--font-family);
-
-  @include mq($until: desktop) {
-    flex-direction: column;
-  }
 }
 
 .about {
-  margin: 0 75px 25px 0;
+  display: flex;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 20px 0;
+  background-color: var(--background-panel);
+  border-radius: $border-radius;
 
   @include mq($until: tablet) {
-    margin-right: 0;
-    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .avatar {
     width: 100%;
     height: 100%;
-    max-width: 300px;
-    margin-bottom: 10px;
+    max-width: 100px;
+    border-radius: 50%;
+    margin: 0 var(--margin-side);
 
     @include mq($until: tablet) {
-      width: 75px;
-      margin-bottom: 0;
-      margin-right: 10px;
+      margin-bottom: 15px;
     }
   }
 
-  .username {
-    margin: 0;
-    color: var(--text-800);
+  .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .username {
+      margin: 0 0 15px;
+      font-size: var(--font-size-header);
+      color: var(--text-900);
+
+      @include mq($until: tablet) {
+        padding: 0 var(--margin-side);
+      }
+
+      .crown {
+        height: 100%;
+        vertical-align: top;
+        font-size: var(--font-size-big);
+        color: $gold;
+      }
+    }
+
+    .stats {
+      display: inline-flex;
+      color: var(--text-700);
+
+      @include mq($until: tablet) {
+        justify-content: center;
+      }
+
+      div {
+        margin-right: 15px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
+      svg {
+        margin-right: 5px;
+      }
+    }
   }
 }
 
 .bins {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(200px, 400px));
-  grid-gap: 20px;
-
-  @include mq($until: tablet) {
-    grid-template-columns: minmax(200px, 400px);
-  }
+  display: flex;
+  flex-direction: column;
 }
 </style>
