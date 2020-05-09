@@ -32,12 +32,12 @@ export default {
 @import 'sass-mq';
 @import 'github-markdown-css';
 @import 'highlight.js/styles/atom-one-dark.css';
-@import '@/assets/_globals.scss';
+@import '@/assets/styles/_variables.scss';
 
 $hljs-theme-background: #282c34;
 
 .markdown-body {
-  background-color: $white;
+  background-color: $white-900;
   padding: 45px;
 
   @include mq($until: tablet) {

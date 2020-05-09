@@ -23,44 +23,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import 'sass-mq';
-@import '@/assets/_globals.scss';
+@import '@/assets/styles/_variables.scss';
 
-$font-size: 17px;
-$font-size-small: 15px;
 $border-radius: 3px;
 
 .actions {
-  margin: 0 $margin-side;
+  margin: 0 var(--margin-side);
   display: flex;
   justify-content: flex-end;
-
-  @include mq($until: desktop) {
-    margin: 0 $margin-side-small;
-  }
 }
 
 button {
   margin-right: 15px;
   padding: 10px 25px;
   border: none;
-  font-family: $font-family;
-  font-size: $font-size;
-  color: rgba($white, 0.8);
-  background-color: $gray;
+  font-family: var(--font-family);
+  font-size: var(--font-size-big);
+  color: var(--text-900);
+  background-color: var(--background-panel);
   border-radius: $border-radius;
   cursor: pointer;
-
-  @include mq($until: tablet) {
-    font-size: $font-size-small;
-  }
 
   &:focus {
     outline-color: $red;
   }
 
   &:hover {
-    background-color: $light-gray;
+    background-color: var(--background-light);
   }
 
   &:last-child {

@@ -32,28 +32,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/_globals.scss';
-
-$name-font-size: 18px;
+@import '@/assets/styles/_variables.scss';
 
 .bin-card {
   padding: 10px 15px;
   display: inline-block;
   max-width: 400px;
-  font-family: $font-family;
-  border: 1px solid rgba($white, 0.5);
+  font-family: var(--font-family);
+  border: 1px solid var(--background-light);
   border-radius: 3px;
 
   a {
-    font-size: $name-font-size;
+    font-size: var(--font-size-big);
     font-weight: 500;
-    color: rgba($blue, 0.9);
+    color: $blue;
     text-decoration: none;
   }
 
   p {
     margin: 15px 0 0;
-    color: rgba($white, 0.7);
+    color: var(--text-700);
 
     .language-color {
       display: inline-block;

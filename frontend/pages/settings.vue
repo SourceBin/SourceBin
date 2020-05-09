@@ -56,9 +56,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/_globals.scss';
-
 .settings {
-  font-family: $font-family;
+  font-family: var(--font-family);
 }
 </style>

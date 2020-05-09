@@ -22,7 +22,6 @@ export default {
 
 <style lang="scss" scoped>
 @import 'sass-mq';
-@import '@/assets/_globals.scss';
 
 .error {
   margin: 25px 0;
@@ -40,8 +39,8 @@ img {
 }
 
 h1 {
-  font-family: $font-family;
-  color: $white;
+  font-family: var(--font-family);
+  color: var(--text-800);
   opacity: 0.9;
   text-align: center;
 }

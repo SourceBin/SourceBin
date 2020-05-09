@@ -83,8 +83,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/_globals.scss';
-
 .homepage {
   flex: 1;
   display: flex;

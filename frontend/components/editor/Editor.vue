@@ -139,14 +139,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/_globals.scss';
-
 .editor {
   flex: 1;
   display: flex;
   flex-direction: column;
   margin: 0 0 15px;
-  background: $gray;
+  background: var(--background-panel);
   overflow: hidden;
 }
 

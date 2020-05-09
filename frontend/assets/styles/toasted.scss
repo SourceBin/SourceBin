@@ -1,0 +1,16 @@
+@import './_variables.scss';
+
+.toasted.toasted-primary {
+  font-family: var(--font-family) !important;
+  font-size: var(--font-size-big) !important;
+
+  &.success {
+    background-color: $green !important;
+    color: $black-900 !important;
+  }
+
+  &.error {
+    background-color: $red !important;
+    color: $white-900 !important;
+  }
+}

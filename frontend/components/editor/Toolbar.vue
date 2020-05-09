@@ -135,24 +135,20 @@ export default {
 
 <style lang="scss" scoped>
 @import 'sass-mq';
-@import '@/assets/_globals.scss';
 
-$height: 40px;
-$height-small: 30px;
-
-$font-size: 15px;
-$font-size-small: 13px;
-
-$border: 1px solid $light-gray;
+$border: 1px solid var(--background-light);
 
 .toolbar {
+  --height: 40px;
+
   display: flex;
   justify-content: space-between;
-  font-family: $font-family;
-  font-size: $font-size;
+  font-family: var(--font-family);
+  font-size: var(--font-size-regular);
 
   @include mq($until: tablet) {
-    font-size: $font-size-small;
+    --height: 30px;
+
     flex-direction: column;
   }
 
@@ -170,19 +166,18 @@ $border: 1px solid $light-gray;
 
   li {
     float: left;
-    padding: 0 15px;
-    color: $white;
+    padding: 0 calc(var(--margin-side) / 2);
+    color: var(--text-800);
     opacity: 0.8;
-    line-height: $height;
+    line-height: var(--height);
     cursor: pointer;
 
     @include mq($until: tablet) {
-      padding: 0 10px;
-      line-height: $height-small;
+      padding: 0 var(--margin-side);
     }
 
     &:hover {
-      background-color: $light-gray;
+      background-color: var(--background-light);
     }
 
     &.language {
@@ -195,25 +190,21 @@ $border: 1px solid $light-gray;
 
 .overlay div {
   border-radius: 5px;
-  padding: 25px;
+  padding: var(--margin-side);
   width: 100%;
   max-width: 500px;
-  background-color: $black;
-
-  @include mq($until: tablet) {
-    padding: 10px;
-  }
+  background-color: var(--background);
 
   h1 {
     margin: 0 0 15px;
-    color: rgba($white, 0.9);
+    color: var(--text-800);
   }
 
   input {
     padding: 10px;
     width: 100%;
-    background-color: $gray;
-    color: rgba($white, 0.8);
+    background-color: var(--background-panel);
+    color: var(--text-700);
     border: none;
     border-radius: 3px;
     outline: none;

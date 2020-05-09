@@ -18,17 +18,17 @@
             @click.native="$store.commit('bin/reset')"
             to="/"
           >
-            <PlusIcon />
+            <font-awesome-icon :icon="['fas', 'plus']" />
           </nuxt-link>
         </li>
         <li>
           <nuxt-link to="/settings">
-            <TuneIcon />
+            <font-awesome-icon :icon="['fas', 'sliders-h']" />
           </nuxt-link>
         </li>
         <li>
           <nuxt-link to="/account">
-            <AccountIcon />
+            <font-awesome-icon :icon="['fas', 'user']" />
           </nuxt-link>
         </li>
       </ul>
@@ -36,41 +36,23 @@
   </header>
 </template>
 
-<script>
-import PlusIcon from 'mdi-vue/Plus.vue';
-import TuneIcon from 'mdi-vue/Tune.vue';
-import AccountIcon from 'mdi-vue/Account.vue';
-
-export default {
-  components: {
-    PlusIcon,
-    TuneIcon,
-    AccountIcon,
-  },
-};
-</script>
-
 <style lang="scss" scoped>
 @import 'sass-mq';
-@import '@/assets/_globals.scss';
-
-$height: 50px;
-
-$font-size: 20px;
-$font-size-title: 25px;
-$font-size-small: 17px;
 
 nav {
-  margin: 0 $margin-side;
-  height: $height;
+  --height: 50px;
+  --icon-size: 20px;
+
   display: flex;
   justify-content: space-between;
-  font-family: $font-family;
-  font-size: $font-size;
+  margin: 0 var(--margin-side);
+  height: var(--height);
+  font-family: var(--font-family);
+  font-size: var(--font-size-header);
 
-  @include mq($until: desktop) {
-    margin: 0 $margin-side-small;
-    font-size: $font-size-small;
+  @include mq($until: tablet) {
+    --height: 40px;
+    --icon-size: 18px;
   }
 }
 
@@ -78,30 +60,30 @@ ul {
   margin: 0;
   padding: 0;
   list-style: none;
-}
 
-li {
-  float: left;
-  margin-right: 15px;
-  line-height: $height;
+  li {
+    float: left;
+    margin-right: 20px;
+    line-height: var(--height);
 
-  &:last-child {
-    margin-right: 0;
+    &:last-child {
+      margin-right: 0;
+    }
+
+    a {
+      display: block;
+      color: var(--text-700);
+      text-decoration: none;
+
+      &.title {
+        font-weight: 700;
+      }
+
+      svg {
+        height: var(--height);
+        font-size: var(--icon-size);
+      }
+    }
   }
-
-  .mdi {
-    vertical-align: -0.25em;
-  }
-}
-
-a {
-  color: $white;
-  opacity: 0.9;
-  text-decoration: none;
-}
-
-.title {
-  font-weight: 700;
-  font-size: $font-size-title;
 }
 </style>
