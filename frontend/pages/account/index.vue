@@ -32,7 +32,7 @@ export default {
   components: {
     BinCard,
   },
-  middleware: 'authenticated',
+  middleware: 'auth',
   computed: mapState(['auth']),
   async asyncData({ $axios }) {
     const bins = await $axios.$get('/api/user/bins');
@@ -57,19 +57,17 @@ export default {
 
 <style lang="scss" scoped>
 @import 'sass-mq';
-@import '@/assets/_globals.scss';
 
 .account {
   display: flex;
   align-items: flex-start;
   align-self: center;
-  margin: 0 $margin-side;
+  margin: 0 var(--margin-side);
   padding-bottom: 15px;
-  font-family: $font-family;
+  font-family: var(--font-family);
 
   @include mq($until: desktop) {
     flex-direction: column;
-    margin: 0 $margin-side-small;
   }
 }
 
@@ -96,7 +94,7 @@ export default {
 
   .username {
     margin: 0;
-    color: rgba($white, 0.7);
+    color: var(--text-800);
   }
 }
 

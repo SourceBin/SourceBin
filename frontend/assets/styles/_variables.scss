@@ -1,0 +1,47 @@
+/* stylelint-disable custom-property-empty-line-before */
+
+@import 'sass-mq';
+
+$black-900: #0d0d0d;
+$black-800: #1a1a1a;
+$black-700: #272727;
+$black-600: #343434;
+
+$white-900: #f2f2f2;
+$white-800: #d9d9d9;
+$white-700: #c0c0c0;
+
+$red: #c5302d;
+$green: #00e015;
+$blue: #3c98ffe6;
+
+html {
+  --background-dark: #{$black-900};
+  --background: #{$black-800};
+  --background-panel: #{$black-700};
+  --background-light: #{$black-600};
+
+  --text-900: #{$white-900};
+  --text-800: #{$white-800};
+  --text-700: #{$white-700};
+
+  --font-family: 'Roboto', sans-serif;
+
+  --font-size-header: 32px;
+  --font-size-large: 25px;
+  --font-size-big: 17px;
+  --font-size-regular: 15px;
+  --font-size-small: 13px;
+
+  --margin-side: 30px;
+
+  @include mq($until: tablet) {
+    --font-size-header: 25px;
+    --font-size-large: 18px;
+    --font-size-big: 15px;
+    --font-size-regular: 13px;
+    --font-size-small: 10px;
+
+    --margin-side: 10px;
+  }
+}

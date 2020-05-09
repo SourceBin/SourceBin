@@ -157,9 +157,6 @@ export default {
 
 <style lang="scss" scoped>
 @import 'sass-mq';
-@import '@/assets/_globals.scss';
-
-$font-size: 17px;
 
 .options {
   display: grid;
@@ -170,7 +167,7 @@ $font-size: 17px;
 
   @include mq($until: tablet) {
     grid-template-columns: 1fr;
-    margin: 0 $margin-side-small;
+    margin: 0 var(--margin-side);
     width: auto;
   }
 
@@ -179,8 +176,8 @@ $font-size: 17px;
 
     dt {
       margin-bottom: 5px;
-      font-size: $font-size;
-      color: rgba($white, 0.8);
+      font-size: var(--font-size-big);
+      color: var(--text-800);
       font-weight: 500;
     }
 

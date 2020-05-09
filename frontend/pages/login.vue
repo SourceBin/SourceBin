@@ -29,24 +29,29 @@
   </div>
 </template>
 
+<script>
+export default {
+  middleware: 'unauth',
+};
+</script>
+
 <style lang="scss" scoped>
-@import '@/assets/_globals.scss';
+@import '@/assets/styles/_variables.scss';
 
 $discord-background: rgba(#7289da, 0.7);
-$github-background: rgba($gray, 0.7);
+$github-background: rgba($black-700, 0.7);
 
-$provider-font-size: 20px;
-$provider-icon-font-size: 25px;
+$provider-icon-font-size: 30px;
 
 .login-container {
-  margin: 75px $margin-side-small;
+  margin: 75px var(--margin-side);
   align-self: center;
-  font-family: $font-family;
+  font-family: var(--font-family);
 }
 
 .error {
   padding: 20px 25px;
-  color: rgba($white, 0.9);
+  color: $white-900;
   background-color: $red;
   text-align: center;
   border-radius: 3px;
@@ -55,7 +60,7 @@ $provider-icon-font-size: 25px;
 .login {
   h1 {
     margin: 0 0 15px;
-    color: rgba($white, 0.9);
+    color: var(--text-800);
     text-align: center;
   }
 }
@@ -69,7 +74,7 @@ $provider-icon-font-size: 25px;
     grid-template-columns: auto 1fr;
     margin: 3px 0;
     padding: 10px 20px;
-    color: rgba($white, 0.8);
+    color: var(--text-900);
     text-decoration: none;
 
     svg {
@@ -80,7 +85,7 @@ $provider-icon-font-size: 25px;
     span {
       text-align: center;
       vertical-align: middle;
-      font-size: $provider-font-size;
+      font-size: var(--font-size-large);
     }
 
     &.discord {

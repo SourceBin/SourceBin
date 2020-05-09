@@ -17,11 +17,11 @@ export default {
 
 <style lang="scss">
 @import 'normalize.css';
-@import '@/assets/_globals.scss';
-@import '@/assets/_toasted.scss';
+@import '@/assets/styles/toasted.scss';
+@import '@/assets/styles/_variables.scss';
 
-$scrollbar-background: lighten($black, 2%);
-$scrollbar-color: $light-gray;
+$scrollbar-background: darken($black-800, 2%);
+$scrollbar-color: $black-700;
 
 *,
 *::before,
@@ -40,7 +40,7 @@ body,
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  background-color: $black;
+  background-color: var(--background);
 }
 
 body {

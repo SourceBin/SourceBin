@@ -67,7 +67,7 @@ export default {
       return `$${(value / 100).toFixed(2)}`;
     },
   },
-  middleware: 'authenticated',
+  middleware: 'auth',
   data() {
     return {
       errors: {

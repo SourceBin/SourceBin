@@ -205,31 +205,28 @@ export default {
 
 <style lang="scss" scoped>
 @import 'sass-mq';
-@import '@/assets/_globals.scss';
 
-$font-size-title: 30px;
 $font-size-close: 20px;
-$font-size-option: 18px;
 
-$input-border: 1px solid rgba($white, 0.8);
-$option-border: 1px solid darken($black, 5%);
+$input-border: 1px solid var(--text-700);
+$option-border: 1px solid var(--background-dark);
 
 .content {
   position: relative;
   display: flex;
   flex-direction: column;
-  font-family: $font-family;
+  font-family: var(--font-family);
   width: 100%;
   max-width: 1000px;
   height: 100%;
-  background: $black;
-  color: rgba($white, 0.9);
+  background: var(--background);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   padding: 25px 100px;
+  color: var(--text-900);
 
   @include mq($until: tablet) {
     flex-direction: column;
@@ -240,7 +237,7 @@ $option-border: 1px solid darken($black, 5%);
 
 h1 {
   margin: 0;
-  font-size: $font-size-title;
+  font-size: var(--font-size-header);
   font-weight: 500;
   cursor: default;
   user-select: none;
@@ -250,11 +247,10 @@ input {
   padding: 8px 2px 2px;
   width: 250px;
   background: transparent;
-  color: rgba($white, 0.8);
+  color: var(--text-800);
   outline: none;
   border: none;
   border-bottom: $input-border;
-  font-family: $font-family;
 }
 
 a {
@@ -273,10 +269,11 @@ ul {
   height: 100%;
   list-style: none;
   overflow-y: auto;
+  color: var(--text-800);
 }
 
 li {
-  font-size: $font-size-option;
+  font-size: var(--font-size-big);
   padding: 10px 20px;
   cursor: pointer;
   user-select: none;
@@ -287,7 +284,7 @@ li {
   }
 
   &.selected {
-    background: $gray;
+    background: var(--background-panel);
   }
 }
 </style>

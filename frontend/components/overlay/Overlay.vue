@@ -24,7 +24,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/_globals.scss';
+@import '@/assets/styles/_variables.scss';
 
 $z-index: 100000;
 
@@ -38,6 +38,6 @@ $z-index: 100000;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba($white, 0.1);
+  background: rgba($white-900, 0.15);
 }
 </style>
