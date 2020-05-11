@@ -10,8 +10,10 @@ import { requiredAuth } from '../middleware/authenticate';
 import { getCustomer } from '../controllers/billing/getCustomer';
 import { getPlan } from '../controllers/billing/getPlan';
 import { getCoupon } from '../controllers/billing/getCoupon';
+import { getUpcomingInvoice } from '../controllers/billing/getUpcomingInvoice';
 import { subscribe } from '../controllers/billing/subscribe';
 import { cancel } from '../controllers/billing/cancel';
+import { reenable } from '../controllers/billing/reenable';
 import { webhook } from '../controllers/billing/webhook';
 
 const router = Router();
@@ -35,6 +37,13 @@ router.get(
   getCoupon,
 );
 
+router.get(
+  '/upcoming-invoice/',
+  // TODO: ratelimit
+  requiredAuth,
+  getUpcomingInvoice,
+);
+
 router.post(
   '/subscribe',
   requiredAuth,
@@ -48,6 +57,13 @@ router.delete(
   requiredAuth,
   rateLimit(rateLimits.billing.cancel),
   cancel,
+);
+
+router.post(
+  '/reenable',
+  requiredAuth,
+  // TODO: ratelimit
+  reenable,
 );
 
 router.post(
