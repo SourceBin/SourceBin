@@ -81,6 +81,8 @@ export default {
   ],
 
   plugins: [
+    { src: '@/plugins/filters.js' },
+
     { src: '@/plugins/localStorage.js', mode: 'client' },
     { src: '@/plugins/stripe.js', mode: 'client' },
 

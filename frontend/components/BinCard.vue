@@ -14,14 +14,13 @@
 
       <p>
         <font-awesome-icon :icon="['fas', 'calendar-day']" />
-        {{ createdDate }}
+        {{ bin.created | date }}
       </p>
     </div>
   </div>
 </template>
 
 <script>
-import { formatDate } from '@/assets/utils/date.js';
 import { getLanguageById } from '@/assets/language.js';
 
 export default {
@@ -34,9 +33,6 @@ export default {
   computed: {
     language() {
       return getLanguageById(this.bin.files[0].languageId);
-    },
-    createdDate() {
-      return formatDate(new Date(this.bin.created));
     },
   },
 };

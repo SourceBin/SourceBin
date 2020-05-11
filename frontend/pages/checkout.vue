@@ -59,14 +59,6 @@
 import { debounce } from 'lodash-es';
 
 export default {
-  filters: {
-    capitalize(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    },
-    currency(value) {
-      return `$${(value / 100).toFixed(2)}`;
-    },
-  },
   middleware: 'auth',
   data() {
     return {

@@ -21,7 +21,7 @@
         <div class="stats">
           <div>
             <font-awesome-icon :icon="['fas', 'calendar-day']" />
-            {{ joinDate }}
+            {{ auth.user.createdAt | date }}
           </div>
 
           <div>
@@ -48,19 +48,12 @@ import Mousetrap from 'mousetrap';
 
 import BinCard from '@/components/BinCard.vue';
 
-import { formatDate } from '@/assets/utils/date.js';
-
 export default {
   components: {
     BinCard,
   },
   middleware: 'auth',
-  computed: {
-    joinDate() {
-      return formatDate(new Date(this.auth.user.createdAt));
-    },
-    ...mapState(['auth']),
-  },
+  computed: mapState(['auth']),
   async asyncData({ $axios }) {
     const bins = await $axios.$get('/api/user/bins');
 

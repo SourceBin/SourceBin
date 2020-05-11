@@ -7,7 +7,9 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
 });
 
 export async function getCustomer(id: string): Promise<Stripe.Customer> {
-  const customer = await stripe.customers.retrieve(id);
+  const customer = await stripe.customers.retrieve(id, {
+    expand: ['subscriptions.data.default_payment_method'],
+  });
 
   if (customer.deleted) {
     throw new Error('Customer is deleted');
