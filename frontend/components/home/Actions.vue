@@ -40,7 +40,7 @@ button {
   font-family: var(--font-family);
   font-size: var(--font-size-big);
   color: var(--text-900);
-  background-color: var(--background-panel);
+  background-color: var(--background-secondary);
   border-radius: $border-radius;
   cursor: pointer;
 
@@ -49,7 +49,7 @@ button {
   }
 
   &:hover {
-    background-color: var(--background-light);
+    background-color: var(--background-modifier-hover);
   }
 
   &:last-child {

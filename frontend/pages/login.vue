@@ -38,8 +38,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/styles/_variables.scss';
 
-$discord-background: rgba(#7289da, 0.7);
-$github-background: rgba($black-700, 0.7);
+$discord-background: #7289da;
+$github-background: $black-800;
 
 $provider-icon-font-size: 30px;
 

@@ -37,7 +37,7 @@ export default {
 $hljs-theme-background: #282c34;
 
 .markdown-body {
-  background-color: $white-900;
+  background-color: $white-800;
   padding: 45px;
 
   @include mq($until: tablet) {

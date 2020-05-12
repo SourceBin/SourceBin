@@ -2,29 +2,38 @@
 
 @import 'sass-mq';
 
-$black-900: #0d0d0d;
-$black-800: #1a1a1a;
-$black-700: #272727;
-$black-600: #343434;
+$black-900: #000;
+$black-800: #0d0d0d;
+$black-700: #1a1a1a;
+$black-600: #272727;
+$black-500: #343434;
 
-$white-900: #f2f2f2;
-$white-800: #d9d9d9;
-$white-700: #c0c0c0;
+$gray-900: #191a1c;
+$gray-800: #25272c;
+$gray-700: #303238;
+$gray-600: #434852;
 
-$red: #f04747;
-$green: #00e015;
-$blue: #3c98ffe6;
+$white-900: #fff;
+$white-800: #f2f2f2;
+$white-700: #d9d9d9;
+$white-600: #c0c0c0;
+
+$red: #b00020;
+$green: #00d114;
+$blue: #3cb1ff;
 $gold: #ffb800;
 
 html {
-  --background-dark: #{$black-900};
-  --background: #{$black-800};
-  --background-panel: #{$black-700};
-  --background-light: #{$black-600};
+  --background-primary: #{$gray-800};
+  --background-secondary: #{$gray-900};
+  --background-tertiary: #{$gray-700};
 
-  --text-900: #{$white-900};
-  --text-800: #{$white-800};
-  --text-700: #{$white-700};
+  --background-modifier-hover: #{rgba($gray-600, 0.2)};
+  --background-modifier-accent: #{rgba($white-900, 0.05)};
+
+  --text-900: #{$white-800};
+  --text-800: #{$white-700};
+  --text-700: #{$white-600};
 
   --font-family: 'Roboto', sans-serif;
 

@@ -71,7 +71,7 @@ export default {
   padding: var(--margin-side);
   width: 100%;
   max-width: 500px;
-  background-color: var(--background);
+  background-color: var(--background-primary);
 
   h1 {
     text-transform: uppercase;
@@ -109,7 +109,7 @@ export default {
 
       &.confirm {
         background-color: $red;
-        color: $white-900;
+        color: $white-800;
       }
     }
   }

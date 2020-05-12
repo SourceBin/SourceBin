@@ -91,7 +91,7 @@ $border-radius: 5px;
   width: 100%;
   margin-bottom: 15px;
   padding: 20px 0;
-  background-color: var(--background-panel);
+  background-color: var(--background-secondary);
   border-radius: $border-radius;
 
   @include mq($until: tablet) {
