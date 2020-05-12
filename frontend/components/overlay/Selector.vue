@@ -209,7 +209,7 @@ export default {
 $font-size-close: 20px;
 
 $input-border: 1px solid var(--text-700);
-$option-border: 1px solid var(--background-dark);
+$option-border: 1px solid var(--background-modifier-accent);
 
 .content {
   position: relative;
@@ -219,7 +219,7 @@ $option-border: 1px solid var(--background-dark);
   width: 100%;
   max-width: 1000px;
   height: 100%;
-  background: var(--background);
+  background: var(--background-primary);
 }
 
 .header {
@@ -284,7 +284,7 @@ li {
   }
 
   &.selected {
-    background: var(--background-panel);
+    background: var(--background-tertiary);
   }
 }
 </style>

@@ -19,9 +19,7 @@ export default {
 @import 'normalize.css';
 @import '@/assets/styles/toasted.scss';
 @import '@/assets/styles/_variables.scss';
-
-$scrollbar-background: darken($black-800, 2%);
-$scrollbar-color: $black-700;
+@import '@/assets/styles/_scrollbar.scss';
 
 *,
 *::before,
@@ -40,36 +38,8 @@ body,
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  background-color: var(--background);
+  background-color: var(--background-primary);
 }
 
-body {
-  scrollbar-width: thin;
-  scrollbar-color: $scrollbar-color $scrollbar-background;
-}
-
-::-webkit-scrollbar {
-  width: 12px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-corner {
-  background: $scrollbar-background;
-}
-
-::-webkit-scrollbar-track {
-  background: $scrollbar-background;
-}
-
-::-webkit-scrollbar-thumb {
-  border: 4px solid $scrollbar-background;
-  border-radius: 7px;
-  background: $scrollbar-color;
-  background-clip: content-box;
-
-  &:active {
-    border: none;
-    border-radius: 0;
-  }
-}
+@include scrollbar(var(--background-secondary), var(--background-primary));
 </style>

@@ -38,6 +38,6 @@ $z-index: 100000;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba($white-900, 0.15);
+  background: rgba($white-800, 0.15);
 }
 </style>

@@ -184,7 +184,7 @@ $border-radius: 5px;
 .subscription {
   margin-bottom: 15px;
   padding: 20px 30px;
-  background-color: var(--background-panel);
+  background-color: var(--background-secondary);
   border-radius: $border-radius;
 
   h1 {
@@ -204,7 +204,7 @@ $border-radius: 5px;
   button {
     border-radius: $border-radius;
     background-color: inherit;
-    border: 1px solid var(--background-light);
+    border: 1px solid var(--background-modifier-accent);
     font-size: var(--font-size-big);
     color: var(--text-700);
     padding: 10px 15px;
@@ -216,20 +216,20 @@ $border-radius: 5px;
     }
 
     &:hover {
-      background-color: var(--background-light);
+      background-color: var(--background-modifier-hover);
     }
 
     &.reenable,
     &.reenable:hover {
       background-color: $red;
-      color: $white-900;
+      color: $white-800;
     }
   }
 
   a {
     display: inline-block;
     background-color: $red;
-    color: $white-900;
+    color: $white-800;
     font-size: var(--font-size-big);
     text-decoration: none;
     border-radius: $border-radius;
@@ -248,7 +248,7 @@ $border-radius: 5px;
 
   div {
     padding: 20px 30px;
-    background-color: var(--background-panel);
+    background-color: var(--background-secondary);
     border-radius: $border-radius;
 
     h1 {

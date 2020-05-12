@@ -136,7 +136,7 @@ export default {
 <style lang="scss" scoped>
 @import 'sass-mq';
 
-$border: 1px solid var(--background-light);
+$border: 1px solid var(--background-modifier-accent);
 
 .toolbar {
   --height: 40px;
@@ -177,7 +177,7 @@ $border: 1px solid var(--background-light);
     }
 
     &:hover {
-      background-color: var(--background-light);
+      background-color: var(--background-modifier-hover);
     }
 
     &.language {
@@ -193,7 +193,7 @@ $border: 1px solid var(--background-light);
   padding: var(--margin-side);
   width: 100%;
   max-width: 500px;
-  background-color: var(--background);
+  background-color: var(--background-primary);
 
   h1 {
     margin: 0 0 15px;
@@ -203,7 +203,7 @@ $border: 1px solid var(--background-light);
   input {
     padding: 10px;
     width: 100%;
-    background-color: var(--background-panel);
+    background-color: var(--background-secondary);
     color: var(--text-700);
     border: none;
     border-radius: 3px;

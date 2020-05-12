@@ -1,0 +1,31 @@
+@mixin scrollbar ($color, $background) {
+  body {
+    scrollbar-width: thin;
+    scrollbar-color: $color $background;
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: $background;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 4px solid $background;
+    border-radius: 7px;
+    background: $color;
+    background-clip: content-box;
+
+    &:active {
+      border: none;
+      border-radius: 0;
+    }
+  }
+}

@@ -44,7 +44,7 @@ export default {
 .bin-card {
   padding: 15px var(--margin-side);
   font-family: var(--font-family);
-  border-bottom: 1px solid var(--background-dark);
+  border-bottom: 1px solid var(--background-modifier-accent);
 
   &:last-child {
     border-bottom: none;

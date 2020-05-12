@@ -144,7 +144,7 @@ export default {
   display: flex;
   flex-direction: column;
   margin: 0 0 15px;
-  background: var(--background-panel);
+  background: var(--background-secondary);
   overflow: hidden;
 }
 
