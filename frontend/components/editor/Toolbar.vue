@@ -8,8 +8,15 @@
         {{ languageName || 'None' }}
       </li>
 
-      <li @click="showNameOverlay">
-        {{ file.name || 'untitled' }}
+      <li @click="editFilename = true">
+        <InlineEditable
+          :editable.sync="editFilename"
+
+          v-model="filename"
+          placeholder="Filename"
+        >
+          {{ filename || 'untitled' }}
+        </InlineEditable>
       </li>
     </ul>
 
@@ -39,23 +46,6 @@
         Raw
       </li>
     </ul>
-
-    <Overlay
-      :visible="nameOverlay"
-      @close="nameOverlay = false"
-    >
-      <div>
-        <h1>Enter a filename</h1>
-
-        <input
-          ref="nameInput"
-          @keyup.enter="nameOverlay = false"
-          v-model="filename"
-          type="text"
-          spellcheck="false"
-        >
-      </div>
-    </Overlay>
   </div>
 </template>
 
@@ -63,7 +53,7 @@
 import { mapState } from 'vuex';
 import clipboardCopy from 'clipboard-copy';
 
-import Overlay from '@/components/overlay/Overlay.vue';
+import InlineEditable from '@/components/InlineEditable.vue';
 
 import { getParser } from '@/assets/beautify/beautify.js';
 import { isMarkdown } from '@/assets/markdown/markdown.js';
@@ -71,7 +61,7 @@ import { promptLanguageSelect } from '@/assets/language.js';
 
 export default {
   components: {
-    Overlay,
+    InlineEditable,
   },
   props: {
     fileIndex: {
@@ -86,7 +76,7 @@ export default {
   },
   data() {
     return {
-      nameOverlay: false,
+      editFilename: false,
     };
   },
   computed: {
@@ -115,10 +105,6 @@ export default {
       await promptLanguageSelect(this.$store, this.fileIndex);
 
       this.$emit('focus');
-    },
-    showNameOverlay() {
-      this.nameOverlay = true;
-      this.$nextTick(() => this.$refs.nameInput.focus());
     },
     async copy() {
       await clipboardCopy(this.file.content);
@@ -185,29 +171,6 @@ $border: 1px solid var(--background-modifier-accent);
       text-align: center;
       border-right: $border;
     }
-  }
-}
-
-.overlay div {
-  border-radius: 5px;
-  padding: var(--margin-side);
-  width: 100%;
-  max-width: 500px;
-  background-color: var(--background-primary);
-
-  h1 {
-    margin: 0 0 15px;
-    color: var(--text-800);
-  }
-
-  input {
-    padding: 10px;
-    width: 100%;
-    background-color: var(--background-secondary);
-    color: var(--text-700);
-    border: none;
-    border-radius: 3px;
-    outline: none;
   }
 }
 </style>
