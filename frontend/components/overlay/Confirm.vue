@@ -110,6 +110,10 @@ export default {
       &.confirm {
         background-color: $red;
         color: $white-800;
+
+        &:hover {
+          background-color: $red-modifier-hover;
+        }
       }
     }
   }
