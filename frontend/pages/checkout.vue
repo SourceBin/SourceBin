@@ -232,7 +232,9 @@ export default {
       try {
         subscription = await this.$axios.$post('/api/billing/subscribe', {
           plan: this.plan.id,
-          coupon: this.coupon.id,
+          coupon: this.coupon
+            ? this.coupon.id
+            : undefined,
           paymentMethod: paymentMethod.id,
         });
       } catch (err) {

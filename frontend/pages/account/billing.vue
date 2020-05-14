@@ -38,15 +38,19 @@
       <div class="information">
         <h1>Billing Information</h1>
 
-        <p v-if="upcomingInvoice">
-          Your subscription will automatically renew on
-          <strong>{{ upcomingInvoice.period_end * 1000 | date }}</strong> and you'll be
-          charged <strong>{{ upcomingInvoice.total | currency }}</strong>.
+        <div v-if="upcomingInvoice">
+          <p>
+            Your subscription will automatically renew on
+            <strong>{{ upcomingInvoice.period_end * 1000 | date }}</strong> and you'll be
+            charged <strong>{{ upcomingInvoice.total | currency }}</strong>.
+          </p>
 
-          The coupon <strong>{{ discount.coupon.id }}</strong> is applied to all your payments
-          <span v-if="discount.end">till <strong>{{ discount.end * 1000 | date }}</strong></span>
-          giving you a <strong>{{ amountOff }}</strong> discount.
-        </p>
+          <p v-if="discount">
+            The coupon <strong>{{ discount.coupon.id }}</strong> is applied to all your payments
+            <span v-if="discount.end">till <strong>{{ discount.end * 1000 | date }}</strong></span>
+            giving you a <strong>{{ amountOff }}</strong> discount.
+          </p>
+        </div>
 
         <p v-else-if="subscription.cancel_at">
           Your subscription is active till
@@ -219,10 +223,13 @@ $border-radius: 5px;
       background-color: var(--background-modifier-hover);
     }
 
-    &.reenable,
-    &.reenable:hover {
+    &.reenable {
       background-color: $red;
       color: $white-800;
+
+      &:hover {
+        background-color: $red-modifier-hover;
+      }
     }
   }
 
@@ -246,7 +253,7 @@ $border-radius: 5px;
     grid-template-columns: 1fr;
   }
 
-  div {
+  > div {
     padding: 20px 30px;
     background-color: var(--background-secondary);
     border-radius: $border-radius;
