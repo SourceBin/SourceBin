@@ -18,7 +18,7 @@ export async function getCustomer(id: string): Promise<Stripe.Customer> {
   }
 }
 
-export async function createCustomer(user: User, paymentMethod: string): Promise<Stripe.Customer> {
+export async function createCustomer(user: User, paymentMethod?: string): Promise<Stripe.Customer> {
   /* eslint-disable @typescript-eslint/camelcase */
   const customer = await stripe.customers.create({
     payment_method: paymentMethod,

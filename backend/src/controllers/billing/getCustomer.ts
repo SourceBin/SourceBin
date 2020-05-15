@@ -1,20 +1,23 @@
 import { Request, Response } from 'express';
 
 import { replyError } from '../../utils/errors';
-import { getCustomer as getStripeCustomer } from '../../utils/stripe';
+import { getCustomer as getStripeCustomer, createCustomer } from '../../utils/stripe';
 
 export async function getCustomer(req: Request, res: Response): Promise<void> {
   if (!req.user) {
     throw new Error('User unavailable after authentication');
   }
 
-  if (!req.user.subscription.stripeId) {
-    replyError(400, 'No customer', res);
-    return;
-  }
+  const { stripeId } = req.user.subscription;
 
   try {
-    const customer = await getStripeCustomer(req.user.subscription.stripeId);
+    let customer;
+
+    if (stripeId) {
+      customer = await getStripeCustomer(stripeId);
+    } else {
+      customer = await createCustomer(req.user);
+    }
 
     res.json(customer);
   } catch (err) {
