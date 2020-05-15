@@ -89,6 +89,16 @@
 <script>
 import Confirm from '@/components/overlay/Confirm.vue';
 
+async function fetchBilling($axios) {
+  const customer = await $axios.$get('/api/billing/customer');
+  const upcomingInvoice = await $axios.$get('/api/billing/upcoming-invoice').catch(() => undefined);
+
+  return {
+    customer,
+    upcomingInvoice,
+  };
+}
+
 export default {
   components: {
     Confirm,
@@ -151,23 +161,23 @@ export default {
       return `${this.discount.coupon.percent_off}%`;
     },
   },
-  async asyncData({ $axios }) {
-    const customer = await $axios.$get('/api/billing/customer');
-    const upcomingInvoice = await $axios.$get('/api/billing/upcoming-invoice').catch(() => undefined);
-
-    return {
-      customer,
-      upcomingInvoice,
-    };
+  asyncData({ $axios }) {
+    return fetchBilling($axios);
   },
   methods: {
+    async updateBilling() {
+      const { customer, upcomingInvoice } = await fetchBilling(this.$axios);
+
+      this.customer = customer;
+      this.upcomingInvoice = upcomingInvoice;
+    },
     async cancelSubscription() {
-      const res = await this.$axios.$delete('/api/billing/cancel');
-      console.log(res);
+      await this.$axios.$delete('/api/billing/cancel');
+      await this.updateBilling();
     },
     async reenableSubscription() {
-      const res = await this.$axios.$post('/api/billing/reenable');
-      console.log(res);
+      await this.$axios.$post('/api/billing/reenable');
+      await this.updateBilling();
     },
   },
 };
