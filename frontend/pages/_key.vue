@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="homepage">
+    <About />
     <Editors />
     <Actions />
 
@@ -12,6 +13,7 @@
 </template>
 
 <script>
+import About from '@/components/home/About.vue';
 import Editors from '@/components/home/Editors.vue';
 import Actions from '@/components/home/Actions.vue';
 
@@ -20,6 +22,7 @@ import { languageOptions } from '@/assets/selector/options.js';
 
 export default {
   components: {
+    About,
     Editors,
     Actions,
     Selector: () => import('@/components/overlay/Selector.vue'),

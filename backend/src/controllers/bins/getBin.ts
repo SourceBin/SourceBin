@@ -7,7 +7,7 @@ import { replyError } from '../../utils/errors';
 export async function getBin(req: Request, res: Response): Promise<void> {
   const bin = await BinModel
     .findOne({ key: req.params.key })
-    .select('-_id key files created')
+    .select('-_id key title description files created')
     .exec();
 
   if (bin) {
