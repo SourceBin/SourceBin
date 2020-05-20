@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="editable">
+  <div class="inline-editable">
     <input
       ref="input"
       v-if="editable"
@@ -64,12 +64,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.editable input {
+.inline-editable input {
   padding: 0;
-  width: 150px;
+  width: 100%;
   outline: none;
   border: none;
+  font-size: inherit;
+  font-weight: inherit;
   color: inherit;
   background-color: inherit;
+
+  &::placeholder {
+    color: var(--text-700);
+  }
 }
 </style>

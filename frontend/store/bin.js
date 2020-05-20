@@ -1,5 +1,8 @@
 export const state = () => ({
   key: undefined,
+  title: undefined,
+  description: undefined,
+  created: undefined,
 
   files: [{
     name: undefined,
@@ -13,6 +16,13 @@ export const state = () => ({
 export const mutations = {
   reset(s) {
     Object.assign(s, state());
+  },
+
+  setTitle(state, title) {
+    state.title = title;
+  },
+  setDescription(state, description) {
+    state.description = description;
   },
 
   setName(state, { name, file }) {
@@ -30,6 +40,9 @@ export const mutations = {
 
   loadFromKeySuccess(state, bin) {
     state.key = bin.key;
+    state.title = bin.title;
+    state.description = bin.description;
+    state.created = bin.created;
 
     state.files = bin.files.map(file => ({
       name: file.name,
@@ -82,6 +95,8 @@ export const actions = {
   },
   async save({ commit, state }) {
     const res = await this.$axios.$post('/api/bins', {
+      title: state.title,
+      description: state.description,
       files: state.files,
     });
 

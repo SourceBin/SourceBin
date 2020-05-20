@@ -10,6 +10,8 @@ export interface File extends mongoose.Document {
 
 export interface Bin extends mongoose.Document {
   key: string;
+  title?: string;
+  description?: string;
   owner?: User;
   files: File[];
   created: Date;
@@ -21,6 +23,9 @@ const binSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
+
+  title: String,
+  description: String,
 
   owner: {
     type: String,

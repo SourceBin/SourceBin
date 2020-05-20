@@ -10,6 +10,12 @@ import { replyError, replyJoiError } from '../../utils/errors';
 import * as config from '../../config';
 
 const schema = Joi.object({
+  title: Joi.string()
+    .max(config.bin.maxTitleLength),
+
+  description: Joi.string()
+    .max(config.bin.maxDescriptionLength),
+
   files: Joi.array()
     .length(1)
     .required()
@@ -49,6 +55,8 @@ export async function createBin(req: Request, res: Response): Promise<void> {
   try {
     const bin = await BinModel.create({
       key: await generateKey(),
+      title: req.body.title,
+      description: req.body.description,
       owner: req.user
         ? req.user._id
         : undefined,

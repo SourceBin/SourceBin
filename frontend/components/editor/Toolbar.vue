@@ -8,7 +8,11 @@
         {{ languageName || 'None' }}
       </li>
 
-      <li @click="editFilename = true">
+      <li
+        @click="editFilename = true"
+        :style="{ fontStyle: filename ? 'normal' : 'italic' }"
+        class="filename"
+      >
         <InlineEditable
           :editable.sync="editFilename"
 
@@ -85,7 +89,7 @@ export default {
     },
     filename: {
       get() {
-        return this.file.name;
+        return this.file.name || '';
       },
       set(name) {
         this.$store.commit('bin/setName', { name, file: this.fileIndex });
@@ -170,6 +174,10 @@ $border: 1px solid var(--background-modifier-accent);
       min-width: 150px;
       text-align: center;
       border-right: $border;
+    }
+
+    &.filename {
+      max-width: 150px;
     }
   }
 }
