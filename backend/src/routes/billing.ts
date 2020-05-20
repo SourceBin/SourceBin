@@ -21,25 +21,25 @@ const router = Router();
 router.get(
   '/customer',
   requiredAuth,
-  // TODO: ratelimit
+  rateLimit(rateLimits.billing.customer),
   getCustomer,
 );
 
 router.get(
   '/plan/:plan',
-  // TODO: ratelimit
+  rateLimit(rateLimits.billing.plan),
   getPlan,
 );
 
 router.get(
   '/coupon/:coupon',
-  // TODO: ratelimit
+  rateLimit(rateLimits.billing.coupon),
   getCoupon,
 );
 
 router.get(
   '/upcoming-invoice/',
-  // TODO: ratelimit
+  rateLimit(rateLimits.billing.invoice),
   requiredAuth,
   getUpcomingInvoice,
 );
@@ -62,13 +62,13 @@ router.delete(
 router.post(
   '/reenable',
   requiredAuth,
-  // TODO: ratelimit
+  rateLimit(rateLimits.billing.reenable),
   reenable,
 );
 
 router.post(
   '/webook',
-  // TODO: ratelimit
+  rateLimit(rateLimits.billing.webhook),
   bodyParser.raw({ type: 'application/json' }),
   webhook,
 );

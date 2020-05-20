@@ -1,13 +1,31 @@
 import { Request, Response } from 'express';
+import Joi from '@hapi/joi';
 
-import { replyError } from '../../utils/errors';
+import { replyError, replyJoiError } from '../../utils/errors';
 import {
   stripe, getCustomer, createCustomer, hasSubscription,
 } from '../../utils/stripe';
 
+const schema = Joi.object({
+  plan: Joi.string()
+    .required(),
+
+  paymentMethod: Joi.string()
+    .required(),
+
+  coupon: Joi.string(),
+});
+
 export async function subscribe(req: Request, res: Response): Promise<void> {
   if (!req.user) {
     throw new Error('User unavailable after authentication');
+  }
+
+  const { error } = schema.validate(req.body);
+
+  if (error) {
+    replyJoiError(error, res);
+    return;
   }
 
   const { stripeId } = req.user.subscription;
