@@ -30,11 +30,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.editors {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-</style>

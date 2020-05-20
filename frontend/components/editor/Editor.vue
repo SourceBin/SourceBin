@@ -79,6 +79,8 @@ export default {
         fontSize: this.settings.fontSize,
         showPrintMargin: this.settings.printMargin,
         fontFamily: this.settings.font,
+        minLines: 10,
+        maxLines: 1000,
         useWorker: false,
       };
     },
@@ -140,16 +142,8 @@ export default {
 
 <style lang="scss" scoped>
 .editor {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   margin: 0 0 15px;
   background: var(--background-secondary);
   overflow: hidden;
-}
-
-.ace,
-.markdown {
-  flex: 1;
 }
 </style>

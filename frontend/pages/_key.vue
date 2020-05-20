@@ -87,9 +87,6 @@ export default {
 
 <style lang="scss" scoped>
 .homepage {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   padding-bottom: 15px;
 }
 </style>
