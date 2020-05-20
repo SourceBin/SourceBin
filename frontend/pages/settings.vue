@@ -57,6 +57,7 @@ export default {
 
 <style lang="scss" scoped>
 .settings {
+  padding-bottom: 15px;
   font-family: var(--font-family);
 }
 </style>
