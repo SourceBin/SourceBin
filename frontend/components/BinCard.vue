@@ -1,8 +1,15 @@
 <template lang="html">
   <div class="bin-card">
     <nuxt-link :to="`/${bin.key}`">
-      {{ bin.key }}
+      {{ bin.key }} {{ bin.title ? `| ${bin.title}` : '' }}
     </nuxt-link>
+
+    <p
+      v-if="bin.description"
+      class="description"
+    >
+      {{ bin.description }}
+    </p>
 
     <div class="about">
       <p>
@@ -57,26 +64,32 @@ export default {
     text-decoration: none;
   }
 
-  .about {
-    display: flex;
-    margin-top: 15px;
+  .description {
+    margin: 10px 0 0;
+    font-size: var(--font-size-big);
+    color: var(--text-700);
   }
 
-  p {
-    margin: 0 15px 0 0;
-    font-size: var(--font-size-regular);
-    color: var(--text-700);
+  .about {
+    display: flex;
+    margin-top: 10px;
 
-    svg,
-    .language-color {
-      margin-right: 5px;
-    }
+    p {
+      margin: 0 15px 0 0;
+      font-size: var(--font-size-regular);
+      color: var(--text-700);
 
-    .language-color {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
+      svg,
+      .language-color {
+        margin-right: 5px;
+      }
+
+      .language-color {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
     }
   }
 }
