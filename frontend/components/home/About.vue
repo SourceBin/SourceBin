@@ -75,14 +75,24 @@ export default {
 <style lang="scss" scoped>
 @import 'sass-mq';
 
+$border-radius: 3px;
+
 .about {
-  margin: 0 0 15px;
+  flex: 1;
+  margin: 0;
   padding: 20px var(--margin-side);
   background-color: var(--background-secondary);
   font-family: var(--font-family);
+  border-radius: $border-radius;
+
+  @include mq($until: desktop) {
+    margin-bottom: 15px;
+    width: 100%;
+  }
 
   @include mq($until: tablet) {
     padding: 10px var(--margin-side);
+    border-radius: 0;
   }
 
   .title {

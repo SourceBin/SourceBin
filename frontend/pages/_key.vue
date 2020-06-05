@@ -1,6 +1,9 @@
 <template lang="html">
   <div class="homepage">
-    <About />
+    <div class="homepage-top">
+      <About />
+      <CarbonAds v-if="!$store.getters.pro" />
+    </div>
     <Editors />
     <Actions />
 
@@ -14,6 +17,7 @@
 
 <script>
 import About from '@/components/home/About.vue';
+import CarbonAds from '@/components/CarbonAds.vue';
 import Editors from '@/components/home/Editors.vue';
 import Actions from '@/components/home/Actions.vue';
 
@@ -23,6 +27,7 @@ import { languageOptions } from '@/assets/selector/options.js';
 export default {
   components: {
     About,
+    CarbonAds,
     Editors,
     Actions,
     Selector: () => import('@/components/overlay/Selector.vue'),
@@ -86,7 +91,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'sass-mq';
+
 .homepage {
   padding-bottom: 15px;
+}
+
+.homepage-top {
+  display: flex;
+  align-items: center;
+  margin: 0 var(--margin-side) 15px;
+
+  @include mq($until: desktop) {
+    flex-direction: column;
+  }
+
+  @include mq($until: tablet) {
+    margin: 0 0 15px;
+  }
 }
 </style>
