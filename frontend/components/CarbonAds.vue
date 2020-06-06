@@ -34,7 +34,11 @@ $font-size-poweredby: 9px;
   max-width: 330px;
 
   @include mq($from: desktop) {
-    margin-left: 15px;
+    margin-left: var(--margin-between);
+  }
+
+  @include mq($until: desktop) {
+    margin-top: var(--margin-between);
   }
 }
 

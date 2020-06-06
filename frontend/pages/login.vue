@@ -59,7 +59,7 @@ $provider-icon-font-size: 30px;
 
 .login {
   h1 {
-    margin: 0 0 15px;
+    margin: 0 0 var(--margin-between);
     color: var(--text-800);
     text-align: center;
   }

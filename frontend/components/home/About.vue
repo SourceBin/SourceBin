@@ -86,7 +86,6 @@ $border-radius: 3px;
   border-radius: $border-radius;
 
   @include mq($until: desktop) {
-    margin-bottom: 15px;
     width: 100%;
   }
 

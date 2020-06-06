@@ -68,7 +68,7 @@
 footer {
   display: flex;
   justify-content: center;
-  margin: auto calc(var(--margin-side) * 3) 15px;
+  margin: auto calc(var(--margin-side) * 3) var(--margin-between);
   padding-top: 25px;
   border-top: 1px solid var(--background-modifier-accent);
   font-family: var(--font-family);
@@ -88,7 +88,7 @@ footer {
     margin: 0 50px;
 
     @include mq($until: tablet) {
-      margin-bottom: 15px;
+      margin-bottom: var(--margin-between);
       width: 100%;
     }
 

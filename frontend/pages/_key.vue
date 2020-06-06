@@ -100,14 +100,14 @@ export default {
 .homepage-top {
   display: flex;
   align-items: center;
-  margin: 0 var(--margin-side) 15px;
+  margin: 0 var(--margin-side) var(--margin-between);
 
   @include mq($until: desktop) {
     flex-direction: column;
   }
 
   @include mq($until: tablet) {
-    margin: 0 0 15px;
+    margin: 0 0 var(--margin-between);
   }
 }
 </style>
