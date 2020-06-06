@@ -17,7 +17,7 @@
 
 <script>
 import About from '@/components/home/About.vue';
-import CarbonAds from '@/components/CarbonAds.vue';
+import CarbonAds from '@/components/home/CarbonAds.vue';
 import Editors from '@/components/home/Editors.vue';
 import Actions from '@/components/home/Actions.vue';
 
