@@ -110,6 +110,12 @@ export default {
     STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
   },
 
+  router: {
+    extendRoutes(routes) {
+      routes.find(route => route.path === '/:key').path = '/:key?';
+    },
+  },
+
   build: {
     extend(config) {
       config.output.globalObject = 'this';
