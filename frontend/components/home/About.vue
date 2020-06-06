@@ -7,7 +7,7 @@
       <InlineEditable
         v-model="title"
         :editable.sync="editTitle"
-        placeholder="Title"
+        :props="{ placeholder: 'Title', maxlength: 100 }"
       >
         {{ title || 'Title' }}
       </InlineEditable>
@@ -20,7 +20,7 @@
       <InlineEditable
         v-model="description"
         :editable.sync="editDescription"
-        placeholder="Description"
+        :props="{ placeholder: 'Description', maxlength: 1000 }"
       >
         {{ bin.description || 'Description' }}
       </InlineEditable>
@@ -104,7 +104,6 @@ $border-radius: 3px;
 
   .description {
     margin: 0 0 10px;
-    word-wrap: break-word;
     font-size: var(--font-size-big);
     color: var(--text-800);
   }
