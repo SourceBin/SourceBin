@@ -142,7 +142,7 @@ export default {
 
 <style lang="scss" scoped>
 .editor {
-  margin: 0 0 15px;
+  margin: 0 0 var(--margin-between);
   background: var(--background-secondary);
   overflow: hidden;
 }

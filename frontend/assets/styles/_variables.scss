@@ -46,6 +46,7 @@ html {
   --font-size-small: 13px;
 
   --margin-side: 30px;
+  --margin-between: 15px;
 
   @include mq($until: tablet) {
     --font-size-header: 25px;
@@ -55,5 +56,6 @@ html {
     --font-size-small: 10px;
 
     --margin-side: 10px;
+    --margin-between: 10px;
   }
 }

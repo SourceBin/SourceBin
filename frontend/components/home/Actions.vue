@@ -34,7 +34,7 @@ $border-radius: 3px;
 }
 
 button {
-  margin-right: 15px;
+  margin-right: var(--margin-between);
   padding: 10px 25px;
   border: none;
   font-family: var(--font-family);

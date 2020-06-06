@@ -196,7 +196,7 @@ $border-radius: 5px;
 }
 
 .subscription {
-  margin-bottom: 15px;
+  margin-bottom: var(--margin-between);
   padding: 20px 30px;
   background-color: var(--background-secondary);
   border-radius: $border-radius;
@@ -269,7 +269,7 @@ $border-radius: 5px;
     border-radius: $border-radius;
 
     h1 {
-      margin: 0 0 15px;
+      margin: 0 0 var(--margin-between);
       font-size: var(--font-size-big);
       color: var(--text-900);
     }
@@ -281,7 +281,7 @@ $border-radius: 5px;
     }
 
     &.method span {
-      margin-right: 15px;
+      margin-right: var(--margin-between);
       vertical-align: middle;
 
       &.card-icon {

@@ -89,7 +89,7 @@ $border-radius: 5px;
 .about {
   display: flex;
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: var(--margin-between);
   padding: 20px 0;
   background-color: var(--background-secondary);
   border-radius: $border-radius;
@@ -107,7 +107,7 @@ $border-radius: 5px;
     margin: 0 var(--margin-side);
 
     @include mq($until: tablet) {
-      margin-bottom: 15px;
+      margin-bottom: var(--margin-between);
     }
   }
 
@@ -117,7 +117,7 @@ $border-radius: 5px;
     justify-content: center;
 
     .username {
-      margin: 0 0 15px;
+      margin: 0 0 var(--margin-between);
       font-size: var(--font-size-header);
       color: var(--text-900);
 
@@ -142,7 +142,7 @@ $border-radius: 5px;
       }
 
       div {
-        margin-right: 15px;
+        margin-right: var(--margin-between);
 
         &:last-child {
           margin-right: 0;

@@ -75,7 +75,7 @@ export default {
 
   h1 {
     text-transform: uppercase;
-    margin: 0 0 15px;
+    margin: 0 0 var(--margin-between);
     font-size: var(--font-size-large);
     color: var(--text-900);
     user-select: none;
@@ -83,7 +83,7 @@ export default {
   }
 
   p {
-    margin: 0 0 15px;
+    margin: 0 0 var(--margin-between);
     font-size: var(--font-size-big);
     color: var(--text-800);
   }
