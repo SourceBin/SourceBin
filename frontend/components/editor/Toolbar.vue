@@ -17,7 +17,7 @@
           :editable.sync="editFilename"
 
           v-model="filename"
-          placeholder="Filename"
+          :props="{ placeholder: 'Filename', maxlength: 100 }"
         >
           {{ filename || 'untitled' }}
         </InlineEditable>

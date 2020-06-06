@@ -9,7 +9,7 @@
       @keyup.esc.prevent="cancel"
 
       v-model="buffer"
-      :placeholder="placeholder"
+      v-bind="props"
 
       type="text"
       spellcheck="false"
@@ -29,9 +29,9 @@ export default {
       type: String,
       required: true,
     },
-    placeholder: {
-      type: String,
-      default: '',
+    props: {
+      type: Object,
+      default: () => ({}),
     },
   },
   data() {
@@ -64,7 +64,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.inline-editable input {
+.inline-editable {
+  word-break: break-word;
+}
+
+input {
   padding: 0;
   width: 100%;
   outline: none;
