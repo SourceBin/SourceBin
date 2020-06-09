@@ -103,6 +103,7 @@ export default {
   components: {
     Confirm,
   },
+  middleware: 'auth',
   data() {
     return {
       confirmOverlay: true,
@@ -235,6 +236,7 @@ $border-radius: 5px;
 
     &.reenable {
       background-color: $red;
+      font-weight: 600;
       color: $white-800;
 
       &:hover {
@@ -246,11 +248,16 @@ $border-radius: 5px;
   a {
     display: inline-block;
     background-color: $red;
-    color: $white-800;
+    font-weight: 600;
     font-size: var(--font-size-big);
+    color: $white-800;
     text-decoration: none;
     border-radius: $border-radius;
     padding: 10px 15px;
+
+    &:hover {
+      background-color: $red-modifier-hover;
+    }
   }
 }
 

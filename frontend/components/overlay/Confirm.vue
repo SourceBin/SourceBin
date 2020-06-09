@@ -109,6 +109,7 @@ export default {
 
       &.confirm {
         background-color: $red;
+        font-weight: 600;
         color: $white-800;
 
         &:hover {
