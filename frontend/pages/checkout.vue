@@ -180,6 +180,11 @@ export default {
         this.errors.card = undefined;
       }
     });
+
+    if (this.$route.query.coupon) {
+      this.$refs.coupon.value = this.$route.query.coupon;
+      this.updateCoupon();
+    }
   },
   methods: {
     updateCoupon: debounce(async function () {
@@ -225,7 +230,7 @@ export default {
         this.$toast.global.success('Payment successful');
         this.$router.push('/account/billing');
       } catch (err) {
-        this.$toast.global.error(`${err.message} Please try again.`);
+        this.$toast.global.error(err.message);
       }
 
       this.loading = false;
