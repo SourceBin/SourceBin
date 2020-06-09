@@ -39,5 +39,6 @@ $z-index: 100000;
   justify-content: center;
   align-items: center;
   background: rgba($black-900, 0.5);
+  backdrop-filter: blur(1px);
 }
 </style>

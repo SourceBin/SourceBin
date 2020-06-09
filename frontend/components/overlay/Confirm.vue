@@ -5,7 +5,8 @@
   >
     <div class="confirm">
       <h1>{{ title }}</h1>
-      <p>{{ description }}</p>
+
+      <p><slot /></p>
 
       <div class="buttons">
         <button
@@ -34,10 +35,6 @@ export default {
   },
   props: {
     title: {
-      type: String,
-      required: true,
-    },
-    description: {
       type: String,
       required: true,
     },

@@ -78,11 +78,10 @@
       ref="confirmCancel"
       @confirm="cancelSubscription"
       title="Cancel Subscription"
-      description="
-        Are you sure you want to cancel your subscription?
-        You can re-enable it again later.
-      "
-    />
+    >
+      Are you sure you want to cancel your subscription?
+      You can re-enable it again later.
+    </Confirm>
   </div>
 </template>
 
