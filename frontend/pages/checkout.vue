@@ -3,55 +3,74 @@
     <div class="details">
       <h1>Purchase Details</h1>
 
-      <div>
+      <div class="about">
         <p>{{ plan.nickname }}</p>
         <p>{{ plan.amount | currency }} / {{ plan.interval | capitalize }}</p>
       </div>
 
-      <div>
-        <input
-          ref="coupon"
-          @input="updateCoupon"
+      <div class="coupon">
+        <div>
+          <font-awesome-icon :icon="['fas', 'ticket-alt']" />
+
+          <input
+            ref="coupon"
+            @input="updateCoupon"
+
+            placeholder="Coupon"
+            type="text"
+            spellcheck="false"
+            autocapitalize="off"
+            autocorrect="off"
+          >
+        </div>
+
+        <p
+          v-if="errors.coupon"
+          class="coupon-error"
         >
-
-        <p v-if="amountOff">
-          {{ amountOff }}
-        </p>
-      </div>
-
-      <div>
-        <p v-if="errors.coupon">
           {{ errors.coupon }}
         </p>
-        <p v-else-if="couponDuration">
-          This coupon applies {{ couponDuration }}
+        <p
+          v-else-if="amountOff && couponDuration"
+          class="coupon-info"
+        >
+          {{ amountOff }} {{ couponDuration }}
         </p>
       </div>
 
-      <div>
+      <div class="total">
         <p>Today's Total</p>
         <p>{{ total | currency }}</p>
       </div>
     </div>
 
     <div class="payment-method">
-      <div ref="paymentRequest" />
-
-      <p>{{ `${displayPaymentRequest ? 'or ' : ''}enter your card` | capitalize }}</p>
+      <h1>Enter your card</h1>
 
       <div
         ref="card"
-        class="MyCardElement"
+        class="stripe-card"
       />
 
-      <p v-if="errors.card">
+      <p
+        v-if="errors.card"
+        class="card-error"
+      >
         {{ errors.card }}
       </p>
-    </div>
 
-    <button @click="purchase">
-      Purchase
-    </button>
+      <p class="legal">
+        You'll be charged today, and every following {{ plan.interval }}
+        while your subscription is active. You can cancel at any time.
+      </p>
+
+      <button
+        @click="purchase"
+        :disabled="loading || !complete || errors.card || errors.coupon"
+      >
+        {{ loading ? 'Processing...' : 'Purchase' }}
+      </button>
+    </div>
   </div>
 </template>
 
@@ -67,8 +86,9 @@ export default {
         coupon: undefined,
       },
       coupon: undefined,
+      loading: false,
+      complete: false,
       cardElement: undefined,
-      displayPaymentRequest: false,
     };
   },
   computed: {
@@ -127,60 +147,33 @@ export default {
       return {};
     }
   },
-  async mounted() {
+  mounted() {
     const elements = this.$stripe.elements();
-
-    const paymentRequest = this.$stripe.paymentRequest({
-      country: 'US',
-      currency: 'usd',
-      total: {
-        label: this.plan.nickname,
-        amount: this.total,
-      },
-      requestPayerName: true,
-    });
-
-    const prButton = elements.create('paymentRequestButton', { paymentRequest });
-
-    this.displayPaymentRequest = await paymentRequest.canMakePayment();
-    if (this.displayPaymentRequest) {
-      prButton.mount(this.$refs.paymentRequest);
-    } else {
-      this.$refs.paymentRequest.style.display = 'none';
-    }
-
-    paymentRequest.on('paymentmethod', async (event) => {
-      const result = await this.purchaseSubscription(event.paymentMethod);
-
-      if (result.error) {
-        event.complete('fail');
-        return;
-      }
-
-      event.complete('success');
-    });
 
     this.cardElement = elements.create('card', {
       style: {
         base: {
-          color: '#32325d',
+          color: '#f2f2f2',
           fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
           fontSmoothing: 'antialiased',
           fontSize: '16px',
+
           '::placeholder': {
-            color: '#aab7c4',
+            color: '#c0c0c0',
           },
         },
         invalid: {
-          color: '#fa755a',
-          iconColor: '#fa755a',
+          color: '#ff4747',
+          iconColor: '#ff4747',
         },
       },
     });
 
     this.cardElement.mount(this.$refs.card);
 
-    this.cardElement.addEventListener('change', ({ error }) => {
+    this.cardElement.addEventListener('change', ({ error, complete }) => {
+      this.complete = complete;
+
       if (error) {
         this.errors.card = error.message;
       } else {
@@ -190,7 +183,7 @@ export default {
   },
   methods: {
     updateCoupon: debounce(async function () {
-      const code = this.$refs.coupon.value;
+      const code = this.$refs.coupon.value.toUpperCase();
 
       if (!code) {
         this.coupon = undefined;
@@ -214,6 +207,8 @@ export default {
       }
     }, 250),
     async purchase() {
+      this.loading = true;
+
       const result = await this.$stripe.createPaymentMethod({
         type: 'card',
         card: this.cardElement,
@@ -224,7 +219,16 @@ export default {
         return;
       }
 
-      await this.purchaseSubscription(result.paymentMethod);
+      try {
+        await this.purchaseSubscription(result.paymentMethod);
+
+        this.$toast.global.success('Payment successful');
+        this.$router.push('/account/billing');
+      } catch (err) {
+        this.$toast.global.error(`${err.message} Please try again.`);
+      }
+
+      this.loading = false;
     },
     async purchaseSubscription(paymentMethod) {
       let subscription;
@@ -238,7 +242,7 @@ export default {
           paymentMethod: paymentMethod.id,
         });
       } catch (err) {
-        return { error: err.response.data.message };
+        throw new Error(err.response.data.message);
       }
 
       const paymentIntent = subscription.latest_invoice.payment_intent;
@@ -251,46 +255,144 @@ export default {
         const result = await this.$stripe.confirmCardPayment(paymentIntent.client_secret);
 
         if (result.error) {
-          return { error: result.error.messag };
+          throw new Error(result.error.message);
         }
       }
 
-      return { subscription };
+      return subscription;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-/* stylelint-disable */
+@import 'sass-mq';
+@import '@/assets/styles/_variables.scss';
+
+$border-radius: 5px;
 
 .checkout {
-  color: white;
+  margin: 0 var(--margin-side);
+  font-family: var(--font-family);
 }
 
-.MyCardElement {
-  height: 40px;
-  padding: 10px 12px;
-  width: 100%;
-  color: #32325d;
-  background-color: white;
-  border: 1px solid transparent;
-  border-radius: 4px;
+.details {
+  margin-bottom: var(--margin-between);
+  background-color: var(--background-secondary);
+  padding: var(--margin-side);
+  border-radius: $border-radius;
 
-  box-shadow: 0 1px 3px 0 #e6ebf1;
-  -webkit-transition: box-shadow 150ms ease;
-  transition: box-shadow 150ms ease;
+  h1 {
+    margin: 0;
+    font-size: var(--font-size-header);
+    color: var(--text-800);
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .about,
+  .coupon,
+  .total {
+    margin: var(--margin-between) 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--font-size-big);
+    color: var(--text-900);
+
+    p {
+      height: 100%;
+    }
+  }
+
+  .coupon {
+    @include mq($until: tablet) {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .coupon-info,
+      .coupon-error {
+        margin-top: var(--margin-between);
+      }
+    }
+
+    input {
+      margin-left: 5px;
+      padding: 5px;
+      background: var(--background-tertiary);
+      color: var(--text-900);
+      text-transform: uppercase;
+      outline: none;
+      border: 1px solid var(--background-modifier-accent);
+      border-radius: 3px;
+    }
+
+    .coupon-error {
+      color: $red;
+    }
+  }
+
+  .total {
+    margin-bottom: 0;
+    padding-top: var(--margin-between);
+    border-top: 1px solid var(--background-modifier-accent);
+  }
 }
 
-.MyCardElement--focus {
-  box-shadow: 0 1px 3px 0 #cfd7df;
-}
+.payment-method {
+  background-color: var(--background-secondary);
+  padding: var(--margin-side);
+  border-radius: $border-radius;
 
-.MyCardElement--invalid {
-  border-color: #fa755a;
-}
+  h1 {
+    margin: 0 0 var(--margin-between);
+    font-size: var(--font-size-large);
+    color: var(--text-800);
+  }
 
-.MyCardElement--webkit-autofill {
-  background-color: #fefde5 !important;
+  /deep/ .stripe-card {
+    height: 40px;
+    padding: 10px 12px;
+    color: var(--text-900);
+    background-color: var(--background-tertiary);
+    border: 1px solid var(--background-modifier-accent);
+    border-radius: $border-radius;
+  }
+
+  .card-error {
+    margin: var(--margin-between) 0 0;
+    font-size: var(--font-size-big);
+    color: $red;
+  }
+
+  .legal {
+    margin: var(--margin-between) 0 0;
+    font-size: var(--font-size-small);
+    color: var(--text-600);
+  }
+
+  button {
+    margin-top: var(--margin-between);
+    padding: 10px 15px;
+    outline: none;
+    border: none;
+    border-radius: $border-radius;
+    background-color: $red;
+    font-weight: 600;
+    font-size: var(--font-size-big);
+    color: $white-900;
+    cursor: pointer;
+
+    &[disabled] {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    &:not([disabled]):hover {
+      background-color: $red-modifier-hover;
+    }
+  }
 }
 </style>

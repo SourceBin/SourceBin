@@ -17,9 +17,10 @@ $white-900: #fff;
 $white-800: #f2f2f2;
 $white-700: #d9d9d9;
 $white-600: #c0c0c0;
+$white-500: #a7a7a7;
 
-$red: #d52900;
-$red-modifier-hover: #c72600;
+$red: #f55;
+$red-modifier-hover: #ff6f6f;
 
 $green: #00d114;
 $blue: #3cb1ff;
@@ -36,6 +37,7 @@ html {
   --text-900: #{$white-800};
   --text-800: #{$white-700};
   --text-700: #{$white-600};
+  --text-600: #{$white-500};
 
   --font-family: 'Roboto', sans-serif;
 
