@@ -1,17 +1,37 @@
 <template lang="html">
-  <div
-    ref="carbon"
-    class="ad"
-  />
+  <div class="carbonads">
+    <AdBlock v-if="blocked" />
+
+    <div
+      ref="carbon"
+      v-else
+      class="ad"
+    />
+  </div>
 </template>
 
 <script>
+import AdBlock from './AdBlock.vue';
+
 export default {
+  components: {
+    AdBlock,
+  },
+  data() {
+    return {
+      blocked: false,
+    };
+  },
   mounted() {
     const script = document.createElement('script');
     script.setAttribute('type', 'text/javascript');
     script.setAttribute('src', '//cdn.carbonads.com/carbon.js?serve=CE7IP2JN&placement=sourcebin');
     script.setAttribute('id', '_carbonads_js');
+
+    script.addEventListener('error', () => {
+      this.blocked = true;
+    });
+
     this.$refs.carbon.appendChild(script);
   },
 };
@@ -23,19 +43,22 @@ export default {
 $font-size-text: 13px;
 $font-size-poweredby: 9px;
 
-.ad {
-  display: flex;
-  justify-content: center;
-  height: 100px;
-  max-width: 330px;
-
+.carbonads {
   @include mq($from: desktop) {
     margin-left: var(--margin-between);
   }
 
   @include mq($until: desktop) {
     margin-top: var(--margin-between);
+    width: auto;
   }
+}
+
+.ad {
+  display: flex;
+  justify-content: center;
+  height: 100px;
+  width: 330px;
 
   /deep/ #carbonads {
     display: flex;
