@@ -11,11 +11,10 @@
         <p class="username">
           {{ auth.user.username }}
 
-          <font-awesome-icon
-            :icon="['fas', 'crown']"
-            v-if="auth.user.subscription === 'Pro'"
-            class="crown"
-          />
+          <span
+            v-if="$store.getters.pro"
+            class="pro"
+          >PRO</span>
         </p>
 
         <div class="stats">
@@ -125,11 +124,14 @@ $border-radius: 5px;
         padding: 0 var(--margin-side);
       }
 
-      .crown {
-        height: 100%;
-        vertical-align: top;
-        font-size: var(--font-size-big);
-        color: $gold;
+      .pro {
+        vertical-align: middle;
+        padding: 2px 4px;
+        font-size: var(--font-size-regular);
+        font-weight: 600;
+        color: $white-900;
+        background-color: $red;
+        border-radius: 3px;
       }
     }
 
