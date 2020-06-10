@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="about">
-    <h1
+    <div
       @click="editTitle = true"
       :class="['title', title ? '' : 'placeholder']"
     >
@@ -9,11 +9,11 @@
         :editable.sync="editTitle"
         :props="{ placeholder: 'Title', maxlength: 100 }"
       >
-        {{ title || 'Title' }}
+        <h1>{{ title || 'Title' }}</h1>
       </InlineEditable>
-    </h1>
+    </div>
 
-    <p
+    <div
       @click="editDescription = true"
       :class="['description', description ? '' : 'placeholder']"
     >
@@ -22,9 +22,9 @@
         :editable.sync="editDescription"
         :props="{ placeholder: 'Description', maxlength: 1000 }"
       >
-        {{ bin.description || 'Description' }}
+        <p>{{ description || 'Description' }}</p>
       </InlineEditable>
-    </p>
+    </div>
 
     <div class="stats">
       <div>
@@ -94,14 +94,16 @@ $border-radius: 3px;
     border-radius: 0;
   }
 
-  .title {
+  .title,
+  .title h1 {
     margin: 0 0 10px;
     font-size: var(--font-size-large);
     font-weight: 500;
     color: var(--text-900);
   }
 
-  .description {
+  .description,
+  .description p {
     margin: 0 0 10px;
     font-size: var(--font-size-big);
     color: var(--text-800);
@@ -113,9 +115,10 @@ $border-radius: 3px;
     color: var(--text-700);
   }
 
-  .placeholder {
+  .placeholder h1,
+  .placeholder p {
     font-style: italic;
-    color: var(--text-700) !important;
+    color: var(--text-600) !important;
   }
 }
 </style>
