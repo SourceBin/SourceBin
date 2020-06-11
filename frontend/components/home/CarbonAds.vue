@@ -58,7 +58,7 @@ $font-size-poweredby: 9px;
   display: flex;
   justify-content: center;
   height: 100px;
-  width: 330px;
+  max-width: 330px;
 
   /deep/ #carbonads {
     display: flex;
@@ -93,7 +93,7 @@ $font-size-poweredby: 9px;
       right: 5px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      font-weight: 600;
+      font-weight: 700;
       font-size: $font-size-poweredby;
     }
   }

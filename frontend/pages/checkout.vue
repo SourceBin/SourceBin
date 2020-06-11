@@ -385,7 +385,7 @@ $border-radius: 5px;
     border: none;
     border-radius: $border-radius;
     background-color: $red;
-    font-weight: 600;
+    font-weight: 700;
     font-size: var(--font-size-big);
     color: $white-900;
     cursor: pointer;
