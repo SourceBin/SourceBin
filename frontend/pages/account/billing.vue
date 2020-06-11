@@ -235,7 +235,7 @@ $border-radius: 5px;
 
     &.reenable {
       background-color: $red;
-      font-weight: 600;
+      font-weight: 700;
       color: $white-800;
 
       &:hover {
@@ -247,7 +247,7 @@ $border-radius: 5px;
   a {
     display: inline-block;
     background-color: $red;
-    font-weight: 600;
+    font-weight: 700;
     font-size: var(--font-size-big);
     color: $white-800;
     text-decoration: none;

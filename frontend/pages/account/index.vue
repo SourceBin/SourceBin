@@ -128,7 +128,7 @@ $border-radius: 5px;
         vertical-align: middle;
         padding: 2px 4px;
         font-size: var(--font-size-regular);
-        font-weight: 600;
+        font-weight: 700;
         color: $white-900;
         background-color: $red;
         border-radius: 3px;
