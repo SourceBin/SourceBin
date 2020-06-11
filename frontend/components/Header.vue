@@ -13,6 +13,15 @@
       </ul>
 
       <ul>
+        <li v-if="!$store.getters.pro">
+          <nuxt-link
+            to="/pricing"
+            class="go-pro"
+          >
+            <span>Upgrade Now -</span> Go Pro
+          </nuxt-link>
+        </li>
+
         <li>
           <nuxt-link
             @click.native="$store.commit('bin/reset')"
@@ -21,11 +30,13 @@
             <font-awesome-icon :icon="['fas', 'plus']" />
           </nuxt-link>
         </li>
+
         <li>
           <nuxt-link to="/settings">
             <font-awesome-icon :icon="['fas', 'sliders-h']" />
           </nuxt-link>
         </li>
+
         <li>
           <nuxt-link to="/account">
             <font-awesome-icon :icon="['fas', 'user']" />
@@ -38,6 +49,7 @@
 
 <style lang="scss" scoped>
 @import 'sass-mq';
+@import '@/assets/styles/_variables.scss';
 
 nav {
   --height: 50px;
@@ -77,6 +89,22 @@ ul {
 
       &.title {
         font-weight: 700;
+      }
+
+      &.go-pro {
+        color: $red;
+        font-weight: 700;
+        font-size: var(--font-size-big);
+
+        @include mq($until: tablet) {
+          span {
+            display: none;
+          }
+        }
+
+        &:hover {
+          color: $red-modifier-hover;
+        }
       }
 
       svg {
