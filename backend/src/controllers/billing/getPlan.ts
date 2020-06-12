@@ -1,11 +1,18 @@
 import { Request, Response } from 'express';
 
 import { replyError } from '../../utils/errors';
-import { stripe } from '../../utils/stripe';
+import { stripe, planNameToId } from '../../utils/stripe';
 
 export async function getPlan(req: Request, res: Response): Promise<void> {
+  const planId = planNameToId(req.params.plan);
+
+  if (!planId) {
+    replyError(400, 'Invalid plan', res);
+    return;
+  }
+
   try {
-    const plan = await stripe.plans.retrieve(req.params.plan);
+    const plan = await stripe.plans.retrieve(planId);
 
     res.json(plan);
   } catch (err) {

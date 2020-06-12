@@ -6,6 +6,17 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2020-03-02',
 });
 
+export function planNameToId(name: string): string | undefined {
+  switch (name) {
+    case 'pro_monthly':
+      return process.env.STRIPE_PRO_MONTHLY;
+    case 'pro_yearly':
+      return process.env.STRIPE_PRO_YEARLY;
+    default:
+      return undefined;
+  }
+}
+
 export async function getCustomer(id: string): Promise<Stripe.Customer> {
   const customer = await stripe.customers.retrieve(id, {
     expand: ['subscriptions.data.default_payment_method'],
