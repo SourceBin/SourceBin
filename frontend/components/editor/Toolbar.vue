@@ -33,7 +33,7 @@
       </li>
 
       <li
-        v-if="canBeautify"
+        v-if="canBeautify && $store.getters.pro"
         @click="$emit('beautify')"
       >
         Format
