@@ -15,7 +15,7 @@
       <ul>
         <li v-if="!$store.getters.pro">
           <nuxt-link
-            to="/pricing"
+            to="/pro"
             class="go-pro"
           >
             <span>Upgrade Now -</span> Go Pro

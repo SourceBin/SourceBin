@@ -47,8 +47,8 @@
 
       <ul>
         <li>
-          <nuxt-link to="/pricing">
-            Pricing
+          <nuxt-link to="/pro">
+            Go Pro
           </nuxt-link>
         </li>
 

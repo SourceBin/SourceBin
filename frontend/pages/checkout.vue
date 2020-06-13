@@ -132,7 +132,7 @@ export default {
   },
   async asyncData({ $axios, query, redirect }) {
     if (!query.plan) {
-      redirect('/pricing');
+      redirect('/pro');
       return {};
     }
 
@@ -143,7 +143,7 @@ export default {
         plan,
       };
     } catch {
-      redirect('/pricing');
+      redirect('/pro');
       return {};
     }
   },

@@ -25,7 +25,7 @@
       <div v-else>
         <p>You have no subscription</p>
 
-        <nuxt-link to="/pricing">
+        <nuxt-link to="/pro">
           Get a subscription
         </nuxt-link>
       </div>

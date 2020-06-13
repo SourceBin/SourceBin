@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="adblock">
     <p>
-      Consider disabling your ad blocker or upgrading to <nuxt-link to="/pricing">
+      Consider disabling your ad blocker or upgrading to <nuxt-link to="/pro">
         Pro
       </nuxt-link> to support SourceBin.
     </p>
