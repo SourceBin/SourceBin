@@ -41,7 +41,7 @@
 export default {
   async asyncData({ $axios, query, redirect }) {
     if (!query.coupon) {
-      return {};
+      return { coupon: undefined };
     }
 
     try {

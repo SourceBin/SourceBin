@@ -12,14 +12,14 @@
 
       <div class="oauth">
         <a
-          href="/api/auth/discord"
+          :href="url('/api/auth/discord')"
           class="discord"
         >
           <font-awesome-icon :icon="['fab', 'discord']" /> <span>Discord</span>
         </a>
 
         <a
-          href="/api/auth/github"
+          :href="url('/api/auth/github')"
           class="github"
         >
           <font-awesome-icon :icon="['fab', 'github']" /> <span>GitHub</span>
@@ -32,6 +32,12 @@
 <script>
 export default {
   middleware: 'unauth',
+  methods: {
+    url(url) {
+      const { redirect } = this.$route.query;
+      return `${url}${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`;
+    },
+  },
 };
 </script>
 
