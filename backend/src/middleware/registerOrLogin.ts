@@ -13,6 +13,24 @@ function redirectError(res: Response, error: string): void {
 
 export function registerOrLogin(strategy: string): RequestHandler {
   return (req, res, next) => {
+    const { redirect } = req.query;
+
+    const state = {
+      redirect,
+    };
+
+    passport.authenticate(
+      strategy,
+      {
+        session: false,
+        state: Buffer.from(JSON.stringify(state)).toString('base64'),
+      },
+    )(req, res, next);
+  };
+}
+
+export function registerOrLoginCallback(strategy: string): RequestHandler {
+  return (req, res, next) => {
     passport.authenticate(
       strategy,
       { session: false },
