@@ -8,7 +8,7 @@ export async function getCustomer(req: Request, res: Response): Promise<void> {
     throw new Error('User unavailable after authentication');
   }
 
-  const { stripeId } = req.user.subscription;
+  const { stripeId } = req.user.payments;
 
   try {
     let customer;

@@ -14,6 +14,6 @@ export const actions = {
 
 export const getters = {
   pro(state) {
-    return state.auth.user.subscription === 'Pro';
+    return state.auth.user.plan === 'Pro';
   },
 };
