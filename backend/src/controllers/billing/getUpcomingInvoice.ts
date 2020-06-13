@@ -8,14 +8,14 @@ export async function getUpcomingInvoice(req: Request, res: Response): Promise<v
     throw new Error('User unavailable after authentication');
   }
 
-  if (!req.user.subscription.stripeId) {
+  if (!req.user.payments.stripeId) {
     replyError(400, 'No customer', res);
     return;
   }
 
   try {
     const invoice = await stripe.invoices.retrieveUpcoming({
-      customer: req.user.subscription.stripeId,
+      customer: req.user.payments.stripeId,
     });
 
     res.json(invoice);

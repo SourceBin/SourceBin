@@ -37,7 +37,7 @@ export async function createCustomer(user: User, paymentMethod?: string): Promis
   });
   /* eslint-enable @typescript-eslint/camelcase */
 
-  user.subscription.stripeId = customer.id; // eslint-disable-line no-param-reassign
+  user.payments.stripeId = customer.id; // eslint-disable-line no-param-reassign
   await user.save();
 
   return customer;
@@ -60,8 +60,8 @@ export async function updateSubscription(invoice: Stripe.Invoice): Promise<void>
 
   await UserModel
     .updateOne(
-      { 'subscription.stripeId': invoice.customer },
-      { 'subscription.plan': product.name },
+      { 'payments.stripeId': invoice.customer },
+      { plan: product.name },
     )
     .exec();
 }
@@ -69,8 +69,8 @@ export async function updateSubscription(invoice: Stripe.Invoice): Promise<void>
 export async function deleteSubscription(subscription: Stripe.Subscription): Promise<void> {
   await UserModel
     .updateOne(
-      { 'subscription.stripeId': subscription.customer },
-      { 'subscription.plan': 'Free' },
+      { 'payments.stripeId': subscription.customer },
+      { plan: 'Free' },
     )
     .exec();
 }

@@ -28,7 +28,7 @@ export async function subscribe(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  const { stripeId } = req.user.subscription;
+  const { stripeId } = req.user.payments;
 
   if (stripeId) {
     try {

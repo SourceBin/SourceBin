@@ -18,9 +18,10 @@ export interface User extends mongoose.Document {
     github?: string;
   };
 
-  subscription: {
+  plan: 'Free' | 'Pro';
+
+  payments: {
     stripeId?: string;
-    plan: 'Free' | 'Pro';
   };
 
   createdAt: Date;
@@ -56,14 +57,15 @@ const userSchema = new mongoose.Schema({
     github: String,
   },
 
-  subscription: {
+  plan: {
+    type: String,
+    enum: ['Free', 'Pro'],
+    required: true,
+    default: 'Free',
+  },
+
+  payments: {
     stripeId: String,
-    plan: {
-      type: String,
-      enum: ['Free', 'Pro'],
-      required: true,
-      default: 'Free',
-    },
   },
 
   createdAt: {

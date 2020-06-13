@@ -8,13 +8,13 @@ export async function reenable(req: Request, res: Response): Promise<void> {
     throw new Error('User unavailable after authentication');
   }
 
-  if (!req.user.subscription.stripeId) {
+  if (!req.user.payments.stripeId) {
     replyError(400, 'No customer', res);
     return;
   }
 
   try {
-    const customer = await getCustomer(req.user.subscription.stripeId);
+    const customer = await getCustomer(req.user.payments.stripeId);
 
     if (!customer.subscriptions) {
       replyError(400, 'No subscription', res);
