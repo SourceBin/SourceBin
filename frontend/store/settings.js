@@ -2,7 +2,7 @@ import { languages } from '@sourcebin/linguist';
 
 export const state = () => ({
   fontSize: 15,
-  printMargin: true,
+  printMargin: false,
   theme: 'one_dark',
   font: 'Ubuntu Mono',
 

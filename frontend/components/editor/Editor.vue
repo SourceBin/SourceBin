@@ -77,7 +77,7 @@ export default {
     options() {
       return {
         fontSize: this.settings.fontSize,
-        showPrintMargin: this.settings.printMargin,
+        printMargin: this.settings.printMargin,
         fontFamily: this.settings.font,
         minLines: 10,
         maxLines: 1000,
