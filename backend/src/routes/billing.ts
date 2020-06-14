@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import bodyParser from 'body-parser';
 
 import { rateLimits } from '../config';
 
@@ -14,7 +13,6 @@ import { getUpcomingInvoice } from '../controllers/billing/getUpcomingInvoice';
 import { subscribe } from '../controllers/billing/subscribe';
 import { cancel } from '../controllers/billing/cancel';
 import { reenable } from '../controllers/billing/reenable';
-import { webhook } from '../controllers/billing/webhook';
 
 const router = Router();
 
@@ -64,13 +62,6 @@ router.post(
   requiredAuth,
   rateLimit(rateLimits.billing.reenable),
   reenable,
-);
-
-router.post(
-  '/webook',
-  rateLimit(rateLimits.billing.webhook),
-  bodyParser.raw({ type: 'application/json' }),
-  webhook,
 );
 
 export default router;
