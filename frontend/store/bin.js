@@ -32,6 +32,7 @@ export const mutations = {
     state.files[file].content = content;
 
     state.key = undefined;
+    state.created = undefined;
     state.saved = false;
   },
   setLanguageId(state, { languageId, file }) {
