@@ -1,10 +1,9 @@
-import passport from 'passport';
 import { Strategy } from 'passport-discord';
 
 import { createOrGetUser } from '../utils/auth';
 import { getAvatarURL } from '../utils/discord';
 
-passport.use(new Strategy(
+export const discord = new Strategy(
   {
     clientID: process.env.DISCORD_OAUTH_ID || '',
     clientSecret: process.env.DISCORD_OAUTH_SECRET || '',
@@ -32,4 +31,4 @@ passport.use(new Strategy(
       done(undefined, undefined, new Error('Email is already used'));
     }
   },
-));
+);

@@ -3,9 +3,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 
-import './strategies';
-
 import routes from './routes';
+import { registerStrategies } from './strategies';
+
+registerStrategies();
 
 const app = express();
 app.use(cors());
