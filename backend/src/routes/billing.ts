@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import { rateLimits } from '../config';
 
 import { rateLimit } from '../middleware/rateLimit';
-import { jsonParser } from '../middleware/jsonParser';
+import { jsonParser } from '../middleware/bodyParser';
 import { requiredAuth } from '../middleware/authenticate';
 
 import { getCustomer } from '../controllers/billing/getCustomer';

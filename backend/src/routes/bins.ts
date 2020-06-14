@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { rateLimits } from '../config';
 
 import { rateLimit } from '../middleware/rateLimit';
-import { jsonParser } from '../middleware/jsonParser';
+import { jsonParserProLimit } from '../middleware/bodyParser';
 import { requiredAuth, optionalAuth } from '../middleware/authenticate';
 
 import { getBin } from '../controllers/bins/getBin';
@@ -24,7 +24,7 @@ router.post(
   '/',
   optionalAuth,
   rateLimit(rateLimits.bins.create),
-  jsonParser,
+  jsonParserProLimit('0.1MB', '5MB'),
   createBin,
 );
 

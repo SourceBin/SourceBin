@@ -32,7 +32,6 @@ export const bin = {
   maxTitleLength: 100,
   maxDescriptionLength: 1000,
   maxNameLength: 100,
-  maxContentLength: 100_000,
 };
 
 export const auth = {
