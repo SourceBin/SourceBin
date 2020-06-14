@@ -1,5 +1,4 @@
 import { Request } from 'express';
-import passport from 'passport';
 import { Strategy } from 'passport-jwt';
 
 import { UserModel } from '../models/User';
@@ -7,7 +6,7 @@ import { RefreshTokenModel } from '../models/RefreshToken';
 
 import { hashRefreshToken, setAccessRefreshTokens, unsetAccessRefreshTokens } from '../utils/auth';
 
-passport.use(new Strategy(
+export const jwt = new Strategy(
   {
     jwtFromRequest: req => req.cookies.access_token,
     secretOrKey: process.env.JWT_SECRET,
@@ -66,4 +65,4 @@ passport.use(new Strategy(
       done(err);
     }
   },
-));
+);

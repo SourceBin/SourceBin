@@ -1,9 +1,8 @@
-import passport from 'passport';
 import { Strategy } from 'passport-github2';
 
 import { createOrGetUser } from '../utils/auth';
 
-passport.use(new Strategy(
+export const github = new Strategy(
   {
     clientID: process.env.GITHUB_OAUTH_ID || '',
     clientSecret: process.env.GITHUB_OAUTH_SECRET || '',
@@ -36,4 +35,4 @@ passport.use(new Strategy(
       done(undefined, undefined, new Error('Email is already used'));
     }
   },
-));
+);
