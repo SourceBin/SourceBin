@@ -50,6 +50,7 @@ export async function createBin(req: Request, res: Response): Promise<void> {
     }
   } catch {
     replyError(500, 'Failed to classify languages', res);
+    return;
   }
 
   try {
