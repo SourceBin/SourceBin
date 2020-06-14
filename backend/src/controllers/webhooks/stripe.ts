@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 
 import { stripe, updateSubscription, deleteSubscription } from '../../utils/stripe';
 
-export async function webhook(req: Request, res: Response): Promise<void> {
+export async function stripeWebhook(req: Request, res: Response): Promise<void> {
   const signature = req.headers['stripe-signature'];
 
   if (!signature) {

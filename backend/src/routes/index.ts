@@ -6,6 +6,7 @@ import bins from './bins';
 import code from './code';
 import raw from './raw';
 import user from './user';
+import webhooks from './webhooks';
 
 const router = Router();
 
@@ -17,5 +18,6 @@ router.use('/bins', bins);
 router.use('/code', code);
 router.use('/raw', raw);
 router.use('/user', user);
+router.use('/webhooks', webhooks);
 
 export default router;

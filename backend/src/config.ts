@@ -12,7 +12,6 @@ export const rateLimits = {
     subscribe: limit({ window: minutes(10), every: minutes(1) }),
     cancel: limit({ window: minutes(10), every: minutes(1) }),
     reenable: limit({ window: minutes(10), every: minutes(1) }),
-    webhook: limit({ window: minutes(1), every: milliseconds(10) }),
   },
   bins: {
     get: limit({ window: minutes(1), every: seconds(1) }),
@@ -25,6 +24,9 @@ export const rateLimits = {
   user: {
     get: limit({ window: minutes(10), every: seconds(10) }),
     bins: limit({ window: minutes(1), every: seconds(1) }),
+  },
+  webhooks: {
+    stripe: limit({ window: minutes(1), every: milliseconds(10) }),
   },
 };
 
