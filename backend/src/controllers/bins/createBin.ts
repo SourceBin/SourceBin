@@ -24,7 +24,6 @@ const schema = Joi.object({
         .max(config.bin.maxNameLength),
 
       content: Joi.string()
-        .max(config.bin.maxContentLength)
         .required(),
 
       languageId: Joi.number()

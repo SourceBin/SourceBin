@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { rateLimits } from '../config';
 
 import { rateLimit } from '../middleware/rateLimit';
-import { jsonParser } from '../middleware/jsonParser';
+import { jsonParser } from '../middleware/bodyParser';
 
 import { classify } from '../controllers/code/classify';
 
