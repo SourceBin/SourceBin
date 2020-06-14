@@ -6,13 +6,13 @@ import { replyError } from '../utils/errors';
 function auth(strategy: string | string[]): RequestHandler {
   return (req, res, next) => {
     passport.authenticate(strategy, { session: false }, (err, user, info) => {
-      if (err) {
-        replyError(500, 'Internal Server Error', res);
+      if (info instanceof Error) {
+        replyError(401, 'Unauthorized', res);
         return;
       }
 
-      if (info instanceof Error) {
-        replyError(401, 'Unauthorized', res);
+      if (err) {
+        replyError(400, 'Failed to authenticate', res);
         return;
       }
 
