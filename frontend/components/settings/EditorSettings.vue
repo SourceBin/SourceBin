@@ -136,7 +136,7 @@ export default {
     editorOptions() {
       return {
         fontSize: this.settings.fontSize,
-        showPrintMargin: this.settings.printMargin,
+        printMargin: this.settings.printMargin,
         fontFamily: this.settings.font,
 
         useWorker: false,
