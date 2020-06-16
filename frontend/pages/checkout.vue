@@ -267,6 +267,11 @@ export default {
       return subscription;
     },
   },
+  head() {
+    return {
+      title: 'Checkout',
+    };
+  },
 };
 </script>
 

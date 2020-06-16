@@ -180,6 +180,11 @@ export default {
       await this.updateBilling();
     },
   },
+  head() {
+    return {
+      title: 'Billing',
+    };
+  },
 };
 </script>
 

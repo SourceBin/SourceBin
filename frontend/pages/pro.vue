@@ -61,6 +61,22 @@ export default {
       return `/checkout?plan=${plan}${coupon ? `&coupon=${coupon}` : ''}`;
     },
   },
+  head() {
+    let description = 'Upgrade to Pro to unlock awesome features!';
+
+    if (this.coupon) {
+      description += ` ${this.coupon.metadata.description}`;
+    }
+
+    return {
+      title: 'Pro',
+      meta: [
+        { hid: 'description', content: description },
+
+        { hid: 'og:description', content: description },
+      ],
+    };
+  },
 };
 </script>
 
