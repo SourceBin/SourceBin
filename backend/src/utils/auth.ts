@@ -8,7 +8,12 @@ import { RefreshTokenModel } from '../models/RefreshToken';
 import * as config from '../config';
 
 export async function createOrGetUser(conditions: any, data: any): Promise<User> {
-  const user = await UserModel.findOne(conditions);
+  const user = await UserModel.findOneAndUpdate(
+    conditions,
+    // TODO: have an image CDN so avatars stay valid
+    { 'about.avatarURL': data.about.avatarURL },
+    { new: true },
+  );
 
   if (user) {
     return user;
