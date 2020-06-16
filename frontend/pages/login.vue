@@ -38,6 +38,11 @@ export default {
       return `${url}${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`;
     },
   },
+  head() {
+    return {
+      title: 'Login',
+    };
+  },
 };
 </script>
 
