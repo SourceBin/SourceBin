@@ -20,16 +20,28 @@
 
     <div class="perks">
       <div>
+        <font-awesome-icon
+          :icon="['fas', 'star']"
+          class="ad-free"
+        />
         <h1>100% Ad Free</h1>
         <p>Turn off ads on all of SourceBin.</p>
       </div>
 
       <div>
+        <font-awesome-icon
+          :icon="['fas', 'align-left']"
+          class="code-formatting"
+        />
         <h1>Code Formatting</h1>
         <p>Format code directly in SourceBin.</p>
       </div>
 
       <div>
+        <font-awesome-icon
+          :icon="['fas', 'cloud-upload-alt']"
+          class="upload-limit"
+        />
         <h1>Upgraded Upload Limit</h1>
         <p>Increased upload limit from 0.1MB to 5MB.</p>
       </div>
@@ -84,8 +96,15 @@ export default {
 @import 'sass-mq';
 @import '@/assets/styles/_variables.scss';
 
+$color-ad-free: #ffad4d;
+$color-code-formatting: #63c7ff;
+$color-upload-limit: #fa63ff;
+
 $font-size-header: 48px;
 $font-size-header-small: 40px;
+
+$font-size-icon: 40px;
+$font-size-icon-small: 30px;
 
 .pro {
   padding: 0 var(--margin-side);
@@ -98,6 +117,10 @@ $font-size-header-small: 40px;
   flex-direction: column;
   align-items: center;
   text-align: center;
+
+  @include mq($until: tablet) {
+    margin: 50px 0;
+  }
 
   h1 {
     margin: 0;
@@ -154,6 +177,10 @@ $font-size-header-small: 40px;
   flex-wrap: wrap;
   max-width: 1000px;
 
+  @include mq($until: tablet) {
+    margin: 50px auto;
+  }
+
   div {
     padding: 30px;
     width: percentage(1 / 3);
@@ -165,6 +192,26 @@ $font-size-header-small: 40px;
     @include mq($until: tablet) {
       padding: 15px;
       width: 100%;
+    }
+
+    svg {
+      font-size: $font-size-icon;
+
+      @include mq($until: tablet) {
+        font-size: $font-size-icon-small;
+      }
+
+      &.ad-free {
+        color: $color-ad-free;
+      }
+
+      &.code-formatting {
+        color: $color-code-formatting;
+      }
+
+      &.upload-limit {
+        color: $color-upload-limit;
+      }
     }
   }
 
