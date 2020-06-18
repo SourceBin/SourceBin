@@ -137,7 +137,7 @@ export default {
       return {
         fontSize: this.settings.fontSize,
         printMargin: this.settings.printMargin,
-        fontFamily: this.settings.font,
+        fontFamily: [this.settings.font, 'monospace'],
 
         useWorker: false,
         readOnly: true,
