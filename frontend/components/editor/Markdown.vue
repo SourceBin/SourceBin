@@ -29,20 +29,13 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'sass-mq';
-@import 'github-markdown-css';
+@import '@/assets/markdown/markdown.scss';
 @import 'highlight.js/styles/atom-one-dark.css';
-@import '@/assets/styles/_variables.scss';
 
 $hljs-theme-background: #282c34;
 
 .markdown-body {
-  background-color: $white-800;
-  padding: 45px;
-
-  @include mq($until: tablet) {
-    padding: 15px;
-  }
+  padding: calc(var(--margin-side) * 1.5);
 }
 
 .markdown-body pre,

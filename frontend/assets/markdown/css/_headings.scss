@@ -1,0 +1,33 @@
+$heading-font-sizes: (
+  h1: 2em,
+  h2: 1.5em,
+  h3: 1.25em,
+  h4: 1em,
+  h5: 0.875em,
+  h6: 0.85em,
+);
+
+.markdown-body {
+  h1,
+  h2 {
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--background-modifier-accent);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 24px 0 16px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  @each $heading, $font-size in $heading-font-sizes {
+    #{$heading} {
+      font-size: $font-size;
+    }
+  }
+}

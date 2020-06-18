@@ -1,0 +1,66 @@
+.markdown-body {
+  code,
+  tt {
+    margin: 0;
+    padding: 0.2em 0.4em;
+    // stylelint-disable-next-line scale-unlimited/declaration-strict-value
+    font-size: 85%;
+    background-color: var(--background-tertiary);
+    border-radius: 5px;
+    font-family: var(--editor-font-family);
+
+    br {
+      display: none;
+    }
+  }
+
+  del code {
+    text-decoration: inherit;
+  }
+
+  pre {
+    word-wrap: normal;
+
+    // Code tags inside code blocks
+    > code {
+      margin: 0;
+      padding: 0;
+      // stylelint-disable-next-line scale-unlimited/declaration-strict-value
+      font-size: 100%;
+      word-break: normal;
+      white-space: pre;
+      background: transparent;
+      border: 0;
+    }
+  }
+
+  pre,
+  .highlight pre {
+    padding: 16px;
+    overflow: auto;
+    // stylelint-disable-next-line scale-unlimited/declaration-strict-value
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: var(--background-tertiary);
+    border-radius: 5px;
+  }
+
+  .highlight {
+    margin-bottom: 16px;
+
+    pre {
+      margin-bottom: 0;
+      word-break: normal;
+    }
+  }
+
+  pre code,
+  pre tt {
+    display: inline;
+    padding: 0;
+    line-height: inherit;
+    word-wrap: normal;
+    background-color: transparent;
+    border: 0;
+  }
+}

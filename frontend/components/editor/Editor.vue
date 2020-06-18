@@ -78,10 +78,11 @@ export default {
       return {
         fontSize: this.settings.fontSize,
         printMargin: this.settings.printMargin,
-        fontFamily: [this.settings.font, 'monospace'],
+
+        fontFamily: 'var(--editor-font-family)',
+        useWorker: false,
         minLines: 10,
         maxLines: 1000,
-        useWorker: false,
       };
     },
     ...mapState(['bin', 'settings']),
