@@ -137,8 +137,8 @@ export default {
       return {
         fontSize: this.settings.fontSize,
         printMargin: this.settings.printMargin,
-        fontFamily: [this.settings.font, 'monospace'],
 
+        fontFamily: 'var(--editor-font-family)',
         useWorker: false,
         readOnly: true,
         maxLines: 10,

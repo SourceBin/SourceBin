@@ -15,6 +15,16 @@ export default {
     Header,
     Footer,
   },
+  watch: {
+    '$store.state.settings.font': {
+      immediate: true,
+      handler(font) {
+        if (process.client) {
+          document.documentElement.style.setProperty('--editor-font-family', [font, 'monospace']);
+        }
+      },
+    },
+  },
 };
 </script>
 

@@ -15,7 +15,6 @@ onmessage = (e) => {
   const rendered = marked(e.data, {
     renderer,
     gfm: true,
-    breaks: true,
   });
 
   postMessage(rendered);

@@ -15,6 +15,13 @@ if (process.client) {
       }
     }
   });
+
+  // Add rel to <a>
+  DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+    if (node.tagName === 'A') {
+      node.setAttribute('rel', 'nofollow noopener');
+    }
+  });
 }
 
 export function sanitize(html) {

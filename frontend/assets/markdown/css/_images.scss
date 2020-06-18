@@ -1,0 +1,107 @@
+// stylelint-disable no-descending-specificity
+
+@import '@/assets/styles/_variables.scss';
+
+.markdown-body {
+  img {
+    max-width: 100%;
+    box-sizing: content-box;
+    background-color: $white-900;
+
+    &[align='right'] {
+      padding-left: 20px;
+    }
+
+    &[align='left'] {
+      padding-right: 20px;
+    }
+  }
+
+  span.frame {
+    display: block;
+    overflow: hidden;
+
+    > span {
+      display: block;
+      float: left;
+      width: auto;
+      margin: 13px 0 0;
+      padding: 7px;
+      overflow: hidden;
+      border: 1px solid var(--background-modifier-accent);
+    }
+
+    span img {
+      display: block;
+      float: left;
+    }
+
+    span span {
+      display: block;
+      padding: 5px 0 0;
+      clear: both;
+      color: var(--text-600);
+    }
+  }
+
+  span.align-center {
+    display: block;
+    overflow: hidden;
+    clear: both;
+
+    > span {
+      display: block;
+      margin: 13px auto 0;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    span img {
+      margin: 0 auto;
+      text-align: center;
+    }
+  }
+
+  span.align-right {
+    display: block;
+    overflow: hidden;
+    clear: both;
+
+    > span {
+      display: block;
+      margin: 13px 0 0;
+      overflow: hidden;
+      text-align: right;
+    }
+
+    span img {
+      margin: 0;
+      text-align: right;
+    }
+  }
+
+  span.float-left {
+    display: block;
+    float: left;
+    margin-right: 13px;
+    overflow: hidden;
+
+    span {
+      margin: 13px 0 0;
+    }
+  }
+
+  span.float-right {
+    display: block;
+    float: right;
+    margin-left: 13px;
+    overflow: hidden;
+
+    > span {
+      display: block;
+      margin: 13px auto 0;
+      overflow: hidden;
+      text-align: right;
+    }
+  }
+}

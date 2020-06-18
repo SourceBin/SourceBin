@@ -1,0 +1,49 @@
+.markdown-body {
+  ul,
+  ol {
+    padding-left: 2em;
+
+    &.no-list {
+      padding: 0;
+      list-style-type: none;
+    }
+  }
+
+  ul ul,
+  ul ol,
+  ol ol,
+  ol ul {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  li {
+    word-wrap: break-all;
+
+    > p {
+      margin-top: 16px;
+    }
+
+    + li {
+      margin-top: 0.25em;
+    }
+  }
+
+  dl {
+    padding: 0;
+
+    dt {
+      padding: 0;
+      margin-top: 16px;
+      // stylelint-disable-next-line scale-unlimited/declaration-strict-value
+      font-size: 1em;
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    dd {
+      padding: 0 16px;
+      margin-bottom: 16px;
+    }
+  }
+}
