@@ -25,5 +25,8 @@ if (process.client) {
 }
 
 export function sanitize(html) {
-  return DOMPurify.sanitize(html);
+  return DOMPurify.sanitize(html, {
+    FORBID_TAGS: ['style'],
+    FORBID_ATTR: ['style'],
+  });
 }
