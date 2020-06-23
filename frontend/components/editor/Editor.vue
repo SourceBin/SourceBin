@@ -142,9 +142,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'sass-mq';
+
+$border-radius: 3px;
+
 .editor {
-  margin: 0 0 var(--margin-between);
+  margin: 0 var(--margin-side) var(--margin-between);
   background: var(--background-secondary);
   overflow: hidden;
+  border-radius: $border-radius;
+
+  @include mq($until: tablet) {
+    margin: 0 0 var(--margin-between);
+    border-radius: 0;
+  }
+}
+
+.markdown-body {
+  border-radius: 0 0 $border-radius $border-radius;
+  border: 1px solid var(--background-secondary);
+  border-top: none;
+
+  @include mq($until: tablet) {
+    border-radius: 0;
+  }
 }
 </style>
