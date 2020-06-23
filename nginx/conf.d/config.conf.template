@@ -25,6 +25,7 @@ server {
   proxy_redirect off;
   proxy_ssl_session_reuse off;
 
+  # Application
   location / {
     proxy_pass http://${FRONTEND_URL}/;
   }
@@ -39,6 +40,15 @@ server {
 
   location /proxy/ {
     proxy_pass http://${PROXY_URL}/;
+  }
+
+  # Socials
+  location = /discord {
+    return 302 https://src.gg/discord;
+  }
+
+  location = /github {
+    return 302 https://src.gg/github;
   }
 
   # Let's Encrypt
