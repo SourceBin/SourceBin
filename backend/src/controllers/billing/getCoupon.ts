@@ -9,8 +9,6 @@ export async function getCoupon(req: Request, res: Response): Promise<void> {
 
     res.json(coupon);
   } catch (err) {
-    console.error(err);
-
     replyError(400, err.message, res);
   }
 }

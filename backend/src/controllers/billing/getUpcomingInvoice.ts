@@ -20,8 +20,6 @@ export async function getUpcomingInvoice(req: Request, res: Response): Promise<v
 
     res.json(invoice);
   } catch (err) {
-    console.error(err);
-
     replyError(400, err.message, res);
   }
 }
