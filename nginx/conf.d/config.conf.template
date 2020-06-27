@@ -51,6 +51,10 @@ server {
     return 302 https://src.gg/github;
   }
 
+  location = /twitter {
+    return 302 https://src.gg/twitter;
+  }
+
   # Let's Encrypt
   location ^~ /.well-known/acme-challenge/ {
     root /var/www/certbot/;
