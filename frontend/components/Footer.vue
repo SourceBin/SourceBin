@@ -15,6 +15,12 @@
             GitHub
           </a>
         </li>
+
+        <li>
+          <a href="/twitter">
+            Twitter
+          </a>
+        </li>
       </ul>
     </div>
 
