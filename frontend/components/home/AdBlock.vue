@@ -19,10 +19,6 @@
   color: var(--text-600);
   border-radius: 3px;
 
-  @include mq($from: desktop) {
-    max-width: 330px;
-  }
-
   @include mq($until: tablet) {
     margin: 0 var(--margin-side);
   }
