@@ -7,7 +7,7 @@
             to="/"
             class="title"
           >
-            SourceBin
+            {SourceBin}
           </nuxt-link>
         </li>
       </ul>
@@ -87,7 +87,12 @@ ul {
       color: var(--text-700);
       text-decoration: none;
 
+      &:hover {
+        color: var(--text-900);
+      }
+
       &.title {
+        font-family: var(--editor-font-family);
         font-weight: 700;
       }
 
