@@ -60,7 +60,6 @@ nav {
   margin: 0 var(--margin-side);
   height: var(--height);
   font-family: var(--font-family);
-  font-size: var(--font-size-header);
 
   @include mq($until: tablet) {
     --height: 40px;
@@ -93,7 +92,12 @@ ul {
 
       &.title {
         font-family: var(--editor-font-family);
+        font-size: var(--font-size-header);
         font-weight: 700;
+
+        @include mq($until: tablet) {
+          font-size: var(--font-size-large);
+        }
       }
 
       &.go-pro {
