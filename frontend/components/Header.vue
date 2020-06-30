@@ -7,7 +7,7 @@
             to="/"
             class="title"
           >
-            {SourceBin}
+            <span>{</span>SourceBin<span>}</span>
           </nuxt-link>
         </li>
       </ul>
@@ -97,6 +97,10 @@ ul {
 
         @include mq($until: tablet) {
           font-size: var(--font-size-large);
+        }
+
+        span {
+          color: $red;
         }
       }
 
