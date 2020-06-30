@@ -25,7 +25,7 @@
           class="ad-free"
         />
         <h1>100% Ad Free</h1>
-        <p>Turn off ads on all of SourceBin.</p>
+        <p>Remove all ads from SourceBin.</p>
       </div>
 
       <div>
@@ -34,7 +34,7 @@
           class="code-formatting"
         />
         <h1>Code Formatting</h1>
-        <p>Format code directly in SourceBin.</p>
+        <p>Format JavaScript, HTML, CSS, Markdown, and other languages in SourceBin.</p>
       </div>
 
       <div>
@@ -43,7 +43,7 @@
           class="upload-limit"
         />
         <h1>Upgraded Upload Limit</h1>
-        <p>Increased upload limit from 0.1MB to 5MB.</p>
+        <p>Increase your upload limit from 0.1MB to 5MB.</p>
       </div>
     </div>
   </div>
