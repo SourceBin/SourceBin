@@ -1,45 +1,41 @@
 <template lang="html">
-  <div class="markdown-body" />
+  <MarkdownContainer v-html="rendered" />
 </template>
 
 <script>
+import MarkdownContainer from '@/components/MarkdownContainer.vue';
+
 import { render } from '@/assets/markdown/markdown.js';
 
 export default {
+  components: {
+    MarkdownContainer,
+  },
   props: {
     markdown: {
       type: String,
       required: true,
     },
   },
+  data() {
+    return {
+      rendered: '',
+    };
+  },
   watch: {
-    markdown() {
-      this.render();
-    },
-  },
-  mounted() {
-    this.render();
-  },
-  methods: {
-    async render() {
-      this.$el.innerHTML = await render(this.markdown);
+    markdown: {
+      immediate: true,
+      async handler() {
+        this.rendered = await render(this.markdown);
+      },
     },
   },
 };
 </script>
 
-<style lang="scss">
-@import '@/assets/markdown/markdown.scss';
-@import 'highlight.js/styles/atom-one-dark.css';
-
-$hljs-theme-background: #282c34;
-
+<style lang="scss" scoped>
 .markdown-body {
   padding: calc(var(--margin-side) * 1.5);
-}
-
-.markdown-body pre,
-.markdown-body .highlight pre {
-  background-color: $hljs-theme-background;
+  background-color: var(--background-primary);
 }
 </style>

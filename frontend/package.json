@@ -49,6 +49,8 @@
     "eslint-plugin-jsdoc": "^15.8.0",
     "eslint-plugin-nuxt": ">=0.4.2",
     "eslint-plugin-vue": "^5.2.3",
+    "html-loader": "^1.1.0",
+    "markdown-loader": "^5.1.0",
     "node-sass": "^4.14.1",
     "nuxt": "^2.11.0",
     "sass-loader": "^8.0.1",
