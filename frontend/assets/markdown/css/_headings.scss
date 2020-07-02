@@ -9,20 +9,22 @@ $heading-font-sizes: (
 
 .markdown-body {
   h1,
-  h2 {
-    padding-bottom: 0.3em;
-    border-bottom: 1px solid var(--background-modifier-accent);
-  }
-
-  h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
+    color: var(--text-800);
     margin: 24px 0 16px;
     font-weight: 600;
     line-height: 1.25;
+  }
+
+  h1,
+  h2 {
+    color: var(--text-900);
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--background-modifier-accent);
   }
 
   @each $heading, $font-size in $heading-font-sizes {

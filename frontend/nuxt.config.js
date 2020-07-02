@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import { meta, GA_ID } from './config.js';
+import { renderer as markdownRenderer } from './assets/markdown/renderer.js';
 
 export default {
   buildDir: 'dist',
@@ -123,6 +124,20 @@ export default {
       config.module.rules.push({
         test: /\.worker\.js$/,
         loader: 'worker-loader',
+      });
+
+      config.module.rules.push({
+        test: /\.md$/,
+        use: [
+          'html-loader',
+          {
+            loader: 'markdown-loader',
+            options: {
+              gfm: true,
+              renderer: markdownRenderer,
+            },
+          },
+        ],
       });
     },
     transpile: [

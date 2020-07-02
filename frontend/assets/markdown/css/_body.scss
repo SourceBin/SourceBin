@@ -1,10 +1,9 @@
 @import '@/assets/styles/_variables.scss';
 
 .markdown-body {
-  background-color: var(--background-primary);
   font-family: var(--font-family);
   font-size: var(--font-size-big);
-  color: var(--text-900);
+  color: var(--text-700);
   line-height: 1.5;
   word-wrap: break-word;
 
