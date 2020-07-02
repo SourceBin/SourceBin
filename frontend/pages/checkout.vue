@@ -220,7 +220,8 @@ export default {
       });
 
       if (result.error) {
-        this.errors.card = result.error;
+        this.$toast.global.error(result.error.message);
+        this.loading = false;
         return;
       }
 
