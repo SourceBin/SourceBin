@@ -60,6 +60,8 @@ RUN npm ci --production
 COPY --from=builder /usr/src/dist dist
 
 # Copy additional files
+# TODO: don't copy all assets over
+COPY --from=builder /usr/src/assets assets
 COPY --from=builder /usr/src/static static
 COPY nuxt.config.js config.js ./
 
