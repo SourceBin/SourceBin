@@ -81,6 +81,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'sass-mq';
 @import '@/assets/styles/_variables.scss';
 
 $border-radius: 5px;

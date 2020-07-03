@@ -1,7 +1,3 @@
-/* stylelint-disable custom-property-empty-line-before */
-
-@import 'sass-mq';
-
 $black-900: #000;
 $black-800: #0d0d0d;
 $black-700: #1a1a1a;
@@ -25,40 +21,3 @@ $red-modifier-hover: #ff4646;
 $green: #00d114;
 $blue: #3cb1ff;
 $gold: #ffb800;
-
-html {
-  --background-primary: #{$gray-800};
-  --background-secondary: #{$gray-900};
-  --background-tertiary: #{$gray-700};
-
-  --background-modifier-hover: #{rgba($gray-600, 0.2)};
-  --background-modifier-accent: #{rgba($white-900, 0.05)};
-
-  --text-900: #{$white-800};
-  --text-800: #{$white-700};
-  --text-700: #{$white-600};
-  --text-600: #{$white-500};
-
-  --font-family: 'Roboto', sans-serif;
-  --editor-font-family: monospace;
-
-  --font-size-header: 32px;
-  --font-size-large: 25px;
-  --font-size-big: 17px;
-  --font-size-regular: 15px;
-  --font-size-small: 13px;
-
-  --margin-side: 30px;
-  --margin-between: 15px;
-
-  @include mq($until: tablet) {
-    --font-size-header: 25px;
-    --font-size-large: 18px;
-    --font-size-big: 15px;
-    --font-size-regular: 13px;
-    --font-size-small: 10px;
-
-    --margin-side: 10px;
-    --margin-between: 10px;
-  }
-}
