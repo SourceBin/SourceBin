@@ -18,6 +18,7 @@ const schema = Joi.object({
 
   files: Joi.array()
     .min(1)
+    .max(25)
     .required()
     .items({
       name: Joi.string()

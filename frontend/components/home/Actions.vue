@@ -2,6 +2,7 @@
   <div class="actions">
     <button
       v-if="$store.getters.pro"
+      :disabled="$store.state.bin.files.length >= 25"
       @click="addFile"
     >
       Add file
