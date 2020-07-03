@@ -1,12 +1,18 @@
 <template lang="html">
   <div class="actions">
     <button
+      v-if="$store.getters.pro"
+      @click="addFile"
+    >
+      Add file
+    </button>
+
+    <button
       :disabled="$store.state.bin.saved"
       @click="save"
     >
       Save
     </button>
-    <!-- <button>Add file</button> -->
   </div>
 </template>
 
@@ -15,6 +21,9 @@ import { save } from '@/assets/home/save.js';
 
 export default {
   methods: {
+    addFile() {
+      this.$store.commit('bin/addFile');
+    },
     save() {
       save(this);
     },

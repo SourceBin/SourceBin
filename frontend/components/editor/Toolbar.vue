@@ -49,6 +49,13 @@
       >
         Raw
       </li>
+
+      <li
+        v-if="bin.files.length > 1"
+        @click="deleteFile"
+      >
+        Delete
+      </li>
     </ul>
   </div>
 </template>
@@ -118,6 +125,9 @@ export default {
     },
     raw() {
       window.location.href = `/raw/${this.bin.key}/${this.fileIndex}`;
+    },
+    deleteFile() {
+      this.$store.commit('bin/deleteFile', this.fileIndex);
     },
   },
 };

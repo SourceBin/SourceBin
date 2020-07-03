@@ -17,7 +17,7 @@ const schema = Joi.object({
     .max(config.bin.maxDescriptionLength),
 
   files: Joi.array()
-    .length(1)
+    .min(1)
     .required()
     .items({
       name: Joi.string()
@@ -37,6 +37,11 @@ export async function createBin(req: Request, res: Response): Promise<void> {
 
   if (error) {
     replyJoiError(error, res);
+    return;
+  }
+
+  if (req.body.files.length > 1 && (!req.user || req.user.plan !== 'Pro')) {
+    replyError(403, 'You need Pro to save multibins', res);
     return;
   }
 

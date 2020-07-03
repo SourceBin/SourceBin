@@ -35,8 +35,8 @@ export async function save(nuxt) {
   try {
     // Save bin
     await nuxt.$store.dispatch('bin/save');
-  } catch {
-    nuxt.$toast.global.error('An error occured while saving');
+  } catch (err) {
+    nuxt.$toast.global.error(err.response.data.message || 'An error occured while saving');
     return;
   }
 

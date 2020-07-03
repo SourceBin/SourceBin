@@ -1,3 +1,9 @@
+function setEdited(state) {
+  state.key = undefined;
+  state.created = undefined;
+  state.saved = false;
+}
+
 export const state = () => ({
   key: undefined,
   title: undefined,
@@ -31,12 +37,25 @@ export const mutations = {
   updateContent(state, { content, file }) {
     state.files[file].content = content;
 
-    state.key = undefined;
-    state.created = undefined;
-    state.saved = false;
+    setEdited(state);
   },
   setLanguageId(state, { languageId, file }) {
     state.files[file].languageId = languageId;
+  },
+
+  addFile(state) {
+    state.files.push({
+      name: undefined,
+      content: '',
+      languageId: undefined,
+    });
+
+    setEdited(state);
+  },
+  deleteFile(state, file) {
+    state.files.splice(file, 1);
+
+    setEdited(state);
   },
 
   loadFromKeySuccess(state, bin) {
