@@ -30,6 +30,15 @@
 
       <div>
         <font-awesome-icon
+          :icon="['fas', 'layer-group']"
+          class="multibins"
+        />
+        <h1>Multibins</h1>
+        <p>Save multiple files in a single bin.</p>
+      </div>
+
+      <div>
+        <font-awesome-icon
           :icon="['fas', 'align-left']"
           class="code-formatting"
         />
@@ -97,6 +106,7 @@ export default {
 @import '@/assets/styles/_variables.scss';
 
 $color-ad-free: #ffad4d;
+$color-multibins: #70d18c;
 $color-code-formatting: #63c7ff;
 $color-upload-limit: #fa63ff;
 
@@ -174,8 +184,10 @@ $font-size-icon-small: 30px;
 .perks {
   margin: 100px auto;
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   max-width: 1000px;
+  text-align: center;
 
   @include mq($until: tablet) {
     margin: 50px auto;
@@ -203,6 +215,10 @@ $font-size-icon-small: 30px;
 
       &.ad-free {
         color: $color-ad-free;
+      }
+
+      &.multibins {
+        color: $color-multibins;
       }
 
       &.code-formatting {
