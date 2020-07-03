@@ -24,6 +24,11 @@
           <font-awesome-icon :icon="['fas', 'calendar-day']" />
           {{ bin.created | date }}
         </p>
+
+        <p>
+          <font-awesome-icon :icon="['fas', 'file-code']" />
+          {{ bin.files.length }} {{ 'file' | pluralize(bin.files.length) }}
+        </p>
       </div>
     </div>
 
