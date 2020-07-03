@@ -25,6 +25,16 @@ export default {
       },
     },
   },
+  async mounted() {
+    // Try to load the user if they're not logged in. This is a potential fix of
+    // the user not being loaded when they visit the site, which seems to be caused
+    // by nuxtServerInit only running server-side.
+    if (!this.$store.state.auth.loggedIn) {
+      try {
+        await this.$store.dispatch('auth/loadUser');
+      } catch {} // eslint-disable-line no-empty
+    }
+  },
 };
 </script>
 
