@@ -33,7 +33,7 @@
 
     <div class="bins">
       <BinCard
-        v-for="(bin, i) in bins"
+        v-for="(bin, i) in sortedBins"
         :key="i"
         :bin="bin"
       />
@@ -52,7 +52,13 @@ export default {
     BinCard,
   },
   middleware: 'auth',
-  computed: mapState(['auth']),
+  computed: {
+    sortedBins() {
+      return [...this.bins]
+        .sort((a, b) => new Date(b.created) - new Date(a.created));
+    },
+    ...mapState(['auth']),
+  },
   async asyncData({ $axios }) {
     const bins = await $axios.$get('/api/user/bins');
 
