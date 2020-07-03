@@ -1,6 +1,6 @@
 <template lang="html">
   <div
-    v-show="visible"
+    v-if="visible"
     @click.self="$emit('close')"
     class="overlay"
   >

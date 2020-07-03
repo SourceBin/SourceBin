@@ -36,6 +36,8 @@
         v-for="(bin, i) in sortedBins"
         :key="i"
         :bin="bin"
+
+        @disown="disownBin(bin)"
       />
     </div>
   </div>
@@ -71,6 +73,13 @@ export default {
   },
   beforeDestroy() {
     Mousetrap.unbind('esc');
+  },
+  methods: {
+    async disownBin(bin) {
+      await this.$axios.$delete(`/api/bins/${bin.key}`);
+
+      this.bins = this.bins.filter(b => b.key !== bin.key);
+    },
   },
   head() {
     return {

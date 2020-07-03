@@ -6,7 +6,9 @@
     <div class="confirm">
       <h1>{{ title }}</h1>
 
-      <p><slot /></p>
+      <div class="content">
+        <slot />
+      </div>
 
       <div class="buttons">
         <button
@@ -79,10 +81,10 @@ export default {
     cursor: default;
   }
 
-  p {
+  .content {
     margin: 0 0 var(--margin-between);
     font-size: var(--font-size-big);
-    color: var(--text-800);
+    color: var(--text-700);
   }
 
   .buttons {
