@@ -5,9 +5,6 @@ services:
     build:
       context: frontend
       args:
-        - API_URL=http://nginx:80/
-        - API_URL_BROWSER=/
-        - SHARE_DOMAIN=${SHARE_DOMAIN}
         - STRIPE_PUBLIC_KEY=${STRIPE_PUBLIC_KEY}
     depends_on:
       - backend
@@ -35,11 +32,6 @@ services:
     ports:
       - 80:80
       - 443:443
-    environment:
-      - DOMAIN=${DOMAIN}
-      - FRONTEND_URL=frontend:3000
-      - BACKEND_URL=backend:3000
-      - PROXY_URL=proxy:3000
     volumes:
       - ./certbot/certs:/etc/ssl/certs
       - ./certbot/letsencrypt:/etc/letsencrypt

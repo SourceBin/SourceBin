@@ -13,6 +13,7 @@ else ifeq ($(ENV), prod)
 	COMPOSE_FILES += -f docker-compose.prod.yml
 endif
 
+DOMAIN=sourceb.in
 CERTBOT_DIR = $(PWD)/certbot
 CERT_DIR = $(CERTBOT_DIR)/letsencrypt/live/$(DOMAIN)
 DHPARAM_DIR = $(CERTBOT_DIR)/certs

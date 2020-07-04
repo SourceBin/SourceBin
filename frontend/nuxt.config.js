@@ -81,6 +81,11 @@ export default {
     }],
   ],
 
+  axios: {
+    baseURL: 'http://nginx:80/',
+    browserBaseURL: '/',
+  },
+
   plugins: [
     { src: '@/plugins/filters.js' },
 
@@ -107,7 +112,6 @@ export default {
   },
 
   env: {
-    SHARE_DOMAIN: process.env.SHARE_DOMAIN,
     STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
   },
 

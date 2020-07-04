@@ -1,5 +1,7 @@
 import clipboardCopy from 'clipboard-copy';
 
+import { shortDomain } from '@/config.js';
+
 function setLanguageIdFromDefault(store) {
   store.state.bin.files.forEach((file, index) => {
     if (file.languageId === undefined) {
@@ -45,7 +47,7 @@ export async function save(nuxt) {
 
   try {
     // Create share URL and copy to clipboard
-    const shareURL = new URL(bin.key, `https://${process.env.SHARE_DOMAIN}`);
+    const shareURL = new URL(bin.key, `https://${shortDomain}`);
     await clipboardCopy(shareURL);
 
     nuxt.$toast.global.success('Successfully saved and copied to clipboard');

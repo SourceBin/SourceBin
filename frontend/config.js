@@ -1,11 +1,12 @@
-const url = 'https://sourceb.in';
+export const domain = 'sourceb.in';
+export const shortDomain = 'srcb.in';
 
 export const meta = {
-  url,
+  url: `https://${domain}`,
   title: 'SourceBin',
   description: '💻 Sharing code made easy',
   themeColor: '#FF5555',
-  image: `${url}/icon.png`,
+  image: `https://${domain}/icon.png`,
 };
 
 export const GA_ID = 'UA-162309515-1';
