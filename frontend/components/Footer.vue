@@ -1,70 +1,58 @@
 <template lang="html">
   <footer>
-    <div>
-      <h1>Community</h1>
+    <ul>
+      <li>
+        <nuxt-link to="/terms">
+          Terms
+        </nuxt-link>
+      </li>
 
-      <ul>
-        <li>
-          <a href="/discord">
-            Discord
-          </a>
-        </li>
+      <li>
+        <nuxt-link to="/privacy">
+          Privacy
+        </nuxt-link>
+      </li>
 
-        <li>
-          <a href="/github">
-            GitHub
-          </a>
-        </li>
+      <li>
+        <a href="https://status.sourceb.in">
+          Status
+        </a>
+      </li>
+    </ul>
 
-        <li>
-          <a href="/twitter">
-            Twitter
-          </a>
-        </li>
-      </ul>
-    </div>
+    <ul>
+      <li>
+        <a href="/discord">
+          <font-awesome-icon :icon="['fab', 'discord']" />
+        </a>
+      </li>
 
-    <div>
-      <h1>Company</h1>
+      <li>
+        <a href="/github">
+          <font-awesome-icon :icon="['fab', 'github']" />
+        </a>
+      </li>
 
-      <ul>
-        <li>
-          <nuxt-link to="/terms">
-            Terms of service
-          </nuxt-link>
-        </li>
+      <li>
+        <a href="/twitter">
+          <font-awesome-icon :icon="['fab', 'twitter']" />
+        </a>
+      </li>
+    </ul>
 
-        <li>
-          <nuxt-link to="/privacy">
-            Privacy
-          </nuxt-link>
-        </li>
+    <ul>
+      <li>
+        <nuxt-link to="/pro">
+          Go Pro
+        </nuxt-link>
+      </li>
 
-        <li>
-          <a href="https://status.sourceb.in">
-            Status
-          </a>
-        </li>
-      </ul>
-    </div>
-
-    <div>
-      <h1>Pro</h1>
-
-      <ul>
-        <li>
-          <nuxt-link to="/pro">
-            Go Pro
-          </nuxt-link>
-        </li>
-
-        <li>
-          <nuxt-link to="/account/billing">
-            Billing
-          </nuxt-link>
-        </li>
-      </ul>
-    </div>
+      <li>
+        <nuxt-link to="/account/billing">
+          Billing
+        </nuxt-link>
+      </li>
+    </ul>
   </footer>
 </template>
 
@@ -73,9 +61,8 @@
 
 footer {
   display: flex;
-  justify-content: center;
-  margin: auto calc(var(--margin-side) * 3) var(--margin-between);
-  padding-top: 25px;
+  margin: auto calc(var(--margin-side) * 3) 0;
+  padding: var(--margin-between) 0;
   border-top: 1px solid var(--background-modifier-accent);
   font-family: var(--font-family);
   opacity: 0.5;
@@ -84,38 +71,38 @@ footer {
   @include mq($until: tablet) {
     flex-direction: column;
     align-items: center;
+
+    ul:not(:last-child) {
+      margin-bottom: var(--margin-between);
+    }
   }
 
   &:hover {
     opacity: 1;
   }
 
-  div {
-    margin: 0 50px;
+  ul {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 
-    @include mq($until: tablet) {
-      margin-bottom: var(--margin-between);
-      width: 100%;
-    }
+    li {
+      margin: 0 var(--margin-between);
 
-    h1 {
-      margin: 0 0 10px;
-      font-size: var(--font-size-big);
-      color: var(--text-900);
-    }
+      a {
+        font-size: var(--font-size-regular);
+        color: var(--text-700);
+        text-decoration: none;
 
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
+        &:hover {
+          color: var(--text-900);
+        }
 
-      li {
-        margin-bottom: 5px;
-
-        a {
-          font-size: var(--font-size-regular);
-          color: var(--text-800);
-          text-decoration: none;
+        svg {
+          font-size: var(--font-size-large);
         }
       }
     }
