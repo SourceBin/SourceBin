@@ -92,9 +92,9 @@ export default {
     return {
       title: 'Pro',
       meta: [
-        { hid: 'description', content: description },
+        { name: 'description', hid: 'description', content: description },
 
-        { hid: 'og:description', content: description },
+        { name: 'og:description', hid: 'og:description', content: description },
       ],
     };
   },
