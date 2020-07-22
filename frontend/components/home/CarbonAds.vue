@@ -78,6 +78,7 @@ $font-size-poweredby: 9px;
 
     .carbon-img img {
       display: block;
+      width: 130px;
     }
 
     .carbon-text {
