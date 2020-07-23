@@ -21,7 +21,6 @@ import CarbonAds from '@/components/home/CarbonAds.vue';
 import Editors from '@/components/home/Editors.vue';
 import Actions from '@/components/home/Actions.vue';
 
-import { loadBin } from '@/assets/home/loadBin.js';
 import { languageOptions } from '@/assets/selector/options.js';
 
 export default {
@@ -42,25 +41,48 @@ export default {
       return this.$store.state.bin.key;
     },
   },
-  watch: {
-    key(key) {
-      if (!key && window.location.pathname !== '/') {
-        window.history.pushState(null, null, '/');
-      }
-    },
+  async fetch({ route, store }) {
+    if (route.params.key) {
+      // If a key is provided the bin is loaded, but the content is excluded. This
+      // allows metadata to be displayed on bin load, and the content itself to be
+      // loaded afterwards.
+      await store.dispatch('bin/loadFromKey', {
+        key: route.params.key,
+        content: false,
+      });
+    } else if (store.state.bin.key) {
+      // If there is a key the bin is reset. This is to prevent content from a different
+      // bin being displayed.
+      store.commit('bin/reset');
+    }
   },
-  async fetch({ route, store, error }) {
-    await loadBin(route, store, error);
-  },
-  mounted() {
+  async mounted() {
     window.addEventListener('popstate', this.handlePopstate);
+
+    await this.loadBin();
   },
   beforeDestroy() {
     window.removeEventListener('popstate', this.handlePopstate);
   },
   methods: {
-    handlePopstate() {
-      loadBin(this.$route, this.$store, this.$nuxt.error);
+    async handlePopstate() {
+      await this.loadBin();
+    },
+    async loadBin() {
+      try {
+        if (this.$route.params.key) {
+          await this.$store.dispatch('bin/loadFromKey', {
+            key: this.$route.params.key,
+          });
+        } else if (this.$route.query.src) {
+          await this.$store.dispatch('bin/loadFromQuery', this.$route.query);
+        }
+      } catch (err) {
+        this.$nuxt.error({
+          statusCode: err.response.status,
+          message: err.response.data.message,
+        });
+      }
     },
   },
   head() {

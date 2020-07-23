@@ -2,6 +2,11 @@ function setEdited(state) {
   state.key = undefined;
   state.created = undefined;
   state.saved = false;
+
+  // Update URL if needed
+  if (window.location.pathname !== '/') {
+    window.history.pushState(null, null, '/');
+  }
 }
 
 export const state = () => ({
@@ -66,7 +71,7 @@ export const mutations = {
 
     state.files = bin.files.map(file => ({
       name: file.name,
-      content: file.content,
+      content: file.content || '',
       languageId: file.languageId,
     }));
 
@@ -77,7 +82,7 @@ export const mutations = {
 
     state.files = [{
       name: external.src.substring(external.src.lastIndexOf('/') + 1),
-      content: external.content,
+      content: external.content || '',
       languageId: undefined,
     }];
 
@@ -96,8 +101,12 @@ export const mutations = {
 };
 
 export const actions = {
-  async loadFromKey({ commit }, key) {
-    const bin = await this.$axios.$get(`/api/bins/${key}`);
+  async loadFromKey({ commit }, { key, content }) {
+    const bin = await this.$axios.$get(`/api/bins/${key}`, {
+      params: {
+        content,
+      },
+    });
 
     commit('loadFromKeySuccess', bin);
   },
