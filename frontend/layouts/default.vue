@@ -43,6 +43,7 @@ export default {
 @import '@/assets/styles/toasted.scss';
 @import '@/assets/styles/cssvars.scss';
 @import '@/assets/styles/scrollbar.scss';
+@import '@/assets/styles/transition.scss';
 @import '@/assets/styles/_variables.scss';
 
 *,
