@@ -115,9 +115,8 @@ $border-radius: 5px;
   }
 
   .avatar {
-    width: 100%;
-    height: 100%;
-    max-width: 100px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     margin: 0 var(--margin-side);
 
