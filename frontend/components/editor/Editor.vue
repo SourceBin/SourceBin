@@ -133,6 +133,8 @@ export default {
       if (this.fileIndex === 0 && !this.bin.saved) {
         this.focus();
       }
+
+      this.$emit('ready');
     },
     focus() {
       this.$refs.editor.focus();

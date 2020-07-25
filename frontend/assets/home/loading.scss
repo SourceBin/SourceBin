@@ -1,0 +1,92 @@
+@import '@/assets/styles/_variables.scss';
+
+$items: (
+  ('<h1>', '</h1>'), // HTML
+  ("console.log('", "');"), // JavaScript
+  ('println!("', '");'), // Rust
+  ("echo '", "'"), // Bash
+  ('(println "', '")'), // Clojure
+  ('IO.puts("', '")'), // Elixir
+  ("print('", "')"), // Python
+  ('fmt.Println("', '")'), // Go
+  ('std::cout << "', '";'), // C++
+  ('printf("', '");'), // C
+  ('putStrLn "', '"'), // Haskell
+  ('io:fwrite("', '").'), // Erlang
+  ('print "', '"'), // Perl
+  ('System.out.println("', '");'), // Java
+  ('write-host "', '"'), // Powershell
+  ('println("', '")'), // Kotlin
+  ('puts "', '"'), // Ruby
+);
+
+$names: 'content-before' 'content-after';
+$animation-duration: length($items) * 3s;
+
+$percent-visible: 90 / length($items);
+$percent-invisible: 10 / length($items) / 2;
+
+@for $i from 1 through 2 {
+  $percent: 0;
+
+  // stylelint-disable-next-line scss/dollar-variable-no-missing-interpolation
+  @keyframes #{nth($names, $i)} {
+    @each $item in $items {
+      #{$percent}%, #{$percent + $percent-visible}% {
+        content: nth($item, $i);
+      }
+
+      $percent: $percent + 100 / length($items); // stylelint-disable-line
+    }
+
+    // stylelint-disable-next-line order/order
+    100% {
+      opacity: 1;
+      content: nth(nth($items, 1), $i);
+    }
+  }
+}
+
+@keyframes pulse {
+  // stylelint-disable-next-line scss/no-duplicate-dollar-variables
+  $percent: 0;
+
+  @while $percent < 100 {
+    #{$percent}%, #{$percent + $percent-visible}% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #{$percent + $percent-visible + $percent-invisible}% {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+
+    $percent: $percent + 100 / length($items); // stylelint-disable-line
+  }
+
+  // stylelint-disable-next-line order/order
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loading {
+  font-family: var(--editor-font-family);
+  color: var(--text-900);
+  text-align: center;
+  animation: pulse linear $animation-duration infinite;
+
+  &::before {
+    content: '';
+    color: $red;
+    animation: content-before linear $animation-duration infinite;
+  }
+
+  &::after {
+    content: '';
+    color: $red;
+    animation: content-after linear $animation-duration infinite;
+  }
+}
