@@ -21,6 +21,8 @@ $items: (
 
 $names: 'content-before' 'content-after';
 $animation-duration: length($items) * 3s;
+$animation-delay: 2s;
+$animation-props: $animation-duration linear $animation-delay infinite;
 
 $percent-visible: 90 / length($items);
 $percent-invisible: 10 / length($items) / 2;
@@ -91,17 +93,20 @@ $percent-invisible: 10 / length($items) / 2;
   font-size: var(--font-size-large);
   color: var(--text-900);
   text-align: center;
-  animation: pulse linear $animation-duration infinite;
+  opacity: 0;
+  animation:
+    pulse $animation-props,
+    fade-in 0.15s linear $animation-delay - 0.15s;
 
   &::before {
-    content: '';
+    content: nth(nth($items, 1), 1);
     color: $red;
-    animation: content-before linear $animation-duration infinite;
+    animation: content-before $animation-props;
   }
 
   &::after {
-    content: '';
+    content: nth(nth($items, 1), 2);
     color: $red;
-    animation: content-after linear $animation-duration infinite;
+    animation: content-after $animation-props;
   }
 }
