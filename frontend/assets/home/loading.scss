@@ -26,6 +26,7 @@ $animation-duration: length($items) * 3s;
 $percent-visible: 90 / length($items);
 $percent-invisible: 10 / length($items) / 2;
 
+// Generate before and after keyframes
 @for $i from 1 through 2 {
   $percent: 0;
 
@@ -41,34 +42,47 @@ $percent-invisible: 10 / length($items) / 2;
 
     // stylelint-disable-next-line order/order
     100% {
-      opacity: 1;
       content: nth(nth($items, 1), $i);
     }
   }
 }
 
+// Generate pulse keyframe
 @keyframes pulse {
   // stylelint-disable-next-line scss/no-duplicate-dollar-variables
   $percent: 0;
+  $visible-percentages: ();
+  $invisible-percentages: ();
 
-  @while $percent < 100 {
-    #{$percent}%, #{$percent + $percent-visible}% {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  // Calculate visible and invisible percentages. THis allows them to be grouped
+  // together reducing output size
+  @while $percent + $percent-visible < 100 {
+    // stylelint-disable-next-line scss/no-duplicate-dollar-variables
+    $visible-percentages: append(
+      $visible-percentages,
+      ('#{$percent}%', '#{$percent + $percent-visible}%'),
+      comma,
+    );
 
-    #{$percent + $percent-visible + $percent-invisible}% {
-      opacity: 0;
-      transform: translateY(15px);
-    }
+    // stylelint-disable-next-line scss/no-duplicate-dollar-variables
+    $invisible-percentages: append(
+      $invisible-percentages,
+      '#{$percent + $percent-visible + $percent-invisible}%',
+      comma,
+    );
 
     $percent: $percent + 100 / length($items); // stylelint-disable-line
   }
 
   // stylelint-disable-next-line order/order
-  100% {
+  #{$visible-percentages}, 100% {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  #{$invisible-percentages} {
+    opacity: 0;
+    transform: translateY(15px);
   }
 }
 
