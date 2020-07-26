@@ -91,7 +91,8 @@ ul {
       }
 
       &.title {
-        font-family: var(--editor-font-family);
+        // stylelint-disable-next-line scale-unlimited/declaration-strict-value
+        font-family: monospace;
         font-size: var(--font-size-header);
         font-weight: 700;
 
