@@ -21,9 +21,10 @@ SourceBin makes sharing code easy by providing an easy to use pastebin service. 
 1. Download or clone the repository
 2. Run `make .env`
 3. Edit the configuration in the `.env` file
-4. Point domain to server
-5. Run `make cert dhparam` to generate certificates
-6. Run `make ENV=prod start`
+4. Run `make dhparam` to generate dhparam
+5. Add SSL cert in `ssl/certs/cert.pem` and `ssl/private/key.pem`
+6. Point domain to server
+7. Run `make start`
 
 ## Note
 

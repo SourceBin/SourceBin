@@ -1,7 +1,7 @@
 node_modules
 dist
 .env
-certbot
+ssl
 
 # @nuxtjs/pwa
 sw.*

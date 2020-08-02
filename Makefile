@@ -9,14 +9,10 @@ COMPOSE_FILES = -f docker-compose.yml
 
 ifeq ($(ENV), dev)
 	COMPOSE_FILES += -f docker-compose.dev.yml
-else ifeq ($(ENV), prod)
-	COMPOSE_FILES += -f docker-compose.prod.yml
 endif
 
 DOMAIN=sourceb.in
-CERTBOT_DIR = $(PWD)/certbot
-CERT_DIR = $(CERTBOT_DIR)/letsencrypt/live/$(DOMAIN)
-DHPARAM_DIR = $(CERTBOT_DIR)/certs
+SSL_DIR = $(PWD)/ssl
 
 .PHONY: build
 build:
@@ -67,32 +63,19 @@ prune:
 	# create .env file from the example
 	cp .env.example .env
 
-.PHONY: cert
-cert:
-	# create a certificate
-	docker run --rm -it \
-		-p 80:80 -p 443:443 \
-		-v $(CERTBOT_DIR)/letsencrypt:/etc/letsencrypt \
-		certbot/certbot \
-		certonly --standalone -n --agree-tos -m $(EMAIL) -d $(DOMAIN)
-
-$(CERT_DIR):
+$(SSL_DIR):
 	# create certificate directory
-	mkdir -p $(CERT_DIR)
+	mkdir -p $(SSL_DIR) $(SSL_DIR)/certs $(SSL_DIR)/private
 
 .PHONY: self-signed-cert
-self-signed-cert: | $(CERT_DIR)
+self-signed-cert: | $(SSL_DIR)
 	# create a self signed certificate
 	openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-		-keyout $(CERT_DIR)/privkey.pem \
-		-out $(CERT_DIR)/fullchain.pem \
+		-out $(SSL_DIR)/certs/cert.pem \
+		-keyout $(SSL_DIR)/private/key.pem \
 		-subj '/CN=localhost'
 
-$(DHPARAM_DIR):
-	# create dhparam directory
-	mkdir -p $(DHPARAM_DIR)
-
 .PHONY: dhparam
-dhparam: | $(DHPARAM_DIR)
+dhparam: | $(SSL_DIR)
 	# create dhparam
-	openssl dhparam -out $(DHPARAM_DIR)/dhparam.pem 2048
+	openssl dhparam -out $(SSL_DIR)/certs/dhparam.pem 2048

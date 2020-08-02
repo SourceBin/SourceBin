@@ -33,16 +33,13 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./certbot/certs:/etc/ssl/certs
-      - ./certbot/letsencrypt:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
+      - ./ssl:/etc/ssl
     depends_on:
       - frontend
       - backend
       - proxy
     container_name: nginx
     restart: always
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
   genus-codice:
     image: docker.pkg.github.com/sourcebin/genus-codice/genus-codice
