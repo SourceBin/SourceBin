@@ -24,3 +24,8 @@ services:
     volumes:
       - ./proxy:/usr/src
       - /usr/src/node_modules
+
+  nginx:
+    build:
+      context: nginx
+      dockerfile: Dockerfile.dev
