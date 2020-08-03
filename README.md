@@ -23,8 +23,9 @@ SourceBin makes sharing code easy by providing an easy to use pastebin service. 
 3. Edit the configuration in the `.env` file
 4. Run `make dhparam` to generate dhparam
 5. Add SSL cert in `ssl/certs/cert.pem` and `ssl/private/key.pem`
-6. Point domain to server
-7. Run `make start`
+6. Add Cloudflare Authenticated Origin Pull cert in `ssl/certs/cloudflare.crt`
+7. Point domain to server
+8. Run `make start`
 
 ## Note
 

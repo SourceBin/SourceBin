@@ -11,8 +11,16 @@ ifeq ($(ENV), dev)
 	COMPOSE_FILES += -f docker-compose.dev.yml
 endif
 
-DOMAIN=sourceb.in
 SSL_DIR = $(PWD)/ssl
+CERT_DIR = $(SSL_DIR)/certs
+PRIVATE_DIR = $(SSL_DIR)/private
+
+CERT = $(CERT_DIR)/cert.pem
+DHPARAM = $(CERT_DIR)/dhparam.pem
+CLOUDFLARE = $(CERT_DIR)/cloudflare.crt
+KEY = $(PRIVATE_DIR)/key.pem
+
+SSL_FILES = $(CERT) $(DHPARAM) $(CLOUDFLARE) $(KEY)
 
 .PHONY: build
 build:
@@ -63,19 +71,19 @@ prune:
 	# create .env file from the example
 	cp .env.example .env
 
-$(SSL_DIR):
-	# create certificate directory
-	mkdir -p $(SSL_DIR) $(SSL_DIR)/certs $(SSL_DIR)/private
+$(SSL_FILES):
+	# create ssl file
+	mkdir -p "$(shell dirname "$@")" && touch "$@"
 
 .PHONY: self-signed-cert
-self-signed-cert: | $(SSL_DIR)
+self-signed-cert: | $(SSL_FILES)
 	# create a self signed certificate
 	openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-		-out $(SSL_DIR)/certs/cert.pem \
-		-keyout $(SSL_DIR)/private/key.pem \
+		-out $(CERT) \
+		-keyout $(KEY) \
 		-subj '/CN=localhost'
 
 .PHONY: dhparam
-dhparam: | $(SSL_DIR)
+dhparam: | $(SSL_FILES)
 	# create dhparam
-	openssl dhparam -out $(SSL_DIR)/certs/dhparam.pem 2048
+	openssl dhparam -out $(DHPARAM) 2048
