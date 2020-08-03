@@ -82,7 +82,7 @@ export default {
         fontFamily: 'var(--editor-font-family)',
         useWorker: false,
         minLines: 10,
-        maxLines: 1000,
+        maxLines: 10000,
       };
     },
     ...mapState(['bin', 'settings']),
