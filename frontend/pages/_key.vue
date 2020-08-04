@@ -69,19 +69,28 @@ export default {
       await this.loadBin();
     },
     async loadBin() {
-      try {
-        if (this.$route.params.key) {
+      if (this.$route.params.key) {
+        try {
           await this.$store.dispatch('bin/loadFromKey', {
             key: this.$route.params.key,
           });
-        } else if (this.$route.query.src) {
-          await this.$store.dispatch('bin/loadFromQuery', this.$route.query);
+        } catch (err) {
+          this.$nuxt.error({
+            statusCode: err.response.status,
+            message: err.response.data.message,
+          });
         }
-      } catch (err) {
-        this.$nuxt.error({
-          statusCode: err.response.status,
-          message: err.response.data.message,
-        });
+      } else if (this.$route.query.src) {
+        const { src } = this.$route.query;
+
+        try {
+          await this.$store.dispatch('bin/loadFromQuery', src);
+        } catch (err) {
+          this.$nuxt.error({
+            statusCode: err.response.status,
+            message: `Failed to load from '${src}': ${err.response.data}`,
+          });
+        }
       }
     },
   },

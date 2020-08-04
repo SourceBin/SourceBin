@@ -37,7 +37,8 @@ export default {
   },
   computed: {
     loading() {
-      return this.editorLoading || (this.bin.key && !this.bin.files.some(file => file.content));
+      return this.editorLoading
+        || (this.bin.key && !this.bin.files.some(file => file.content !== undefined));
     },
     ...mapState(['bin']),
   },

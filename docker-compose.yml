@@ -22,11 +22,6 @@ services:
     container_name: backend
     restart: always
 
-  proxy:
-    build: proxy
-    container_name: proxy
-    restart: always
-
   nginx:
     build: nginx
     ports:
@@ -44,4 +39,12 @@ services:
   genus-codice:
     image: docker.pkg.github.com/sourcebin/genus-codice/genus-codice
     container_name: genus-codice
+    restart: always
+
+  proxy:
+    image: docker.pkg.github.com/sourcebin/proxy/proxy:v0.0.2
+    environment:
+      - RUST_LOG=info
+      - PROXY_SECRET=${PROXY_SECRET}
+    container_name: proxy
     restart: always

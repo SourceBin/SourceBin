@@ -17,14 +17,6 @@ services:
       - ./backend:/usr/src
       - /usr/src/node_modules
 
-  proxy:
-    build:
-      context: proxy
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./proxy:/usr/src
-      - /usr/src/node_modules
-
   nginx:
     build:
       context: nginx

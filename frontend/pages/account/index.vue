@@ -2,7 +2,7 @@
   <div class="account">
     <div class="about">
       <img
-        :src="`/proxy/?q=${encodeURIComponent(auth.user.about.avatarURL)}`"
+        :src="auth.user.about.avatarURL"
         alt="avatar"
         class="avatar"
       >

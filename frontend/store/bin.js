@@ -1,3 +1,5 @@
+import { proxyFile } from '@/assets/proxy.js';
+
 function setEdited(state) {
   state.key = undefined;
   state.created = undefined;
@@ -110,16 +112,12 @@ export const actions = {
 
     commit('loadFromKeySuccess', bin);
   },
-  async loadFromQuery({ commit }, query) {
-    const content = await this.$axios.$get('/proxy', {
-      params: {
-        q: query.src,
-      },
-    });
+  async loadFromQuery({ commit }, src) {
+    const file = await proxyFile(src, this.$axios);
 
     commit('loadFromQuerySuccess', {
-      src: query.src,
-      content,
+      src,
+      content: file.content,
     });
   },
   async save({ commit, state }) {

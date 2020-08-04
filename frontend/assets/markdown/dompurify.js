@@ -1,21 +1,8 @@
 import DOMPurify from 'dompurify';
 
-const PROXY = '/proxy/?q=';
+import { imageURL } from '@/assets/proxy.js';
 
 if (process.client) {
-  // Proxy URLs
-  DOMPurify.addHook('afterSanitizeAttributes', (node) => {
-    const attributes = ['src'];
-
-    for (const attribute of attributes) {
-      if (node.hasAttribute(attribute)) {
-        const proxy = PROXY + encodeURIComponent(node.getAttribute(attribute));
-
-        node.setAttribute(attribute, proxy);
-      }
-    }
-  });
-
   // Add rel to <a>
   DOMPurify.addHook('afterSanitizeAttributes', (node) => {
     if (node.tagName === 'A') {
@@ -24,9 +11,24 @@ if (process.client) {
   });
 }
 
-export function sanitize(html) {
-  return DOMPurify.sanitize(html, {
+async function proxyURLs(dom) {
+  const nodes = [...dom.querySelectorAll('[src]')];
+  const urls = await Promise.all(nodes.map(node => imageURL(node.src)));
+
+  nodes.forEach((node, i) => {
+    node.src = urls[i]; // eslint-disable-line no-param-reassign
+  });
+}
+
+export async function sanitize(html) {
+  const sanitized = DOMPurify.sanitize(html, {
     FORBID_TAGS: ['style'],
     FORBID_ATTR: ['style'],
   });
+
+  const dom = new DOMParser().parseFromString(sanitized, 'text/html').body;
+
+  await proxyURLs(dom);
+
+  return dom.outerHTML;
 }
