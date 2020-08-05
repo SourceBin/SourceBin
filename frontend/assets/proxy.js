@@ -1,17 +1,7 @@
 const proxy = process.client ? `//proxy.${window.location.hostname}` : '';
 
-function hexEncode(string) {
-  let result = '';
-
-  for (let i = 0; i < string.length; i += 1) {
-    result += string.charCodeAt(i).toString(16);
-  }
-
-  return result;
-}
-
 export function signURL(url) {
-  return window.$nuxt.$axios.$post(`${proxy}/sign/${hexEncode(url)}`);
+  return window.$nuxt.$axios.$post(`${proxy}/sign/${btoa(url)}`);
 }
 
 export async function fileURL(url) {

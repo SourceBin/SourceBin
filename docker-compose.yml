@@ -42,9 +42,10 @@ services:
     restart: always
 
   proxy:
-    image: docker.pkg.github.com/sourcebin/proxy/proxy:v0.0.2
+    image: docker.pkg.github.com/sourcebin/proxy/proxy:v0.0.3
     environment:
       - RUST_LOG=info
+      - GENUS_CODICE_URL=genus-codice:5000
       - PROXY_SECRET=${PROXY_SECRET}
     container_name: proxy
     restart: always

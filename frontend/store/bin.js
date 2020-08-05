@@ -1,3 +1,4 @@
+import { languages } from '@sourcebin/linguist';
 import { proxyFile } from '@/assets/proxy.js';
 
 function setEdited(state) {
@@ -85,7 +86,7 @@ export const mutations = {
     state.files = [{
       name: external.src.substring(external.src.lastIndexOf('/') + 1),
       content: external.content || '',
-      languageId: undefined,
+      languageId: languages[external.language],
     }];
 
     state.saved = true;
@@ -118,6 +119,7 @@ export const actions = {
     commit('loadFromQuerySuccess', {
       src,
       content: file.content,
+      language: file.language,
     });
   },
   async save({ commit, state }) {
