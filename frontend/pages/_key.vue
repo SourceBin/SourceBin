@@ -99,8 +99,8 @@ export default {
       title: this.key,
     };
 
-    // Remove site information when ssr, and a key is provided
-    if (this.key && process.server) {
+    // Remove site information when ssr, and a key/src is provided
+    if (process.server && (this.key || this.$route.query.src)) {
       head.meta = [
         { hid: 'description', content: null },
 
