@@ -44,7 +44,7 @@
       </li>
 
       <li
-        v-if="bin.saved"
+        v-if="bin.saved && !$route.query.src"
         @click="raw"
       >
         Raw
