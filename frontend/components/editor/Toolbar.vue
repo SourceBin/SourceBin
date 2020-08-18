@@ -43,11 +43,12 @@
         Copy
       </li>
 
+      <!-- Padding is removed because the anchor element sets it -->
       <li
         v-if="bin.saved && !$route.query.src"
-        @click="raw"
+        style="padding: 0"
       >
-        Raw
+        <a :href="`/raw/${bin.key}/${fileIndex}`">Raw</a>
       </li>
 
       <li
@@ -123,9 +124,6 @@ export default {
 
       this.$emit('focus');
     },
-    raw() {
-      window.location.href = `/raw/${this.bin.key}/${this.fileIndex}`;
-    },
     deleteFile() {
       this.$store.commit('bin/deleteFile', this.fileIndex);
     },
@@ -178,6 +176,13 @@ $border: 1px solid var(--background-modifier-accent);
 
     &:hover {
       background-color: var(--background-modifier-hover);
+    }
+
+    a {
+      display: inline-block;
+      color: inherit;
+      text-decoration: none;
+      padding: 0 calc(var(--margin-side) / 2);
     }
 
     &.language {
