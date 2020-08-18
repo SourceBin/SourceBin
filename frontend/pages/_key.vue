@@ -2,7 +2,7 @@
   <div class="homepage">
     <div class="homepage-top">
       <About />
-      <CarbonAds v-if="!$store.getters.pro" />
+      <CarbonAds v-if="showAds" />
     </div>
     <Editors />
     <Actions />
@@ -39,6 +39,9 @@ export default {
   computed: {
     key() {
       return this.$store.state.bin.key;
+    },
+    showAds() {
+      return !this.$store.getters.pro || this.$store.state.settings.showAds;
     },
   },
   async fetch({ route, store }) {
