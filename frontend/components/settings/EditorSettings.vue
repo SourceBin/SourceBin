@@ -18,6 +18,8 @@
           <input
             v-model="fontSize"
             type="number"
+            min="5"
+            max="50"
           >
         </dd>
       </dl>
