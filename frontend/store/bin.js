@@ -7,7 +7,7 @@ function setEdited(state) {
   state.saved = false;
 
   // Update URL if needed
-  if (window.location.pathname !== '/') {
+  if (window.location.pathname !== '/' || window.$nuxt.$route.query.src) {
     window.history.pushState(null, null, '/');
   }
 }
