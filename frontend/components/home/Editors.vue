@@ -2,18 +2,22 @@
   <div>
     <Loading v-if="loading" />
 
-    <transition
-      name="loading"
-      appear
+    <!-- TODO: use transition-group here instead. This requires :key to not be the v-for index -->
+    <div
+      v-show="!loading"
+      v-for="(file, i) in bin.files"
+      :key="i"
     >
-      <Editor
-        v-show="!loading"
-        v-for="(_, i) in bin.files"
-        :key="i"
-        :fileIndex="i"
-        @ready="editorLoading = false"
-      />
-    </transition>
+      <transition
+        name="loading"
+        appear
+      >
+        <Editor
+          :fileIndex="i"
+          @ready="editorLoading = false"
+        />
+      </transition>
+    </div>
   </div>
 </template>
 
