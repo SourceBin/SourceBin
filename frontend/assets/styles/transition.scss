@@ -1,9 +1,5 @@
 $offset: 5px;
 
-@mixin animation ($name) {
-  animation: $name ease 0.15s;
-}
-
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -16,22 +12,10 @@ $offset: 5px;
   }
 }
 
-@keyframes fade-out {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateY($offset);
-  }
-}
-
 .page-enter-active {
-  @include animation(fade-in);
+  animation: fade-in ease 0.15s;
 }
 
 .page-leave-active {
-  @include animation(fade-out);
+  animation: fade-in reverse ease 0.15s;
 }
