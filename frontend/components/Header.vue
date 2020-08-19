@@ -39,7 +39,16 @@
 
         <li>
           <nuxt-link to="/account">
-            <font-awesome-icon :icon="['fas', 'user']" />
+            <img
+              v-if="$store.state.auth.loggedIn"
+              :src="$store.state.auth.user.about.avatarURL"
+              alt="avatar"
+            >
+
+            <font-awesome-icon
+              v-else
+              :icon="['fas', 'user']"
+            />
           </nuxt-link>
         </li>
       </ul>
@@ -84,6 +93,7 @@ ul {
     a {
       display: block;
       color: var(--text-700);
+      height: var(--height);
       text-decoration: none;
 
       &:hover {
@@ -124,6 +134,12 @@ ul {
       svg {
         height: var(--height);
         font-size: var(--icon-size);
+      }
+
+      img {
+        width: calc(var(--icon-size) + 5px);
+        border-radius: 50%;
+        vertical-align: middle;
       }
     }
   }
