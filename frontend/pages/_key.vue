@@ -44,15 +44,22 @@ export default {
       return !this.$store.getters.pro || this.$store.state.settings.showAds;
     },
   },
-  async fetch({ route, store }) {
+  async fetch({ route, store, error }) {
     if (route.params.key) {
       // If a key is provided the bin is loaded, but the content is excluded. This
       // allows metadata to be displayed on bin load, and the content itself to be
       // loaded afterwards.
-      await store.dispatch('bin/loadFromKey', {
-        key: route.params.key,
-        content: false,
-      });
+      try {
+        await store.dispatch('bin/loadFromKey', {
+          key: route.params.key,
+          content: false,
+        });
+      } catch (err) {
+        error({
+          statusCode: err.response.status,
+          message: err.response.data.message,
+        });
+      }
     } else if (store.state.bin.key) {
       // If there is a key the bin is reset. This is to prevent content from a different
       // bin being displayed.
@@ -119,7 +126,7 @@ export default {
     return head;
   },
   validate({ params }) {
-    return !params.key || /[0-9A-F]{10}/i.test(params.key);
+    return !params.key || /^[0-9A-F]{10}$/i.test(params.key);
   },
 };
 </script>
