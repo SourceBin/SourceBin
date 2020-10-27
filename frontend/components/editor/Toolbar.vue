@@ -48,7 +48,7 @@
         v-if="bin.saved && !$route.query.src"
         style="padding: 0"
       >
-        <a :href="`/raw/${bin.key}/${fileIndex}`">Raw</a>
+        <a :href="rawUrl">Raw</a>
       </li>
 
       <li
@@ -92,6 +92,9 @@ export default {
     };
   },
   computed: {
+    rawUrl() {
+      return `${process.env.CDN_BASE_URL}/bins/${this.bin.key}/${this.fileIndex}`;
+    },
     file() {
       return this.bin.files[this.fileIndex];
     },

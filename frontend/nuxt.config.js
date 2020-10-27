@@ -113,6 +113,7 @@ export default {
 
   env: {
     STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
+    CDN_BASE_URL: process.env.CDN_BASE_URL,
   },
 
   router: {

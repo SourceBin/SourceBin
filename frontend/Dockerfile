@@ -9,6 +9,10 @@ WORKDIR /usr/src
 ARG STRIPE_PUBLIC_KEY
 ENV STRIPE_PUBLIC_KEY $STRIPE_PUBLIC_KEY
 
+# Set cdn base url
+ARG CDN_BASE_URL
+ENV CDN_BASE_URL $CDN_BASE_URL
+
 # Install dependences
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
 RUN apk add --no-cache python make g++ git

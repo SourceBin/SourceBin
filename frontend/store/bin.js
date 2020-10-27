@@ -66,19 +66,24 @@ export const mutations = {
     setEdited(state);
   },
 
-  loadFromKeySuccess(state, bin) {
-    state.key = bin.key;
-    state.title = bin.title;
-    state.description = bin.description;
-    state.created = bin.created;
+  loadMetadataFromKeySuccess(state, data) {
+    state.key = data.key;
+    state.title = data.title;
+    state.description = data.description;
+    state.created = data.created;
 
-    state.files = bin.files.map(file => ({
+    state.files = data.files.map(file => ({
       name: file.name,
-      content: file.content || '',
+      content: '',
       languageId: file.languageId,
     }));
 
     state.saved = true;
+  },
+  loadBinFilesSuccess(state, files) {
+    files.forEach((file, i) => {
+      state.files[i].content = file;
+    });
   },
   loadFromQuerySuccess(state, external) {
     state.key = external.src;
@@ -104,14 +109,21 @@ export const mutations = {
 };
 
 export const actions = {
-  async loadFromKey({ commit }, { key, content }) {
-    const bin = await this.$axios.$get(`/api/bins/${key}`, {
+  async loadMetadataFromKey({ commit }, key) {
+    const data = await this.$axios.$get(`/api/bins/${key}`, {
       params: {
-        content,
+        content: false,
       },
     });
 
-    commit('loadFromKeySuccess', bin);
+    commit('loadMetadataFromKeySuccess', data);
+  },
+  async loadBinFiles({ commit, state }) {
+    const files = await Promise.all(
+      state.files.map((_, i) => this.$axios.$get(`${process.env.CDN_BASE_URL}/bins/${state.key}/${i}`)),
+    );
+
+    commit('loadBinFilesSuccess', files);
   },
   async loadFromQuery({ commit }, src) {
     const file = await proxyFile(src, this.$axios);

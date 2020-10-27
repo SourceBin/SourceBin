@@ -11,7 +11,9 @@ ifeq ($(ENV), dev)
 	COMPOSE_FILES += -f docker-compose.dev.yml
 endif
 
-SSL_DIR = $(PWD)/ssl
+SECRET_DIR = $(PWD)/secrets
+
+SSL_DIR = $(SECRET_DIR)/ssl
 CERT_DIR = $(SSL_DIR)/certs
 PRIVATE_DIR = $(SSL_DIR)/private
 
@@ -20,7 +22,9 @@ DHPARAM = $(CERT_DIR)/dhparam.pem
 CLOUDFLARE = $(CERT_DIR)/cloudflare.crt
 KEY = $(PRIVATE_DIR)/key.pem
 
-SSL_FILES = $(CERT) $(DHPARAM) $(CLOUDFLARE) $(KEY)
+GCS = $(SECRET_DIR)/google/cloud-storage-key.json
+
+SECRET_FILES = $(GCS) $(CERT) $(DHPARAM) $(CLOUDFLARE) $(KEY)
 
 .PHONY: build
 build:
@@ -71,12 +75,12 @@ prune:
 	# create .env file from the example
 	cp .env.example .env
 
-$(SSL_FILES):
-	# create ssl file
+$(SECRET_FILES):
+	# create secret file
 	mkdir -p "$(shell dirname "$@")" && touch "$@"
 
 .PHONY: self-signed-cert
-self-signed-cert: | $(SSL_FILES)
+self-signed-cert: | $(SECRET_FILES)
 	# create a self signed certificate
 	openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 		-out $(CERT) \
@@ -84,6 +88,6 @@ self-signed-cert: | $(SSL_FILES)
 		-subj '/CN=localhost'
 
 .PHONY: dhparam
-dhparam: | $(SSL_FILES)
+dhparam: | $(SECRET_FILES)
 	# create dhparam
 	openssl dhparam -out $(DHPARAM) 2048

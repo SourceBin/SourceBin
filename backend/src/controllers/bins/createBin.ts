@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import Joi from '@hapi/joi';
 
-import { BinModel } from '../../models/Bin';
-
-import { generateKey } from '../../utils/bins';
+import { saveBin } from '../../utils/bins';
 import { classifySnippets } from '../../utils/code';
 import { replyError, replyJoiError } from '../../utils/errors';
 
@@ -59,11 +57,10 @@ export async function createBin(req: Request, res: Response): Promise<void> {
   }
 
   try {
-    const bin = await BinModel.create({
-      key: await generateKey(),
+    const bin = await saveBin({
       title: req.body.title,
       description: req.body.description,
-      owner: req.user
+      ownerId: req.user
         ? req.user._id
         : undefined,
       files: req.body.files,

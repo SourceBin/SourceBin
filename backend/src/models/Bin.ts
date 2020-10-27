@@ -4,7 +4,7 @@ import { User } from './User';
 
 export interface File extends mongoose.Document {
   name: string;
-  content: string;
+  content: string; // TODO: don't store content in mongodb
   languageId: number;
 }
 

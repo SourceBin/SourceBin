@@ -50,10 +50,7 @@ export default {
       // allows metadata to be displayed on bin load, and the content itself to be
       // loaded afterwards.
       try {
-        await store.dispatch('bin/loadFromKey', {
-          key: route.params.key,
-          content: false,
-        });
+        await store.dispatch('bin/loadMetadataFromKey', route.params.key);
       } catch (err) {
         error({
           statusCode: err.response.status,
@@ -81,9 +78,12 @@ export default {
     async loadBin() {
       if (this.$route.params.key) {
         try {
-          await this.$store.dispatch('bin/loadFromKey', {
-            key: this.$route.params.key,
-          });
+          // Load the bin metadata if the key is not set
+          if (!this.key) {
+            await this.$store.dispatch('bin/loadMetadataFromKey', this.$route.params.key);
+          }
+
+          await this.$store.dispatch('bin/loadBinFiles');
         } catch (err) {
           this.$nuxt.error({
             statusCode: err.response.status,

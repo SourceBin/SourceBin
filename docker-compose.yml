@@ -6,6 +6,7 @@ services:
       context: frontend
       args:
         - STRIPE_PUBLIC_KEY=${STRIPE_PUBLIC_KEY}
+        - CDN_BASE_URL=${CDN_BASE_URL}
     depends_on:
       - backend
     container_name: frontend
@@ -15,8 +16,11 @@ services:
     build: backend
     environment:
       - GENUS_CODICE_URL=genus-codice:5000
+      - GOOGLE_APPLICATION_CREDENTIALS=/etc/google/cloud-storage-key.json
     env_file:
       - .env
+    volumes:
+      - ./secrets/google:/etc/google
     depends_on:
       - genus-codice
     container_name: backend
@@ -28,7 +32,7 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./ssl:/etc/ssl
+      - ./secrets/ssl:/etc/ssl
     depends_on:
       - frontend
       - backend
