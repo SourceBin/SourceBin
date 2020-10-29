@@ -9,9 +9,11 @@ import * as config from '../../config';
 
 const schema = Joi.object({
   title: Joi.string()
+    .allow('')
     .max(config.bin.maxTitleLength),
 
   description: Joi.string()
+    .allow('')
     .max(config.bin.maxDescriptionLength),
 
   files: Joi.array()
@@ -20,6 +22,7 @@ const schema = Joi.object({
     .required()
     .items({
       name: Joi.string()
+        .allow('')
         .max(config.bin.maxNameLength),
 
       content: Joi.string()
