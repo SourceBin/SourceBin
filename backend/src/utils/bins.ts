@@ -1,22 +1,19 @@
-import crypto from 'crypto';
 import { Storage } from '@google-cloud/storage';
+import cryptoRandomString from 'crypto-random-string';
 
 import { days } from './time';
 
 import { File, Bin, BinModel } from '../models/Bin';
 
+import * as config from '../config';
+
 const storage = new Storage();
 const cdn = storage.bucket(process.env.GOOGLE_CLOUD_STORAGE_BUCKET || '');
 
 function generateKey(): Promise<string> {
-  return new Promise((res, rej) => {
-    crypto.randomBytes(5, (err, buffer) => {
-      if (err) {
-        rej(err);
-      } else {
-        res(buffer.toString('hex'));
-      }
-    });
+  return cryptoRandomString.async({
+    length: config.bin.keyLength,
+    type: 'alphanumeric',
   });
 }
 

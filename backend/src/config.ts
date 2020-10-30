@@ -31,6 +31,7 @@ export const rateLimits = {
 };
 
 export const bin = {
+  keyLength: 10,
   maxTitleLength: 100,
   maxDescriptionLength: 1000,
   maxNameLength: 100,

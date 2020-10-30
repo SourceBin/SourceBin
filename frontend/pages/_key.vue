@@ -126,7 +126,7 @@ export default {
     return head;
   },
   validate({ params }) {
-    return !params.key || /^[0-9A-F]{10}$/i.test(params.key);
+    return !params.key || /^[0-9A-Z]{10}$/i.test(params.key);
   },
 };
 </script>

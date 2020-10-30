@@ -10,7 +10,7 @@ import { getBin } from '../controllers/bins/getBin';
 import { createBin } from '../controllers/bins/createBin';
 import { disownBin } from '../controllers/bins/disownBin';
 
-const KEY_PATTERN = '[0-9a-fA-F]{10}';
+const KEY_PATTERN = '[0-9a-zA-Z]{10}';
 
 const router = Router();
 
