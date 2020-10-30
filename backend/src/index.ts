@@ -9,6 +9,8 @@ import { registerStrategies } from './strategies';
 registerStrategies();
 
 const app = express();
+app.set('trust proxy', true);
+
 app.use(cors());
 app.use(cookieParser());
 app.use(routes);
