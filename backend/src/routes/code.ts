@@ -1,7 +1,5 @@
 import { Router } from 'express';
 
-import { rateLimits } from '../config';
-
 import { rateLimit } from '../middleware/rateLimit';
 import { jsonParser } from '../middleware/bodyParser';
 
@@ -11,7 +9,7 @@ const router = Router();
 
 router.post(
   '/classify',
-  rateLimit(rateLimits.code.classify),
+  rateLimit('code', 'classify'),
   jsonParser,
   classify,
 );

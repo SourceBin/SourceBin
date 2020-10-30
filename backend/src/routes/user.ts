@@ -1,7 +1,5 @@
 import { Router } from 'express';
 
-import { rateLimits } from '../config';
-
 import { rateLimit } from '../middleware/rateLimit';
 import { requiredAuth } from '../middleware/authenticate';
 
@@ -13,14 +11,14 @@ const router = Router();
 router.get(
   '/',
   requiredAuth,
-  rateLimit(rateLimits.user.get),
+  rateLimit('user', 'get'),
   getUser,
 );
 
 router.get(
   '/bins',
   requiredAuth,
-  rateLimit(rateLimits.user.bins),
+  rateLimit('user', 'bins'),
   getBins,
 );
 

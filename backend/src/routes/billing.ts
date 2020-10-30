@@ -1,7 +1,5 @@
 import { Router } from 'express';
 
-import { rateLimits } from '../config';
-
 import { rateLimit } from '../middleware/rateLimit';
 import { jsonParser } from '../middleware/bodyParser';
 import { requiredAuth } from '../middleware/authenticate';
@@ -19,25 +17,25 @@ const router = Router();
 router.get(
   '/customer',
   requiredAuth,
-  rateLimit(rateLimits.billing.customer),
+  rateLimit('billing', 'customer'),
   getCustomer,
 );
 
 router.get(
   '/plan/:plan',
-  rateLimit(rateLimits.billing.plan),
+  rateLimit('billing', 'plan'),
   getPlan,
 );
 
 router.get(
   '/coupon/:coupon',
-  rateLimit(rateLimits.billing.coupon),
+  rateLimit('billing', 'coupon'),
   getCoupon,
 );
 
 router.get(
   '/upcoming-invoice/',
-  rateLimit(rateLimits.billing.invoice),
+  rateLimit('billing', 'invoice'),
   requiredAuth,
   getUpcomingInvoice,
 );
@@ -45,7 +43,7 @@ router.get(
 router.post(
   '/subscribe',
   requiredAuth,
-  rateLimit(rateLimits.billing.subscribe),
+  rateLimit('billing', 'subscribe'),
   jsonParser,
   subscribe,
 );
@@ -53,14 +51,14 @@ router.post(
 router.delete(
   '/cancel',
   requiredAuth,
-  rateLimit(rateLimits.billing.cancel),
+  rateLimit('billing', 'cancel'),
   cancel,
 );
 
 router.post(
   '/reenable',
   requiredAuth,
-  rateLimit(rateLimits.billing.reenable),
+  rateLimit('billing', 'reenable'),
   reenable,
 );
 

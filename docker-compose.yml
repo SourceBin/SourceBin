@@ -15,6 +15,7 @@ services:
   backend:
     build: backend
     environment:
+      - REDIS_URL=redis://redis
       - GENUS_CODICE_URL=genus-codice:5000
       - GOOGLE_APPLICATION_CREDENTIALS=/etc/google/cloud-storage-key.json
     env_file:
@@ -22,6 +23,7 @@ services:
     volumes:
       - ./secrets/google:/etc/google
     depends_on:
+      - redis
       - genus-codice
     container_name: backend
     restart: always
@@ -52,4 +54,9 @@ services:
       - GENUS_CODICE_URL=genus-codice:5000
       - PROXY_SECRET=${PROXY_SECRET}
     container_name: proxy
+    restart: always
+
+  redis:
+    image: redis:6.0-alpine
+    container_name: redis
     restart: always

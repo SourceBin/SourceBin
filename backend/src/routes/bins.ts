@@ -1,7 +1,5 @@
 import { Router } from 'express';
 
-import { rateLimits } from '../config';
-
 import { rateLimit } from '../middleware/rateLimit';
 import { jsonParserProLimit } from '../middleware/bodyParser';
 import { requiredAuth, optionalAuth } from '../middleware/authenticate';
@@ -16,14 +14,14 @@ const router = Router();
 
 router.get(
   `/:key(${KEY_PATTERN})`,
-  rateLimit(rateLimits.bins.get),
+  rateLimit('bins', 'get'),
   getBin,
 );
 
 router.post(
   '/',
   optionalAuth,
-  rateLimit(rateLimits.bins.create),
+  rateLimit('bins', 'create'),
   jsonParserProLimit('0.1MB', '5MB'),
   createBin,
 );
@@ -31,7 +29,7 @@ router.post(
 router.delete(
   `/:key(${KEY_PATTERN})`,
   requiredAuth,
-  rateLimit(rateLimits.bins.disown),
+  rateLimit('bins', 'disown'),
   disownBin,
 );
 
