@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import routes from './routes';
 import { registerStrategies } from './strategies';
 
+import { auth } from './middleware/authenticate';
+
 registerStrategies();
 
 const app = express();
@@ -13,6 +15,7 @@ app.set('trust proxy', true);
 
 app.use(cors());
 app.use(cookieParser());
+app.use(auth);
 app.use(routes);
 
 mongoose.connect(process.env.MONGODB_URI || '', {
