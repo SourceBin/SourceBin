@@ -24,7 +24,7 @@ export async function cacheLoad<T extends mongoose.Document>(
   const cached = await redis.get(cacheKey);
 
   return cached
-    ? new Model(JSON.parse(cached))
+    ? Model.hydrate(JSON.parse(cached))
     : otherwise(Model);
 }
 

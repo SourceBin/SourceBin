@@ -4,7 +4,6 @@ import auth from './auth';
 import billing from './billing';
 import bins from './bins';
 import code from './code';
-import raw from './raw';
 import user from './user';
 import webhooks from './webhooks';
 
@@ -16,7 +15,6 @@ router.use('/auth', auth);
 router.use('/billing', billing);
 router.use('/bins', bins);
 router.use('/code', code);
-router.use('/raw', raw);
 router.use('/user', user);
 router.use('/webhooks', webhooks);
 
