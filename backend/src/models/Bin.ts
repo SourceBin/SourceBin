@@ -12,6 +12,7 @@ export interface Bin extends mongoose.Document {
   key: string;
   title?: string;
   description?: string;
+  hits: number;
   owner?: User;
   files: File[];
   created: Date;
@@ -26,6 +27,12 @@ const binSchema = new mongoose.Schema({
 
   title: String,
   description: String,
+
+  hits: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
 
   owner: {
     type: String,

@@ -1,7 +1,8 @@
 import { Storage } from '@google-cloud/storage';
 import cryptoRandomString from 'crypto-random-string';
 
-import { days } from './time';
+import { minutes, days } from './time';
+import { countHit, cacheLoad, cacheSave } from './redis';
 
 import { File, Bin, BinModel } from '../models/Bin';
 
@@ -43,6 +44,26 @@ export async function saveBin(opts: {
   await Promise.all(
     opts.files.map((file, i) => saveFile(`bins/${bin.key}/${i}`, file.content)),
   );
+
+  return bin;
+}
+
+export async function loadBin(key: string, select: string, user: string): Promise<Bin | null> {
+  const bin = await cacheLoad(BinModel, `bin:${key}`, Model => Model
+    .findOne({ key })
+    .select(select)
+    .exec());
+
+  if (bin) {
+    const newHit = await countHit(`bin:${key}:hit`, user);
+
+    if (newHit) {
+      bin.hits += 1;
+      BinModel.updateOne({ key }, { $inc: { hits: 1 } }).exec();
+    }
+
+    await cacheSave(bin, `bin:${key}`, minutes(1));
+  }
 
   return bin;
 }
