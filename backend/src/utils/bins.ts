@@ -32,6 +32,7 @@ export async function saveBin(opts: {
   description: string;
   ownerId: string | undefined;
   files: File[];
+  contents: string[];
 }): Promise<Bin> {
   const bin = await BinModel.create({
     key: await generateKey(),
@@ -42,7 +43,7 @@ export async function saveBin(opts: {
   });
 
   await Promise.all(
-    opts.files.map((file, i) => saveFile(`bins/${bin.key}/${i}`, file.content)),
+    opts.contents.map((content, i) => saveFile(`bins/${bin.key}/${i}`, content)),
   );
 
   return bin;

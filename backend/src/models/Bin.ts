@@ -4,7 +4,6 @@ import { User } from './User';
 
 export interface File extends mongoose.Document {
   name: string;
-  content: string; // TODO: don't store content in mongodb
   languageId: number;
 }
 
@@ -47,11 +46,6 @@ const binSchema = new mongoose.Schema({
 
   files: [{
     name: String,
-
-    content: {
-      type: String,
-      required: true,
-    },
 
     languageId: {
       type: Number,

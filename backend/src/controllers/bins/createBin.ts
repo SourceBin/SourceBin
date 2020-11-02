@@ -48,11 +48,11 @@ export async function createBin(req: Request, res: Response): Promise<void> {
   }
 
   try {
-    const files: any[] = req.body.files.filter((file: any) => file.languageId === undefined);
-    const languages = await classifySnippets(files.map((file: any) => file.content));
+    const unclassified: any[] = req.body.files.filter((file: any) => file.languageId === undefined);
+    const languages = await classifySnippets(unclassified.map((file: any) => file.content));
 
-    for (let i = 0; i < files.length; i += 1) {
-      files[i].languageId = languages[i];
+    for (let i = 0; i < unclassified.length; i += 1) {
+      unclassified[i].languageId = languages[i];
     }
   } catch {
     replyError(500, 'Failed to classify languages', res);
@@ -66,7 +66,13 @@ export async function createBin(req: Request, res: Response): Promise<void> {
       ownerId: req.user
         ? req.user._id
         : undefined,
-      files: req.body.files,
+
+      files: req.body.files.map((file: any) => ({
+        name: file.name,
+        languageId: file.languageId,
+      })),
+
+      contents: req.body.files.map((file: any) => file.content),
     });
 
     res.json({
