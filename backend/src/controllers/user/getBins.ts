@@ -9,7 +9,7 @@ export async function getBins(req: Request, res: Response): Promise<void> {
 
   const bins = await BinModel
     .find({ owner: req.user._id })
-    .select('-_id key title description files.languageId created')
+    .select('-_id key title description hits files.languageId created')
     .exec();
 
   res.json(bins);

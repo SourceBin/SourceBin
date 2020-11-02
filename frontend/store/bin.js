@@ -3,6 +3,7 @@ import { proxyFile } from '@/assets/proxy.js';
 
 function setEdited(state) {
   state.key = undefined;
+  state.hits = undefined;
   state.created = undefined;
   state.saved = false;
 
@@ -16,6 +17,7 @@ export const state = () => ({
   key: undefined,
   title: undefined,
   description: undefined,
+  hits: undefined,
   created: undefined,
 
   files: [{
@@ -70,6 +72,7 @@ export const mutations = {
     state.key = data.key;
     state.title = data.title;
     state.description = data.description;
+    state.hits = data.hits;
     state.created = data.created;
 
     state.files = data.files.map(file => ({
@@ -110,11 +113,7 @@ export const mutations = {
 
 export const actions = {
   async loadMetadataFromKey({ commit }, key) {
-    const data = await this.$axios.$get(`/api/bins/${key}`, {
-      params: {
-        content: false,
-      },
-    });
+    const data = await this.$axios.$get(`/api/bins/${key}`);
 
     commit('loadMetadataFromKeySuccess', data);
   },

@@ -27,10 +27,15 @@
     </div>
 
     <div class="stats">
-      <div>
+      <p>
         <font-awesome-icon :icon="['fas', 'calendar-day']" />
         {{ bin.created | date }}
-      </div>
+      </p>
+
+      <p>
+        <font-awesome-icon :icon="['fas', 'eye']" />
+        {{ bin.hits || 0 }} {{ 'view' | pluralize(bin.hits) }}
+      </p>
     </div>
   </div>
 </template>
@@ -110,9 +115,17 @@ $border-radius: 3px;
   }
 
   .stats {
-    margin: 0;
-    font-size: var(--font-size-regular);
-    color: var(--text-700);
+    display: flex;
+
+    p {
+      margin: 0 15px 0 0;
+      font-size: var(--font-size-regular);
+      color: var(--text-700);
+
+      svg {
+        margin-right: 5px;
+      }
+    }
   }
 
   .placeholder h1,

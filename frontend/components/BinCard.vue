@@ -26,6 +26,11 @@
         </p>
 
         <p>
+          <font-awesome-icon :icon="['fas', 'eye']" />
+          {{ bin.hits }} {{ 'view' | pluralize(bin.hits) }}
+        </p>
+
+        <p>
           <font-awesome-icon :icon="['fas', 'file-code']" />
           {{ bin.files.length }} {{ 'file' | pluralize(bin.files.length) }}
         </p>
@@ -108,10 +113,10 @@ export default {
 
     .data {
       display: flex;
-      margin-top: 10px;
+      flex-wrap: wrap;
 
       p {
-        margin: 0 15px 0 0;
+        margin: 10px 15px 0 0;
         font-size: var(--font-size-regular);
         color: var(--text-700);
 
