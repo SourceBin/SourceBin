@@ -120,7 +120,9 @@ export const actions = {
   },
   async loadBinFiles({ commit, state }) {
     const files = await Promise.all(
-      state.files.map((_, i) => this.$axios.$get(`${process.env.CDN_BASE_URL}/bins/${state.key}/${i}`)),
+      state.files.map((_, i) => this.$axios.$get(`${process.env.CDN_BASE_URL}/bins/${state.key}/${i}`, {
+        transformResponse: x => x, // axios always tries JSON.parse: https://github.com/axios/axios/issues/907
+      })),
     );
 
     commit('loadBinFilesSuccess', files);
