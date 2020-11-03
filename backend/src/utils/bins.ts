@@ -50,20 +50,24 @@ export async function saveBin(opts: {
 }
 
 export async function loadBin(key: string, select: string, user: string): Promise<Bin | null> {
-  const bin = await cacheLoad(BinModel, `bin:${key}`, Model => Model
-    .findOne({ key })
-    .select(select)
-    .exec());
+  let bin = await cacheLoad(BinModel, `bin:${key}`);
+
+  if (!bin) {
+    bin = await BinModel
+      .findOne({ key })
+      .select(select)
+      .exec();
+  }
 
   if (bin) {
     const newHit = await countHit(`bin:${key}:hit`, user);
 
     if (newHit) {
       bin.hits += 1;
-      BinModel.updateOne({ key }, { $inc: { hits: 1 } }).exec();
-    }
 
-    await cacheSave(bin, `bin:${key}`, minutes(1));
+      BinModel.updateOne({ key }, { $inc: { hits: 1 } }).exec();
+      await cacheSave(bin, `bin:${key}`, minutes(5));
+    }
   }
 
   return bin;

@@ -19,13 +19,12 @@ export async function countHit(key: string, user: string): Promise<boolean> {
 export async function cacheLoad<T extends mongoose.Document>(
   Model: mongoose.Model<T>,
   cacheKey: string,
-  otherwise: (Model: mongoose.Model<T>) => Promise<T | null>,
 ): Promise<T | null> {
   const cached = await redis.get(cacheKey);
 
   return cached
     ? Model.hydrate(JSON.parse(cached))
-    : otherwise(Model);
+    : null;
 }
 
 export async function cacheSave(
@@ -36,21 +35,21 @@ export async function cacheSave(
   await redis.set(cacheKey, JSON.stringify(doc.toJSON()), 'PX', duration);
 }
 
-export function cacheQuery<T extends mongoose.Document>(
+export async function cacheQuery<T extends mongoose.Document>(
   Model: mongoose.Model<T>,
   cacheKey: string,
   duration: number,
-  otherwise: (Model: mongoose.Model<T>) => Promise<T | null>,
+  query: (Model: mongoose.Model<T>) => Promise<T | null>,
 ): Promise<T | null> {
-  return cacheLoad(Model, cacheKey, async (M) => {
-    // Load the document from the database
-    const d = await otherwise(M);
+  const cached = await cacheLoad(Model, cacheKey);
+  if (cached) {
+    return cached;
+  }
 
-    if (d) {
-      // Cache the document
-      await cacheSave(d, cacheKey, duration);
-    }
+  const doc = await query(Model);
+  if (doc) {
+    await cacheSave(doc, cacheKey, duration);
+  }
 
-    return d;
-  });
+  return doc;
 }
