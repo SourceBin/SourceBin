@@ -10,10 +10,15 @@ export function rateLimit<T extends keyof typeof rateLimits>(
   ns: T,
   route: keyof typeof rateLimits[T],
 ): RateLimit.Instance {
+  const options: RateLimit.Options = rateLimits[ns][route];
+
   return new RateLimit({
     store: new RedisStore({
       prefix: `rl:${ns}.${route}:`,
       client: redis,
+      expiry: options.windowMs
+        ? options.windowMs / 1000
+        : undefined,
     }),
     handler(_, res) {
       replyError(429, 'You are being rate limited', res);
@@ -24,6 +29,6 @@ export function rateLimit<T extends keyof typeof rateLimits>(
         : req.ip;
     },
 
-    ...rateLimits[ns][route],
+    ...options,
   });
 }
