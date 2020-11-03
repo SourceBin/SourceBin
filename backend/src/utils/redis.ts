@@ -35,3 +35,22 @@ export async function cacheSave(
 ): Promise<void> {
   await redis.set(cacheKey, JSON.stringify(doc.toJSON()), 'PX', duration);
 }
+
+export function cacheQuery<T extends mongoose.Document>(
+  Model: mongoose.Model<T>,
+  cacheKey: string,
+  duration: number,
+  otherwise: (Model: mongoose.Model<T>) => Promise<T | null>,
+): Promise<T | null> {
+  return cacheLoad(Model, cacheKey, async (M) => {
+    // Load the document from the database
+    const d = await otherwise(M);
+
+    if (d) {
+      // Cache the document
+      await cacheSave(d, cacheKey, duration);
+    }
+
+    return d;
+  });
+}

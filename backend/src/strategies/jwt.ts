@@ -4,6 +4,8 @@ import { Strategy } from 'passport-jwt';
 import { UserModel } from '../models/User';
 import { RefreshTokenModel } from '../models/RefreshToken';
 
+import { seconds } from '../utils/time';
+import { cacheQuery } from '../utils/redis';
 import { hashRefreshToken, setAccessRefreshTokens, unsetAccessRefreshTokens } from '../utils/auth';
 
 export const jwt = new Strategy(
@@ -19,9 +21,9 @@ export const jwt = new Strategy(
 
       // If the access token is valid get the user
       if (!isExpired) {
-        const user = await UserModel
+        const user = await cacheQuery(UserModel, `user:${payload.sub}`, seconds(30), Model => Model
           .findOne({ _id: payload.sub })
-          .exec();
+          .exec());
 
         done(undefined, user);
         return;
