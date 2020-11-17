@@ -7,6 +7,11 @@
     <Editors />
     <Actions />
 
+    <CarbonAdsText
+      v-if="showAds"
+      class="carbon-text"
+    />
+
     <Selector
       :options="languageOptions"
       event-name="promptLanguageSelect"
@@ -17,18 +22,21 @@
 
 <script>
 import About from '@/components/home/About.vue';
-import CarbonAds from '@/components/home/CarbonAds.vue';
 import Editors from '@/components/home/Editors.vue';
 import Actions from '@/components/home/Actions.vue';
+
+import CarbonAds from '@/components/ads/CarbonAds.vue';
+import CarbonAdsText from '@/components/ads/CarbonAdsText.vue';
 
 import { languageOptions } from '@/assets/selector/options.js';
 
 export default {
   components: {
     About,
-    CarbonAds,
     Editors,
     Actions,
+    CarbonAds,
+    CarbonAdsText,
     Selector: () => import('@/components/overlay/Selector.vue'),
   },
   data() {
@@ -135,6 +143,9 @@ export default {
 @import 'sass-mq';
 
 .homepage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding-bottom: 15px;
 }
 
@@ -150,5 +161,10 @@ export default {
   @include mq($until: tablet) {
     margin: 0 0 var(--margin-between);
   }
+}
+
+.carbon-text {
+  margin: auto 0 0 0;
+  align-self: center;
 }
 </style>

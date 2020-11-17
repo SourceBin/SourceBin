@@ -38,7 +38,7 @@ export default {
 $border-radius: 3px;
 
 .actions {
-  margin: 0 var(--margin-side);
+  margin: 0 var(--margin-side) var(--margin-between);
   display: flex;
   justify-content: flex-end;
 }

@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="carbonads">
+  <div class="carbon">
     <AdBlock v-if="blocked" />
 
     <div
@@ -43,7 +43,7 @@ export default {
 $font-size-text: 13px;
 $font-size-poweredby: 9px;
 
-.carbonads {
+.carbon {
   @include mq($from: desktop) {
     width: 330px;
     margin-left: var(--margin-between);
