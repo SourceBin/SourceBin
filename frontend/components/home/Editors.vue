@@ -2,22 +2,19 @@
   <div class="editors">
     <Loading v-if="loading" />
 
-    <!-- TODO: use transition-group here instead. This requires :key to not be the v-for index -->
-    <div
+    <transition-group
       v-show="!loading"
-      v-for="(file, i) in bin.files"
-      :key="i"
+      name="loading"
+      tag="div"
     >
-      <transition
-        name="loading"
-        appear
-      >
-        <Editor
-          :fileIndex="i"
-          @ready="editorLoading = false"
-        />
-      </transition>
-    </div>
+      <Editor
+        v-for="(file, i) in bin.files"
+        :key="file._id"
+
+        :fileIndex="i"
+        @ready="editorLoading = false"
+      />
+    </transition-group>
   </div>
 </template>
 
@@ -65,15 +62,15 @@ export default {
   animation: fade-in ease 0.3s;
 }
 
-.editors > :not(:last-child) {
-  margin-bottom: var(--margin-between);
-}
-
 .editor {
   border-radius: 3px;
 
   @include mq($until: tablet) {
     border-radius: 0;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: var(--margin-between);
   }
 }
 </style>

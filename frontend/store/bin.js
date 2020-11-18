@@ -1,3 +1,5 @@
+/* eslint-disable symbol-description */
+
 import { languages } from '@sourcebin/linguist';
 import { proxyFile } from '@/assets/proxy.js';
 
@@ -21,6 +23,7 @@ export const state = () => ({
   created: undefined,
 
   files: [{
+    _id: Symbol(),
     name: undefined,
     content: '',
     languageId: undefined,
@@ -55,6 +58,7 @@ export const mutations = {
 
   addFile(state) {
     state.files.push({
+      _id: Symbol(),
       name: undefined,
       content: '',
       languageId: undefined,
@@ -76,6 +80,7 @@ export const mutations = {
     state.created = data.created;
 
     state.files = data.files.map(file => ({
+      _id: Symbol(),
       name: file.name,
       content: '',
       languageId: file.languageId,
@@ -92,6 +97,7 @@ export const mutations = {
     state.key = external.src;
 
     state.files = [{
+      _id: Symbol(),
       name: external.src.substring(external.src.lastIndexOf('/') + 1),
       content: external.content || '',
       languageId: languages[external.language],
@@ -139,7 +145,11 @@ export const actions = {
     const res = await this.$axios.$post('/api/bins', {
       title: state.title,
       description: state.description,
-      files: state.files,
+      files: state.files.map(file => ({
+        name: file.name,
+        content: file.content,
+        languageId: file.languageId,
+      })),
     });
 
     commit('saveSuccess', res);
