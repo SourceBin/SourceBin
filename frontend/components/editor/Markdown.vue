@@ -32,10 +32,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.markdown-body {
-  padding: calc(var(--margin-side) * 1.5);
-  background-color: var(--background-primary);
-}
-</style>

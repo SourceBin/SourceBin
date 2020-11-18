@@ -1,5 +1,5 @@
 <template lang="html">
-  <div>
+  <div class="editors">
     <Loading v-if="loading" />
 
     <!-- TODO: use transition-group here instead. This requires :key to not be the v-for index -->
@@ -59,7 +59,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'sass-mq';
+
 .loading-enter-active {
   animation: fade-in ease 0.3s;
+}
+
+.editors > :not(:last-child) {
+  margin-bottom: var(--margin-between);
+}
+
+.editor {
+  border-radius: 3px;
+
+  @include mq($until: tablet) {
+    border-radius: 0;
+  }
 }
 </style>

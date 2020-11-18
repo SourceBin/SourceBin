@@ -46,11 +46,6 @@ $font-size-poweredby: 9px;
 .carbon {
   @include mq($from: desktop) {
     width: 330px;
-    margin-left: var(--margin-between);
-  }
-
-  @include mq($until: desktop) {
-    margin-top: var(--margin-between);
   }
 }
 

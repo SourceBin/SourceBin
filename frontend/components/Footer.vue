@@ -61,7 +61,7 @@
 
 footer {
   display: flex;
-  margin: auto calc(var(--margin-side) * 3) 0;
+  margin: 0 calc(var(--margin-side) * 3);
   padding: var(--margin-between) 0;
   border-top: 1px solid var(--background-modifier-accent);
   font-family: var(--font-family);

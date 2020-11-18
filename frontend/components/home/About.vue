@@ -84,7 +84,6 @@ $border-radius: 3px;
 
 .about {
   flex: 1;
-  margin: 0;
   padding: 20px var(--margin-side);
   background-color: var(--background-secondary);
   font-family: var(--font-family);

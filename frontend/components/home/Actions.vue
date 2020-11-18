@@ -38,13 +38,11 @@ export default {
 $border-radius: 3px;
 
 .actions {
-  margin: 0 var(--margin-side) var(--margin-between);
   display: flex;
   justify-content: flex-end;
 }
 
 button {
-  margin-right: var(--margin-between);
   padding: 10px 25px;
   border: none;
   font-family: var(--font-family);
@@ -54,16 +52,16 @@ button {
   border-radius: $border-radius;
   cursor: pointer;
 
+  &:not(:last-child) {
+    margin-right: var(--margin-between);
+  }
+
   &:focus {
     outline-color: $red;
   }
 
   &:hover {
     background-color: var(--background-modifier-hover);
-  }
-
-  &:last-child {
-    margin-right: 0;
   }
 
   &:disabled {

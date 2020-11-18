@@ -146,25 +146,43 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-bottom: 15px;
+
+  > * {
+    margin: 0 var(--margin-side) var(--margin-between);
+
+    @include mq($until: tablet) {
+      &:not(.actions) {
+        margin: 0 0 var(--margin-between);
+      }
+    }
+  }
 }
 
 .homepage-top {
   display: flex;
   align-items: center;
-  margin: 0 var(--margin-side) var(--margin-between);
 
   @include mq($until: desktop) {
     flex-direction: column;
   }
 
-  @include mq($until: tablet) {
-    margin: 0 0 var(--margin-between);
+  > :first-child {
+    @include mq($from: desktop) {
+      margin-right: var(--margin-between);
+    }
+
+    @include mq($until: desktop) {
+      margin-bottom: var(--margin-between);
+    }
   }
 }
 
 .carbon-text {
-  margin: auto 0 0 0;
+  margin: auto 0 0 0 !important;
   align-self: center;
+
+  /deep/ .native-box {
+    margin-bottom: var(--margin-between);
+  }
 }
 </style>
