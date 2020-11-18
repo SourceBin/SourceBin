@@ -11,7 +11,6 @@
       <li
         @click="editFilename = true"
         :style="{ fontStyle: filename ? 'normal' : 'italic' }"
-        class="filename"
       >
         <InlineEditable
           :editable.sync="editFilename"
@@ -143,6 +142,7 @@ $border: 1px solid var(--background-modifier-accent);
   --height: 40px;
 
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   font-family: var(--font-family);
   font-size: var(--font-size-regular);
@@ -192,10 +192,6 @@ $border: 1px solid var(--background-modifier-accent);
       min-width: 150px;
       text-align: center;
       border-right: $border;
-    }
-
-    &.filename {
-      max-width: 150px;
     }
   }
 }
