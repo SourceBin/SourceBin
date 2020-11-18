@@ -64,6 +64,11 @@ body,
   flex-direction: column;
   min-height: 100%;
   background-color: var(--background-primary);
+
+  > :nth-child(2) {
+    // make site content span full height
+    flex: 1;
+  }
 }
 
 @include scrollbar(var(--background-secondary), var(--background-primary));
