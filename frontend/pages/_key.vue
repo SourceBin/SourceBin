@@ -142,7 +142,7 @@ export default {
 <style lang="scss" scoped>
 @import 'sass-mq';
 
-.homepage > * {
+.homepage > *:not(.overlay) {
   margin: 0 var(--margin-side) var(--margin-between);
 
   @include mq($until: tablet) {
