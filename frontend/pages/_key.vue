@@ -122,10 +122,10 @@ export default {
 
     if (this.bin.title || this.bin.description) {
       head.meta = [
-        { hid: 'description', content: this.bin.description },
+        { name: 'description', hid: 'description', content: this.bin.description },
 
-        { hid: 'og:title', content: this.bin.title },
-        { hid: 'og:description', content: this.bin.description },
+        { name: 'og:title', hid: 'og:title', content: this.bin.title },
+        { name: 'og:description', hid: 'og:description', content: this.bin.description },
       ];
     } else if (process.server && (this.key || this.$route.query.src)) {
       // Remove site information when ssr and a bin is provided
