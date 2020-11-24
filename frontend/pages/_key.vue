@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import About from '@/components/home/About.vue';
 import Editors from '@/components/home/Editors.vue';
 import Actions from '@/components/home/Actions.vue';
@@ -46,11 +48,12 @@ export default {
   },
   computed: {
     key() {
-      return this.$store.state.bin.key;
+      return this.bin.key;
     },
     showAds() {
       return !this.$store.getters.pro || this.$store.state.settings.showAds;
     },
+    ...mapState(['bin']),
   },
   async fetch({ route, store, error }) {
     if (route.params.key) {
@@ -117,12 +120,19 @@ export default {
       title: this.key,
     };
 
-    // Remove site information when ssr, and a key/src is provided
-    if (process.server && (this.key || this.$route.query.src)) {
+    if (this.bin.title || this.bin.description) {
+      head.meta = [
+        { hid: 'description', content: this.bin.description },
+
+        { hid: 'og:title', content: this.bin.title },
+        { hid: 'og:description', content: this.bin.description },
+      ];
+    } else if (process.server && (this.key || this.$route.query.src)) {
+      // Remove site information when ssr and a bin is provided
       head.meta = [
         { hid: 'description', content: null },
 
-        // Open Graph
+        { hid: 'og:site_name', content: null },
         { hid: 'og:title', content: null },
         { hid: 'og:description', content: null },
         { hid: 'og:type', content: null },

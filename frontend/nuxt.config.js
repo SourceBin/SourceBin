@@ -19,6 +19,7 @@ export default {
       { name: 'description', hid: 'description', content: meta.description },
 
       // Open Graph
+      { name: 'og:site_name', hid: 'og:site_name', content: meta.siteName },
       { name: 'og:title', hid: 'og:title', content: meta.title },
       { name: 'og:description', hid: 'og:description', content: meta.description },
       { name: 'og:type', hid: 'og:type', content: 'website' },
