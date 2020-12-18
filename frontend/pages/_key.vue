@@ -175,13 +175,13 @@ export default {
     flex-direction: column;
   }
 
-  > :first-child {
+  > .carbon {
     @include mq($from: desktop) {
-      margin-right: var(--margin-between);
+      margin-left: var(--margin-between);
     }
 
     @include mq($until: desktop) {
-      margin-bottom: var(--margin-between);
+      margin-top: var(--margin-between);
     }
   }
 }
