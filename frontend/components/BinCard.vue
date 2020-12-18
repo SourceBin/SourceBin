@@ -12,14 +12,7 @@
         {{ bin.description }}
       </p>
 
-      <div class="data">
-        <p>
-          <span
-            :style="{ backgroundColor: `#${language.color || 'fff'}` }"
-            class="language-color"
-          />{{ language.name }}
-        </p>
-
+      <div class="stats">
         <p>
           <font-awesome-icon :icon="['fas', 'calendar-day']" />
           {{ bin.created | date }}
@@ -34,6 +27,17 @@
           <font-awesome-icon :icon="['fas', 'file-code']" />
           {{ bin.files.length }} {{ 'file' | pluralize(bin.files.length) }}
         </p>
+      </div>
+
+      <div class="languages">
+        <ul>
+          <li v-for="language in languages">
+            <span
+              :style="{ backgroundColor: `#${language.color || 'fff'}` }"
+              class="language-color"
+            />{{ language.name }}
+          </li>
+        </ul>
       </div>
     </div>
 
@@ -75,8 +79,10 @@ export default {
     },
   },
   computed: {
-    language() {
-      return getLanguageById(this.bin.files[0].languageId);
+    languages() {
+      const ids = [...new Set(this.bin.files.map(file => file.languageId))];
+
+      return ids.map(id => getLanguageById(id));
     },
   },
 };
@@ -111,7 +117,7 @@ export default {
       color: var(--text-700);
     }
 
-    .data {
+    .stats {
       display: flex;
       flex-wrap: wrap;
 
@@ -119,18 +125,33 @@ export default {
         margin: 10px 15px 0 0;
         font-size: var(--font-size-regular);
         color: var(--text-700);
+      }
 
-        svg,
-        .language-color {
-          margin-right: 5px;
-        }
+      svg {
+        margin-right: 5px;
+      }
+    }
 
-        .language-color {
-          display: inline-block;
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
-        }
+    .languages {
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      li {
+        display: inline-flex;
+        margin: 10px 15px 0 0;
+        font-size: var(--font-size-regular);
+        color: var(--text-700);
+      }
+
+      .language-color {
+        margin-right: 5px;
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
       }
     }
   }
