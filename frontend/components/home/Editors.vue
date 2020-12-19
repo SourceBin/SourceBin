@@ -12,7 +12,7 @@
         :key="file._id"
 
         :fileIndex="i"
-        @ready="editorLoading = false"
+        @ready="loading = false"
       />
     </transition-group>
   </div>
@@ -22,25 +22,22 @@
 import { mapState } from 'vuex';
 import Mousetrap from 'mousetrap';
 
+import Editor from '@/components/editor/Editor.vue';
 import Loading from './Loading.vue';
 
 import { save } from '@/assets/home/save.js';
 
 export default {
   components: {
+    Editor,
     Loading,
-    Editor: () => import('@/components/editor/Editor.vue'),
   },
   data() {
     return {
-      editorLoading: true,
+      loading: true,
     };
   },
   computed: {
-    loading() {
-      return this.editorLoading
-        || (this.bin.key && !this.bin.files.some(file => file.content !== undefined));
-    },
     ...mapState(['bin']),
   },
   mounted() {

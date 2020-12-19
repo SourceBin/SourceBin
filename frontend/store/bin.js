@@ -29,6 +29,7 @@ export const state = () => ({
     languageId: undefined,
   }],
 
+  status: 'LOADED',
   saved: false,
 });
 
@@ -86,12 +87,15 @@ export const mutations = {
       languageId: file.languageId,
     }));
 
+    state.status = 'METADATA';
     state.saved = true;
   },
   loadBinFilesSuccess(state, files) {
     files.forEach((file, i) => {
       state.files[i].content = file;
     });
+
+    state.status = 'LOADED';
   },
   loadFromQuerySuccess(state, external) {
     state.key = external.src;
@@ -103,6 +107,7 @@ export const mutations = {
       languageId: languages[external.language],
     }];
 
+    state.status = 'LOADED';
     state.saved = true;
   },
 
@@ -115,15 +120,23 @@ export const mutations = {
 
     state.saved = true;
   },
+
+  setLoading(state) {
+    state.status = 'LOADING';
+  },
 };
 
 export const actions = {
   async loadMetadataFromKey({ commit }, key) {
+    commit('setLoading');
+
     const data = await this.$axios.$get(`/api/bins/${key}`);
 
     commit('loadMetadataFromKeySuccess', data);
   },
   async loadBinFiles({ commit, state }) {
+    commit('setLoading');
+
     const files = await Promise.all(
       state.files.map((_, i) => this.$axios.$get(`${process.env.CDN_BASE_URL}/bins/${state.key}/${i}`, {
         transformResponse: x => x, // axios always tries JSON.parse: https://github.com/axios/axios/issues/907
@@ -133,6 +146,8 @@ export const actions = {
     commit('loadBinFilesSuccess', files);
   },
   async loadFromQuery({ commit }, src) {
+    commit('setLoading');
+
     const file = await proxyFile(src, this.$axios);
 
     commit('loadFromQuerySuccess', {

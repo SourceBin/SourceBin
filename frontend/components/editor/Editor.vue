@@ -24,7 +24,7 @@
         :theme="settings.theme"
         :options="options"
 
-        @ready="ready"
+        @ready="editorReady = true"
 
         class="ace"
       />
@@ -91,6 +91,13 @@ export default {
     language() {
       this.displayMarkdown = false;
     },
+
+    editorReady() {
+      this.checkReady();
+    },
+    'bin.status': function () {
+      this.checkReady();
+    },
   },
   mounted() {
     const mousetrap = new Mousetrap(this.$el);
@@ -126,9 +133,13 @@ export default {
       toast.goAway(0);
       this.focus();
     },
-    ready() {
-      this.editorReady = true;
 
+    checkReady() {
+      if (this.bin.status === 'LOADED' && this.editorReady) {
+        this.ready();
+      }
+    },
+    ready() {
       // Focus the first editor when the editor is ready
       if (this.fileIndex === 0 && !this.bin.saved) {
         this.focus();
@@ -136,6 +147,7 @@ export default {
 
       this.$emit('ready');
     },
+
     focus() {
       this.$refs.editor.focus();
     },
