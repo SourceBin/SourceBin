@@ -5,11 +5,12 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RedisModule } from 'nestjs-redis';
 
 import { AppController } from './app.controller';
-import { dbConfig } from './configs';
+import { AuthConfig, DatabaseConfig, StripeConfig } from './configs';
 import { CodeModule } from './libs/code';
 import { GCloudStorageModule } from './libs/gcloud-storage';
 import { RateLimiterModule } from './libs/rate-limiter';
@@ -24,19 +25,32 @@ import { User } from './schemas/user.schema';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(dbConfig.MONGODB_URI, {
-      useNewUrlParser: true,
-      useFindAndModify: false,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
+    ConfigModule.forRoot({
+      cache: true,
+      load: [AuthConfig, DatabaseConfig, StripeConfig],
     }),
-    RedisModule.register({
-      url: dbConfig.REDIS_URL,
+    MongooseModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get('database.MONGODB_URI'),
+        useNewUrlParser: true,
+        useFindAndModify: false,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+      }),
+    }),
+    RedisModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        url: configService.get('database.REDIS_URL'),
+      }),
     }),
     RateLimiterModule.register({
       keyGenerator: (req) => (req.user as User | undefined)?._id ?? req.ip,
     }),
-    GCloudStorageModule.register(dbConfig.GCLOUD_BUCKET),
+    GCloudStorageModule.registerAsync({
+      useFactory: (configService: ConfigService) =>
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        configService.get('database.GCLOUD_BUCKET')!,
+    }),
     HttpModule,
     BinsModule,
     AuthModule,

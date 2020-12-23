@@ -4,7 +4,11 @@ import cryptoRandomString from 'crypto-random-string';
 import { Model } from 'mongoose';
 import { RedisService } from 'nestjs-redis';
 
-import { binConfig } from '../../configs';
+import {
+  CDN_CACHE_CONTROL,
+  HIT_COUNT_WINDOW,
+  KEY_LENGTH,
+} from '../../configs/bin.config';
 import { GCloudStorageService } from '../../libs/gcloud-storage';
 import { Bin, BinDocument } from '../../schemas/bin.schema';
 import { User } from '../../schemas/user.schema';
@@ -20,7 +24,7 @@ export class BinsService {
 
   private generateKey(): Promise<string> {
     return cryptoRandomString.async({
-      length: binConfig.KEY_LENGTH,
+      length: KEY_LENGTH,
       type: 'alphanumeric',
     });
   }
@@ -33,9 +37,7 @@ export class BinsService {
       return;
     }
 
-    await this.redisService
-      .getClient()
-      .set(key, 0, 'PX', binConfig.HIT_COUNT_WINDOW);
+    await this.redisService.getClient().set(key, 0, 'PX', HIT_COUNT_WINDOW);
 
     bin.hits += 1;
     this.binModel.updateOne({ key: bin.key }, { $inc: { hits: 1 } }).exec();
@@ -66,7 +68,7 @@ export class BinsService {
         .map((content, i) =>
           this.gcloudStorage.saveFile(`bins/${bin.key}/${i}`, content, {
             contentType: 'text/plain',
-            cacheControl: binConfig.CDN_CACHE_CONTROL,
+            cacheControl: CDN_CACHE_CONTROL,
           }),
         ),
     ]);

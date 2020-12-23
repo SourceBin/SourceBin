@@ -1,8 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-discord';
 
-import { authConfig } from '../../../configs';
+import { AuthConfig } from '../../../configs';
 import { User } from '../../../schemas/user.schema';
 import { UserService } from '../../user/user.service';
 
@@ -10,7 +11,10 @@ const BASE_URL = 'https://cdn.discordapp.com';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly userService: UserService) {
+  constructor(
+    @Inject(AuthConfig.KEY) authConfig: ConfigType<typeof AuthConfig>,
+    private readonly userService: UserService,
+  ) {
     super({
       clientID: authConfig.DISCORD.ID,
       clientSecret: authConfig.DISCORD.SECRET,

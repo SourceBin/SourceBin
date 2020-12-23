@@ -1,29 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import Stripe from 'stripe';
 
-import { stripeConfig } from '../../configs';
+import { StripeConfig } from '../../configs';
 import { SubscribeDto } from '../../routes/billing/dto/subscribe.dto';
 import { Plan, User, UserDocument } from '../../schemas/user.schema';
 
 @Injectable()
 export class StripeService {
-  private readonly stripe = new Stripe(stripeConfig.KEY, {
-    apiVersion: '2020-08-27',
-  });
+  private readonly stripe: Stripe;
 
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<UserDocument>,
-  ) {}
+    @Inject(StripeConfig.KEY)
+    private readonly stripeConfig: ConfigType<typeof StripeConfig>,
+  ) {
+    this.stripe = new Stripe(stripeConfig.KEY, {
+      apiVersion: '2020-08-27',
+    });
+  }
 
   planToId(name: string): string | undefined {
     switch (name) {
       case 'pro_monthly':
-        return stripeConfig.PRO_MONTHLY;
+        return this.stripeConfig.PRO_MONTHLY;
       case 'pro_yearly':
-        return stripeConfig.PRO_YEARLY;
+        return this.stripeConfig.PRO_YEARLY;
       default:
         return undefined;
     }
@@ -134,7 +139,7 @@ export class StripeService {
     return this.stripe.webhooks.constructEvent(
       payload,
       signature,
-      stripeConfig.WEBHOOK_SECRET,
+      this.stripeConfig.WEBHOOK_SECRET,
     );
   }
 

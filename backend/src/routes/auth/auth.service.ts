@@ -2,13 +2,15 @@ import crypto from 'crypto';
 import url from 'url';
 import { promisify } from 'util';
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { CookieOptions, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Model } from 'mongoose';
 
-import { authConfig } from '../../configs';
+import { AuthConfig } from '../../configs';
+import { ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL } from '../../configs/auth.config';
 import {
   RefreshToken,
   RefreshTokenDocument,
@@ -31,6 +33,8 @@ export class AuthService {
   constructor(
     @InjectModel(RefreshToken.name)
     private readonly refreshTokenModel: Model<RefreshTokenDocument>,
+    @Inject(AuthConfig.KEY)
+    private readonly authConfig: ConfigType<typeof AuthConfig>,
   ) {}
 
   redirectError(res: Response, err: Error): void {
@@ -61,11 +65,15 @@ export class AuthService {
       user: user,
     }).save();
 
-    const accessToken = jwt.sign({ sub: user._id }, authConfig.JWT_SECRET, {
-      expiresIn: authConfig.ACCESS_TOKEN_TTL / 1000,
-    });
+    const accessToken = jwt.sign(
+      { sub: user._id },
+      this.authConfig.JWT.SECRET,
+      {
+        expiresIn: ACCESS_TOKEN_TTL / 1000,
+      },
+    );
 
-    const expires = new Date(Date.now() + authConfig.REFRESH_TOKEN_TTL);
+    const expires = new Date(Date.now() + REFRESH_TOKEN_TTL);
 
     res.cookie(ACCESS_TOKEN, accessToken, {
       ...COOKIE_SETTINGS,

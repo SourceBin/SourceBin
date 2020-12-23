@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-import { authConfig } from '../configs';
+import { REFRESH_TOKEN_TTL } from '../configs/auth.config';
 import { User } from './user.schema';
 
 @Schema()
@@ -19,7 +19,7 @@ export class RefreshToken {
   @Prop({
     required: true,
     default: Date.now,
-    expires: authConfig.REFRESH_TOKEN_TTL / 1000,
+    expires: REFRESH_TOKEN_TTL / 1000,
   })
   createdAt!: Date;
 }
