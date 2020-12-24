@@ -1,0 +1,222 @@
+import {
+  ForbiddenException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { of, throwError } from 'rxjs';
+
+import { CodeService } from '../../libs/code';
+import { Bin } from '../../schemas/bin.schema';
+import { Plan, User } from '../../schemas/user.schema';
+import { BinsController } from './bins.controller';
+import { BinsService } from './bins.service';
+import { BinCreatedResponseDto } from './dto/bin-created-response.dto';
+import { BinResponseDto } from './dto/bin-response.dto';
+import { CreateBinDto } from './dto/create-bin.dto';
+
+function mockBin(data: Partial<Bin>): Bin {
+  const bin = new Bin();
+  Object.assign(bin, data);
+  return bin;
+}
+
+function mockUser(data: Partial<User>): User {
+  const user = new User();
+  Object.assign(user, data);
+  return user;
+}
+
+describe('BinsController', () => {
+  let binsController: BinsController;
+  let binsService: BinsService;
+  let codeService: CodeService;
+
+  beforeEach(async () => {
+    const module = await Test.createTestingModule({
+      controllers: [BinsController],
+      providers: [
+        {
+          provide: BinsService,
+          useValue: {
+            generateKey: jest.fn().mockResolvedValue('123'),
+            countHit: jest.fn(),
+            findOne: jest
+              .fn()
+              .mockImplementation((key: string) =>
+                Promise.resolve(mockBin({ key, files: [] })),
+              ),
+            createBin: jest.fn().mockImplementation((dto: CreateBinDto) =>
+              mockBin({
+                key: '123',
+                files: dto.files.map((file, i) => ({
+                  languageId: file.languageId ?? i,
+                })),
+              }),
+            ),
+            disownBin: jest.fn().mockResolvedValue(true),
+          },
+        },
+        {
+          provide: CodeService,
+          useValue: {
+            detectLanguages: jest
+              .fn()
+              .mockImplementation((contents: string[]) =>
+                of(contents.map((_, i) => i)),
+              ),
+          },
+        },
+      ],
+    }).compile();
+
+    binsController = module.get(BinsController);
+    binsService = module.get(BinsService);
+    codeService = module.get(CodeService);
+  });
+
+  it('should be defined', () => {
+    expect(binsController).toBeDefined();
+  });
+
+  describe('findOne', () => {
+    it('should return a bin if it exists', async () => {
+      await expect(
+        binsController.findOne('123', '', undefined),
+      ).resolves.toEqual(
+        BinResponseDto.fromDocument(mockBin({ key: '123', files: [] })),
+      );
+
+      await expect(
+        binsController.findOne('456', '', undefined),
+      ).resolves.toEqual(
+        BinResponseDto.fromDocument(mockBin({ key: '456', files: [] })),
+      );
+    });
+
+    it('should count a hit if not logged in', async () => {
+      await binsController.findOne('123', 'ip', undefined);
+
+      expect(binsService.countHit).toHaveBeenCalledWith(
+        expect.anything(),
+        'ip',
+      );
+    });
+
+    it('should count a hit if logged in', async () => {
+      await binsController.findOne('123', 'ip', mockUser({ _id: 'user id' }));
+
+      expect(binsService.countHit).toHaveBeenCalledWith(
+        expect.anything(),
+        'user id',
+      );
+    });
+
+    it('should throw not found if no bin exists', async () => {
+      jest.spyOn(binsService, 'findOne').mockResolvedValueOnce(null);
+
+      await expect(
+        binsController.findOne('123', '', undefined),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('create', () => {
+    it('should create a bin if languages are provided', async () => {
+      await expect(
+        binsController.create({
+          files: [{ content: 'one', languageId: 42 }],
+        }),
+      ).resolves.toEqual(
+        BinCreatedResponseDto.fromDocument(
+          mockBin({ key: '123', files: [{ languageId: 42 }] }),
+        ),
+      );
+
+      await expect(
+        binsController.create(
+          {
+            files: [
+              { content: 'one', languageId: 42 },
+              { content: 'two', languageId: 24 },
+            ],
+          },
+          mockUser({ plan: Plan.PRO }),
+        ),
+      ).resolves.toEqual(
+        BinCreatedResponseDto.fromDocument(
+          mockBin({
+            key: '123',
+            files: [{ languageId: 42 }, { languageId: 24 }],
+          }),
+        ),
+      );
+    });
+
+    it('should create a bin and detect languages if languages are not provided', async () => {
+      await expect(
+        binsController.create({
+          files: [{ content: 'one' }],
+        }),
+      ).resolves.toEqual(
+        BinCreatedResponseDto.fromDocument(
+          mockBin({ key: '123', files: [{ languageId: 0 }] }),
+        ),
+      );
+
+      await expect(
+        binsController.create(
+          {
+            files: [{ content: 'one' }, { content: 'two' }],
+          },
+          mockUser({ plan: Plan.PRO }),
+        ),
+      ).resolves.toEqual(
+        BinCreatedResponseDto.fromDocument(
+          mockBin({
+            key: '123',
+            files: [{ languageId: 0 }, { languageId: 1 }],
+          }),
+        ),
+      );
+    });
+
+    it('should throw internal server error if language detection fails', async () => {
+      jest
+        .spyOn(codeService, 'detectLanguages')
+        .mockReturnValueOnce(throwError(new Error()));
+
+      await expect(binsController.create({ files: [] })).rejects.toThrow(
+        new InternalServerErrorException('Failed to classify languages'),
+      );
+    });
+
+    it('should throw forbidden if multiple files are provided and user is not pro', async () => {
+      await expect(
+        binsController.create({
+          files: [{ content: 'one' }, { content: 'two' }],
+        }),
+      ).rejects.toThrow(
+        new ForbiddenException('Only Pro users can save multibins'),
+      );
+    });
+  });
+
+  describe('disownOne', () => {
+    it('should return success if it disowned the bin', async () => {
+      await expect(
+        binsController.disownOne('123', mockUser({})),
+      ).resolves.toEqual({ success: true });
+    });
+
+    it('should throw not found if disown failed', async () => {
+      jest.spyOn(binsService, 'disownBin').mockResolvedValueOnce(false);
+
+      await expect(
+        binsController.disownOne('123', mockUser({})),
+      ).rejects.toThrow(
+        new NotFoundException('Bin does not exist or you are not the owner'),
+      );
+    });
+  });
+});

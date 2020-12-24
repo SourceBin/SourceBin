@@ -60,10 +60,10 @@ export class AuthService {
   async setNewAccessRefreshToken(res: Response, user: User): Promise<void> {
     const refreshToken = await this.generateRefreshToken();
 
-    await new this.refreshTokenModel({
+    await this.refreshTokenModel.create({
       _id: this.hashRefreshToken(refreshToken),
       user: user,
-    }).save();
+    } as any);
 
     const accessToken = jwt.sign(
       { sub: user._id },

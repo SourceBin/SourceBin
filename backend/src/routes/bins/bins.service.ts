@@ -51,7 +51,7 @@ export class BinsService {
     createBinDto: CreateBinDto,
     user?: User,
   ): Promise<BinDocument> {
-    const bin = await new this.binModel({
+    const bin = await this.binModel.create({
       key: await this.generateKey(),
       title: createBinDto.title,
       description: createBinDto.description,
@@ -60,7 +60,7 @@ export class BinsService {
         name: file.name,
         languageId: file.languageId,
       })),
-    }).save();
+    } as any);
 
     await Promise.all([
       createBinDto.files
