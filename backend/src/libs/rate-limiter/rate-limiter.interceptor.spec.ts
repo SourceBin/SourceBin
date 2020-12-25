@@ -1,4 +1,4 @@
-import { createMock } from '@golevelup/nestjs-testing';
+import { createMock } from '@golevelup/ts-jest';
 import { ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request, Response } from 'express';
@@ -29,7 +29,7 @@ describe('RateLimiterInterceptor', () => {
       const limiter = interceptor['getLimiter'](
         createMock<Request>({
           method: 'GET',
-          route: { path: 'path' },
+          route: { path: 'path' } as any,
         }),
         {
           points: 5,
@@ -44,7 +44,7 @@ describe('RateLimiterInterceptor', () => {
     it('should return an existing instance if called multiple times', () => {
       const req = createMock<Request>({
         method: 'GET',
-        route: { path: 'path' },
+        route: { path: 'path' } as any,
       });
 
       const opts = { points: 5, duration: 10 };
