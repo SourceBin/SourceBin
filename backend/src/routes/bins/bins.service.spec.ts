@@ -5,24 +5,13 @@ import { Redis } from 'ioredis';
 import { Model, Query } from 'mongoose';
 import { RedisService } from 'nestjs-redis';
 
+import { mockDocument } from '../../../test/utils';
 import { GCloudStorageService } from '../../libs/gcloud-storage';
 import { Bin, BinDocument } from '../../schemas/bin.schema';
 import { User } from '../../schemas/user.schema';
 import { BinsService } from './bins.service';
 
 type BinQuery = Query<BinDocument, BinDocument>;
-
-function mockBin(data: Partial<Bin>): Bin {
-  const bin = new Bin();
-  Object.assign(bin, data);
-  return bin;
-}
-
-function mockUser(data: Partial<User>): User {
-  const user = new User();
-  Object.assign(user, data);
-  return user;
-}
 
 describe('BinsService', () => {
   let binsService: BinsService;
@@ -90,7 +79,7 @@ describe('BinsService', () => {
         }),
       );
 
-      const binMock = mockBin({ hits: 0 });
+      const binMock = mockDocument(Bin, { hits: 0 });
       await binsService.countHit(binMock, 'id');
 
       expect(binMock.hits).toBe(1);
@@ -105,7 +94,7 @@ describe('BinsService', () => {
         }),
       );
 
-      const binMock = mockBin({ hits: 0 });
+      const binMock = mockDocument(Bin, { hits: 0 });
       await binsService.countHit(binMock, 'id');
 
       expect(binMock.hits).toBe(0);
@@ -117,12 +106,14 @@ describe('BinsService', () => {
     it('should return bin if it exists', async () => {
       jest.spyOn(binModel, 'findOne').mockReturnValueOnce(
         createMock<BinQuery>({
-          exec: jest.fn().mockResolvedValueOnce(mockBin({ key: '123' })),
+          exec: jest
+            .fn()
+            .mockResolvedValueOnce(mockDocument(Bin, { key: '123' })),
         }),
       );
 
       await expect(binsService.findOne('123')).resolves.toEqual(
-        mockBin({ key: '123' }),
+        mockDocument(Bin, { key: '123' }),
       );
     });
 
@@ -140,7 +131,7 @@ describe('BinsService', () => {
   describe('createBin', () => {
     it('should save a bin with a single file', async () => {
       jest.spyOn(binModel, 'create').mockResolvedValueOnce(
-        mockBin({
+        mockDocument(Bin, {
           key: '123',
           files: [{ languageId: 1 }],
         }) as never,
@@ -151,7 +142,7 @@ describe('BinsService', () => {
       });
 
       expect(createdBin).toEqual(
-        mockBin({ key: '123', files: [{ languageId: 1 }] }),
+        mockDocument(Bin, { key: '123', files: [{ languageId: 1 }] }),
       );
 
       expect(gcloudStorage.saveFile).toBeCalledTimes(1);
@@ -164,7 +155,7 @@ describe('BinsService', () => {
 
     it('should save a bin with multiple files', async () => {
       jest.spyOn(binModel, 'create').mockResolvedValueOnce(
-        mockBin({
+        mockDocument(Bin, {
           key: '123',
           files: [{ languageId: 1 }, { languageId: 2 }],
         }) as never,
@@ -178,7 +169,10 @@ describe('BinsService', () => {
       });
 
       expect(createdBin).toEqual(
-        mockBin({ key: '123', files: [{ languageId: 1 }, { languageId: 2 }] }),
+        mockDocument(Bin, {
+          key: '123',
+          files: [{ languageId: 1 }, { languageId: 2 }],
+        }),
       );
 
       expect(gcloudStorage.saveFile).toHaveBeenCalledTimes(2);
@@ -205,9 +199,9 @@ describe('BinsService', () => {
         }),
       );
 
-      await expect(binsService.disownBin('123', mockUser({}))).resolves.toBe(
-        true,
-      );
+      await expect(
+        binsService.disownBin('123', mockDocument(User, {})),
+      ).resolves.toBe(true);
     });
 
     it('should return false if it did not disown a bin', async () => {
@@ -217,9 +211,9 @@ describe('BinsService', () => {
         }),
       );
 
-      await expect(binsService.disownBin('123', mockUser({}))).resolves.toBe(
-        false,
-      );
+      await expect(
+        binsService.disownBin('123', mockDocument(User, {})),
+      ).resolves.toBe(false);
     });
   });
 });
