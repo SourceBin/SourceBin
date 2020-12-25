@@ -6,6 +6,7 @@ import {
 import { Test } from '@nestjs/testing';
 import { of, throwError } from 'rxjs';
 
+import { mockDocument } from '../../../test/utils';
 import { CodeService } from '../../libs/code';
 import { Bin } from '../../schemas/bin.schema';
 import { Plan, User } from '../../schemas/user.schema';
@@ -14,18 +15,6 @@ import { BinsService } from './bins.service';
 import { BinCreatedResponseDto } from './dto/bin-created-response.dto';
 import { BinResponseDto } from './dto/bin-response.dto';
 import { CreateBinDto } from './dto/create-bin.dto';
-
-function mockBin(data: Partial<Bin>): Bin {
-  const bin = new Bin();
-  Object.assign(bin, data);
-  return bin;
-}
-
-function mockUser(data: Partial<User>): User {
-  const user = new User();
-  Object.assign(user, data);
-  return user;
-}
 
 describe('BinsController', () => {
   let binsController: BinsController;
@@ -44,10 +33,10 @@ describe('BinsController', () => {
             findOne: jest
               .fn()
               .mockImplementation((key: string) =>
-                Promise.resolve(mockBin({ key, files: [] })),
+                Promise.resolve(mockDocument(Bin, { key, files: [] })),
               ),
             createBin: jest.fn().mockImplementation((dto: CreateBinDto) =>
-              mockBin({
+              mockDocument(Bin, {
                 key: '123',
                 files: dto.files.map((file, i) => ({
                   languageId: file.languageId ?? i,
@@ -84,13 +73,17 @@ describe('BinsController', () => {
       await expect(
         binsController.findOne('123', '', undefined),
       ).resolves.toEqual(
-        BinResponseDto.fromDocument(mockBin({ key: '123', files: [] })),
+        BinResponseDto.fromDocument(
+          mockDocument(Bin, { key: '123', files: [] }),
+        ),
       );
 
       await expect(
         binsController.findOne('456', '', undefined),
       ).resolves.toEqual(
-        BinResponseDto.fromDocument(mockBin({ key: '456', files: [] })),
+        BinResponseDto.fromDocument(
+          mockDocument(Bin, { key: '456', files: [] }),
+        ),
       );
     });
 
@@ -104,7 +97,11 @@ describe('BinsController', () => {
     });
 
     it('should count a hit if logged in', async () => {
-      await binsController.findOne('123', 'ip', mockUser({ _id: 'user id' }));
+      await binsController.findOne(
+        '123',
+        'ip',
+        mockDocument(User, { _id: 'user id' }),
+      );
 
       expect(binsService.countHit).toHaveBeenCalledWith(
         expect.anything(),
@@ -129,7 +126,7 @@ describe('BinsController', () => {
         }),
       ).resolves.toEqual(
         BinCreatedResponseDto.fromDocument(
-          mockBin({ key: '123', files: [{ languageId: 42 }] }),
+          mockDocument(Bin, { key: '123', files: [{ languageId: 42 }] }),
         ),
       );
 
@@ -141,11 +138,11 @@ describe('BinsController', () => {
               { content: 'two', languageId: 24 },
             ],
           },
-          mockUser({ plan: Plan.PRO }),
+          mockDocument(User, { plan: Plan.PRO }),
         ),
       ).resolves.toEqual(
         BinCreatedResponseDto.fromDocument(
-          mockBin({
+          mockDocument(Bin, {
             key: '123',
             files: [{ languageId: 42 }, { languageId: 24 }],
           }),
@@ -160,7 +157,7 @@ describe('BinsController', () => {
         }),
       ).resolves.toEqual(
         BinCreatedResponseDto.fromDocument(
-          mockBin({ key: '123', files: [{ languageId: 0 }] }),
+          mockDocument(Bin, { key: '123', files: [{ languageId: 0 }] }),
         ),
       );
 
@@ -169,11 +166,11 @@ describe('BinsController', () => {
           {
             files: [{ content: 'one' }, { content: 'two' }],
           },
-          mockUser({ plan: Plan.PRO }),
+          mockDocument(User, { plan: Plan.PRO }),
         ),
       ).resolves.toEqual(
         BinCreatedResponseDto.fromDocument(
-          mockBin({
+          mockDocument(Bin, {
             key: '123',
             files: [{ languageId: 0 }, { languageId: 1 }],
           }),
@@ -205,7 +202,7 @@ describe('BinsController', () => {
   describe('disownOne', () => {
     it('should return success if it disowned the bin', async () => {
       await expect(
-        binsController.disownOne('123', mockUser({})),
+        binsController.disownOne('123', mockDocument(User, {})),
       ).resolves.toEqual({ success: true });
     });
 
@@ -213,7 +210,7 @@ describe('BinsController', () => {
       jest.spyOn(binsService, 'disownBin').mockResolvedValueOnce(false);
 
       await expect(
-        binsController.disownOne('123', mockUser({})),
+        binsController.disownOne('123', mockDocument(User, {})),
       ).rejects.toThrow(
         new NotFoundException('Bin does not exist or you are not the owner'),
       );
