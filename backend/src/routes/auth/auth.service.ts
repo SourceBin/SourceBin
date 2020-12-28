@@ -48,12 +48,12 @@ export class AuthService {
     );
   }
 
-  async generateRefreshToken(): Promise<string> {
+  private async generateRefreshToken(): Promise<string> {
     const bytes = await randomBytes(32);
     return bytes.toString('base64');
   }
 
-  hashRefreshToken(refreshToken: string): string {
+  private hashRefreshToken(refreshToken: string): string {
     return crypto.createHash('sha256').update(refreshToken).digest('base64');
   }
 
@@ -99,18 +99,18 @@ export class AuthService {
       .exec();
   }
 
-  extractRedirect(state: string): string | null {
-    const { redirect } = JSON.parse(Buffer.from(state, 'base64').toString());
+  private extractRedirect(state: string): string | null {
+    try {
+      const { redirect } = JSON.parse(Buffer.from(state, 'base64').toString());
 
-    if (redirect) {
-      try {
+      if (redirect) {
         return url.parse(redirect).path;
-      } catch {
-        return null;
       }
-    }
 
-    return null;
+      return null;
+    } catch {
+      return null;
+    }
   }
 
   async generateTokenAndRedirect(
