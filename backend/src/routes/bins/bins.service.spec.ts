@@ -56,14 +56,6 @@ describe('BinsService', () => {
     expect(binsService).toBeDefined();
   });
 
-  describe('generateKey', () => {
-    it('should generate a valid key', async () => {
-      await expect(binsService['generateKey']()).resolves.toMatch(
-        /[a-z0-9]{10}/i,
-      );
-    });
-  });
-
   describe('countHit', () => {
     it('should count a hit if id does not exist', async () => {
       jest.spyOn(binModel, 'updateOne').mockReturnValue(
@@ -130,36 +122,33 @@ describe('BinsService', () => {
 
   describe('createBin', () => {
     it('should save a bin with a single file', async () => {
-      jest.spyOn(binModel, 'create').mockResolvedValueOnce(
-        mockDocument(Bin, {
-          key: '123',
-          files: [{ languageId: 1 }],
-        }) as never,
-      );
+      jest
+        .spyOn(binModel, 'create')
+        .mockImplementation((data: any) =>
+          Promise.resolve(mockDocument(Bin, data)),
+        );
 
       const createdBin = await binsService.createBin({
         files: [{ content: 'one', languageId: 1 }],
       });
 
-      expect(createdBin).toEqual(
-        mockDocument(Bin, { key: '123', files: [{ languageId: 1 }] }),
-      );
+      expect(createdBin.key).toMatch(/[a-z0-9]{10}/i);
+      expect(createdBin.files).toEqual([{ languageId: 1 }]);
 
       expect(gcloudStorage.saveFile).toBeCalledTimes(1);
       expect(gcloudStorage.saveFile).toHaveBeenCalledWith(
-        'bins/123/0',
+        `bins/${createdBin.key}/0`,
         'one',
         expect.anything(),
       );
     });
 
     it('should save a bin with multiple files', async () => {
-      jest.spyOn(binModel, 'create').mockResolvedValueOnce(
-        mockDocument(Bin, {
-          key: '123',
-          files: [{ languageId: 1 }, { languageId: 2 }],
-        }) as never,
-      );
+      jest
+        .spyOn(binModel, 'create')
+        .mockImplementation((data: any) =>
+          Promise.resolve(mockDocument(Bin, data)),
+        );
 
       const createdBin = await binsService.createBin({
         files: [
@@ -168,23 +157,19 @@ describe('BinsService', () => {
         ],
       });
 
-      expect(createdBin).toEqual(
-        mockDocument(Bin, {
-          key: '123',
-          files: [{ languageId: 1 }, { languageId: 2 }],
-        }),
-      );
+      expect(createdBin.key).toMatch(/[a-z0-9]{10}/i);
+      expect(createdBin.files).toEqual([{ languageId: 1 }, { languageId: 2 }]);
 
       expect(gcloudStorage.saveFile).toHaveBeenCalledTimes(2);
       expect(gcloudStorage.saveFile).toHaveBeenNthCalledWith(
         1,
-        'bins/123/0',
+        `bins/${createdBin.key}/0`,
         'one',
         expect.anything(),
       );
       expect(gcloudStorage.saveFile).toHaveBeenNthCalledWith(
         2,
-        'bins/123/1',
+        `bins/${createdBin.key}/1`,
         'two',
         expect.anything(),
       );
