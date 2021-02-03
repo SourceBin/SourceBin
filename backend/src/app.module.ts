@@ -27,18 +27,25 @@ import { User } from './schemas/user.schema';
   imports: [
     ConfigModule.forRoot({
       cache: true,
+      isGlobal: true,
       load: [AuthConfig, DatabaseConfig, StripeConfig],
     }),
     MongooseModule.forRootAsync({
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get('database.MONGODB_URI'),
-        useNewUrlParser: true,
-        useFindAndModify: false,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-      }),
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return {
+          uri: configService.get('database.MONGODB_URI'),
+          useNewUrlParser: true,
+          useFindAndModify: false,
+          useUnifiedTopology: true,
+          useCreateIndex: true,
+        };
+      },
     }),
     RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         url: configService.get('database.REDIS_URL'),
       }),
@@ -47,9 +54,10 @@ import { User } from './schemas/user.schema';
       keyGenerator: (req) => (req.user as User | undefined)?._id ?? req.ip,
     }),
     GCloudStorageModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        configService.get('database.GCLOUD_BUCKET')!,
+        configService.get('database.GCLOUD_BUCKET')!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
     }),
     HttpModule,
     BinsModule,
