@@ -10,11 +10,6 @@
       <div class="info">
         <p class="username">
           {{ auth.user.username }}
-
-          <span
-            v-if="$store.getters.pro"
-            class="pro"
-          >PRO</span>
         </p>
 
         <div class="stats">
@@ -134,20 +129,6 @@ $border-radius: 5px;
       margin: 0 0 var(--margin-between);
       font-size: var(--font-size-header);
       color: var(--text-900);
-
-      @include mq($until: tablet) {
-        padding: 0 var(--margin-side);
-      }
-
-      .pro {
-        vertical-align: middle;
-        padding: 2px 4px;
-        font-size: var(--font-size-regular);
-        font-weight: 700;
-        color: $white-900;
-        background-color: $red;
-        border-radius: 3px;
-      }
     }
 
     .stats {

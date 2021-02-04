@@ -2,15 +2,12 @@
   <div class="homepage">
     <div class="homepage-top">
       <About />
-      <CarbonAds v-if="showAds" />
+      <CarbonAds />
     </div>
     <Editors />
     <Actions />
 
-    <CarbonAdsText
-      v-if="showAds"
-      class="carbon-text"
-    />
+    <CarbonAdsText class="carbon-text" />
 
     <Selector
       :options="languageOptions"
@@ -49,9 +46,6 @@ export default {
   computed: {
     key() {
       return this.bin.key;
-    },
-    showAds() {
-      return !this.$store.getters.pro || this.$store.state.settings.showAds;
     },
     ...mapState(['bin']),
   },

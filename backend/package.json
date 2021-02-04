@@ -41,7 +41,6 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.3",
-    "stripe": "^8.129.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

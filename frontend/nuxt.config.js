@@ -91,7 +91,6 @@ export default {
     { src: '@/plugins/filters.js' },
 
     { src: '@/plugins/localStorage.js', mode: 'client' },
-    { src: '@/plugins/stripe.js', mode: 'client' },
 
     { src: '@/plugins/ssr-cookie-proxy.js', mode: 'server' },
   ],
@@ -113,14 +112,7 @@ export default {
   },
 
   env: {
-    STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
     CDN_BASE_URL: process.env.CDN_BASE_URL,
-  },
-
-  router: {
-    extendRoutes(routes) {
-      routes.find(route => route.path === '/:key').path = '/:key?';
-    },
   },
 
   build: {

@@ -12,12 +12,6 @@
           Privacy
         </nuxt-link>
       </li>
-
-      <li>
-        <a href="https://status.sourceb.in">
-          Status
-        </a>
-      </li>
     </ul>
 
     <ul>
@@ -42,14 +36,14 @@
 
     <ul>
       <li>
-        <nuxt-link to="/pro">
-          Go Pro
-        </nuxt-link>
+        <a href="https://status.sourceb.in">
+          Status
+        </a>
       </li>
 
       <li>
-        <nuxt-link to="/account/billing">
-          Billing
+        <nuxt-link to="/donate">
+          Donate
         </nuxt-link>
       </li>
     </ul>

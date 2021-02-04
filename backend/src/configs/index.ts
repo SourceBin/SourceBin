@@ -25,11 +25,3 @@ export const DatabaseConfig = registerAs('database', () => ({
   REDIS_URL: asString(process.env.REDIS_URL),
   GCLOUD_BUCKET: asString(process.env.GOOGLE_CLOUD_STORAGE_BUCKET),
 }));
-
-export const StripeConfig = registerAs('stripe', () => ({
-  KEY: asString(process.env.STRIPE_SECRET_KEY),
-  WEBHOOK_SECRET: asString(process.env.STRIPE_WEBHOOK_SECRET),
-
-  PRO_MONTHLY: asString(process.env.STRIPE_PRO_MONTHLY),
-  PRO_YEARLY: asString(process.env.STRIPE_PRO_YEARLY),
-}));

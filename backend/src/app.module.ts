@@ -1,26 +1,16 @@
-import {
-  HttpModule,
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RedisModule } from 'nest-redis';
 
 import { AppController } from './app.controller';
-import { AuthConfig, DatabaseConfig, StripeConfig } from './configs';
+import { AuthConfig, DatabaseConfig } from './configs';
 import { CodeModule } from './libs/code';
 import { GCloudStorageModule } from './libs/gcloud-storage';
 import { RateLimiterModule } from './libs/rate-limiter';
-import { JsonBodyMiddleware } from './middleware/json-body.middleware';
-import { RawBodyMiddleware } from './middleware/raw-body.middleware';
 import { AuthModule } from './routes/auth/auth.module';
-import { BillingModule } from './routes/billing/billing.module';
 import { BinsModule } from './routes/bins/bins.module';
 import { UserModule } from './routes/user/user.module';
-import { WebhooksModule } from './routes/webhooks/webhooks.module';
 import { User } from './schemas/user.schema';
 
 @Module({
@@ -28,7 +18,7 @@ import { User } from './schemas/user.schema';
     ConfigModule.forRoot({
       cache: true,
       isGlobal: true,
-      load: [AuthConfig, DatabaseConfig, StripeConfig],
+      load: [AuthConfig, DatabaseConfig],
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -64,17 +54,7 @@ import { User } from './schemas/user.schema';
     AuthModule,
     UserModule,
     CodeModule,
-    BillingModule,
-    WebhooksModule,
   ],
   controllers: [AppController],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer): void {
-    consumer
-      .apply(RawBodyMiddleware)
-      .forRoutes({ path: 'webhooks/stripe', method: RequestMethod.POST })
-      .apply(JsonBodyMiddleware)
-      .forRoutes('*');
-  }
-}
+export class AppModule {}

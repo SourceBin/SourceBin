@@ -49,10 +49,6 @@ If you believe that content on our website violates your copyright, please conta
 
 We will terminate the Accounts of repeat infringers of this policy.
 
-## Refund Policy
-
-For monthly or yearly payment plans, the Service is billed in advance on a monthly or yearly bases respectively and is non-refundable. There will be no refunds or credits for partial months or services, downgrade refunds, or refunds for months unused with an open Account; however, the service will remain active for the length of the paid billing period. You can cancel your subscription at any time.
-
 ## Privacy
 
 Please review our [Privacy Policy](/privacy).

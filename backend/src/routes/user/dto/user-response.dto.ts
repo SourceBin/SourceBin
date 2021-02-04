@@ -1,4 +1,4 @@
-import { About, Plan, User } from '../../../schemas/user.schema';
+import { About, User } from '../../../schemas/user.schema';
 import { BaseResponseDto } from '../../../utils/base-response.dto';
 
 export class AboutResponseDto extends BaseResponseDto<AboutResponseDto> {
@@ -33,7 +33,6 @@ export class UserResponseDto extends BaseResponseDto<UserResponseDto> {
   readonly username!: string;
   readonly about!: AboutResponseDto;
   readonly oauth!: OauthResponseDto;
-  readonly plan!: Plan;
   readonly createdAt!: Date;
 
   static fromDocument(user: User): UserResponseDto {
@@ -41,7 +40,6 @@ export class UserResponseDto extends BaseResponseDto<UserResponseDto> {
       username: user.username,
       about: AboutResponseDto.fromDocument(user.about),
       oauth: OauthResponseDto.fromDocument(user.oauth),
-      plan: user.plan,
       createdAt: user.createdAt,
     });
   }

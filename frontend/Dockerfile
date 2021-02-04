@@ -5,10 +5,6 @@ FROM node:12.14-alpine AS builder
 
 WORKDIR /usr/src
 
-# Set stripe key
-ARG STRIPE_PUBLIC_KEY
-ENV STRIPE_PUBLIC_KEY $STRIPE_PUBLIC_KEY
-
 # Set cdn base url
 ARG CDN_BASE_URL
 ENV CDN_BASE_URL $CDN_BASE_URL

@@ -1,7 +1,8 @@
 <template lang="html">
   <div class="actions">
+    <!-- TODO: reenable -->
     <button
-      v-if="$store.getters.pro"
+      v-if="false"
       :disabled="$store.state.bin.files.length >= 25"
       @click="addFile"
     >

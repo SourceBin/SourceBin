@@ -20,10 +20,6 @@ We do not collect any personal information about you unless you voluntarily prov
 
 When you create an account, we store your username and email address. Depending on your sign-in method, we may also store third-party information, such as your avatar, biography, location, company, and a URL to a third-party website.
 
-### Payment Information
-
-If you purchase products or services, we collect your full name, address, and credit card information. Please note, SourceBin does not process or store your credit card information, but our third-party payment processor does.
-
 ### Usage Information
 
 If you're accessing our Service or Website, we collect information about how you use the Service, such as the pages you view, the referring site, your IP address and session information, and the date and time of each request. This is information we collect from every visitor to the Website, whether they have an Account or not. This information may include User Personal information.
@@ -67,7 +63,6 @@ We use a number of third-party analytics and service providers to help us evalua
 SourceBin works together with third parties to provide analytics, advertisements, and other services. Each party has their own Privacy Policy for its policies on user data. You can find these policies below:
 
 - [Carbon Ads](https://buysellads.com/about/privacy)
-- [Stripe](http://stripe.com/privacy)
 - [Google Analytics](https://policies.google.com/privacy)
 
 ## How we secure your information

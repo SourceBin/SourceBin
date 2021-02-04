@@ -8,8 +8,6 @@ export const state = () => ({
 
   languageDetection: true,
   defaultLanguageId: languages.Text,
-
-  showAds: true,
 });
 
 export const mutations = {
@@ -31,9 +29,5 @@ export const mutations = {
   },
   setDefaultLanguageId(state, id) {
     state.defaultLanguageId = id;
-  },
-
-  setShowAds(state, showAds) {
-    state.showAds = showAds;
   },
 };

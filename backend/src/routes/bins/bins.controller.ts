@@ -13,7 +13,7 @@ import {
 
 import { CurrentUser } from '../../decorators/current-user.decorator';
 import { RateLimit } from '../../libs/rate-limiter';
-import { Plan, User } from '../../schemas/user.schema';
+import { User } from '../../schemas/user.schema';
 import { hours, minutes, seconds } from '../../utils/time.util';
 import { RequiredAuthGuard } from '../auth/guards/required.guard';
 import { BinsService } from './bins.service';
@@ -50,7 +50,7 @@ export class BinsController {
     @Body() createBinDto: CreateBinDto,
     @CurrentUser() user?: User,
   ): Promise<BinCreatedResponseDto> {
-    if (createBinDto.files.length > 1 && user?.plan !== Plan.PRO) {
+    if (createBinDto.files.length > 1 /*&& user?.plan !== Plan.PRO*/) {
       throw new ForbiddenException('Only Pro users can save multibins');
     }
 

@@ -1,8 +1,8 @@
 <template lang="html">
   <div class="adblock">
     <p>
-      Consider disabling your ad blocker or upgrading to <nuxt-link to="/pro">
-        Pro
+      Consider disabling your ad blocker or <nuxt-link to="/donate">
+        donating
       </nuxt-link> to support SourceBin.
     </p>
   </div>

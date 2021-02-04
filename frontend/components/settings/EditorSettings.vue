@@ -66,16 +66,6 @@
           >
         </dd>
       </dl>
-
-      <dl v-if="$store.getters.pro">
-        <dt>Show ads</dt>
-        <dd>
-          <input
-            v-model="showAds"
-            type="checkbox"
-          >
-        </dd>
-      </dl>
     </div>
 
     <client-only>
@@ -143,15 +133,6 @@ export default {
     },
     defaultLanguage() {
       return getLanguageById(this.settings.defaultLanguageId).name;
-    },
-
-    showAds: {
-      get() {
-        return this.settings.showAds;
-      },
-      set(showAds) {
-        this.$store.commit('settings/setShowAds', showAds);
-      },
     },
 
     editorOptions() {

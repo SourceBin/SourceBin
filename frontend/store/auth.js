@@ -16,7 +16,6 @@ export const state = () => ({
       github: undefined,
     },
 
-    plan: undefined,
     createdAt: undefined,
   },
 });

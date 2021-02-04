@@ -13,12 +13,12 @@
       </ul>
 
       <ul>
-        <li v-if="!$store.getters.pro">
+        <li>
           <nuxt-link
-            to="/pro"
-            class="go-pro"
+            to="/donate"
+            class="donate"
           >
-            <span>Upgrade Now -</span> Go Pro
+            Donate
           </nuxt-link>
         </li>
 
@@ -115,16 +115,10 @@ ul {
         }
       }
 
-      &.go-pro {
+      &.donate {
         color: $red;
         font-weight: 700;
         font-size: var(--font-size-big);
-
-        @include mq($until: tablet) {
-          span {
-            display: none;
-          }
-        }
 
         &:hover {
           color: $red-modifier-hover;
