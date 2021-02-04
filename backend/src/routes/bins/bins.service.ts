@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import cryptoRandomString from 'crypto-random-string';
 import { Model } from 'mongoose';
@@ -9,15 +9,17 @@ import {
   HIT_COUNT_WINDOW,
   KEY_LENGTH,
 } from '../../configs/bin.config';
+import { CodeService } from '../../libs/code';
 import { GCloudStorageService } from '../../libs/gcloud-storage';
 import { Bin, BinDocument } from '../../schemas/bin.schema';
 import { User } from '../../schemas/user.schema';
-import { CreateBinDto } from './dto/create-bin.dto';
+import { CreateBinDto, FileDto } from './dto/create-bin.dto';
 
 @Injectable()
 export class BinsService {
   constructor(
     @InjectModel(Bin.name) private readonly binModel: Model<BinDocument>,
+    private readonly codeService: CodeService,
     private readonly redisService: RedisService,
     private readonly gcloudStorage: GCloudStorageService,
   ) {}
@@ -41,6 +43,20 @@ export class BinsService {
 
     bin.hits += 1;
     this.binModel.updateOne({ key: bin.key }, { $inc: { hits: 1 } }).exec();
+  }
+
+  async classifyFiles(files: FileDto[]): Promise<void> {
+    try {
+      const languages = await this.codeService
+        .detectLanguages(files.map((file) => file.content))
+        .toPromise();
+
+      for (let i = 0; i < files.length; i++) {
+        files[i].languageId = languages[i];
+      }
+    } catch {
+      throw new InternalServerErrorException('Failed to classify languages');
+    }
   }
 
   findOne(key: string): Promise<BinDocument | null> {
