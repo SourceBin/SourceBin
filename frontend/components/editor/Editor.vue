@@ -44,10 +44,9 @@
 import { mapState } from 'vuex';
 import Mousetrap from 'mousetrap';
 
-import Toolbar from './Toolbar.vue';
-
 import { beautify } from '@/assets/beautify/beautify.js';
 import { getActiveLanguage } from '@/assets/language.js';
+import Toolbar from './Toolbar.vue';
 
 export default {
   components: {

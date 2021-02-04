@@ -42,9 +42,8 @@ import Mousetrap from 'mousetrap';
 import { debounce } from 'lodash-es';
 
 import CloseIcon from 'mdi-vue/Close.vue';
-import Overlay from './Overlay.vue';
-
 import { eventBus } from '@/assets/eventBus.js';
+import Overlay from './Overlay.vue';
 
 export default {
   components: {

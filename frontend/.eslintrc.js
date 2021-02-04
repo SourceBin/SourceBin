@@ -19,6 +19,7 @@ module.exports = {
   rules: {
     'import/prefer-default-export': 'off',
     'import/no-extraneous-dependencies': 'off',
+    'vue/comment-directive': 'off',
   },
 
   overrides: [

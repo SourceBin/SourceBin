@@ -23,9 +23,8 @@ import { mapState } from 'vuex';
 import Mousetrap from 'mousetrap';
 
 import Editor from '@/components/editor/Editor.vue';
-import Loading from './Loading.vue';
-
 import { save } from '@/assets/home/save.js';
+import Loading from './Loading.vue';
 
 export default {
   components: {

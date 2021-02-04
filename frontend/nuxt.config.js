@@ -5,7 +5,6 @@ import { renderer as markdownRenderer } from './assets/markdown/renderer.js';
 
 export default {
   buildDir: 'dist',
-  mode: 'universal',
 
   head: {
     titleTemplate: x => (x ? `${x} | SourceBin` : 'SourceBin'),
