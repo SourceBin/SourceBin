@@ -4,7 +4,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
 import { Redis } from 'ioredis';
 import { Model, Query } from 'mongoose';
-import { RedisService } from 'nestjs-redis';
+import { RedisService } from 'nest-redis';
 import { of, throwError } from 'rxjs';
 
 import { mockDocument, mockObject } from '../../../test/utils';
