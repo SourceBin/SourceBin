@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RedisModule } from 'nestjs-redis';
+import { RedisModule } from 'nest-redis';
 
 import { AppController } from './app.controller';
 import { AuthConfig, DatabaseConfig, StripeConfig } from './configs';

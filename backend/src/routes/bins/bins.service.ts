@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import cryptoRandomString from 'crypto-random-string';
 import { Model } from 'mongoose';
-import { RedisService } from 'nestjs-redis';
+import { RedisService } from 'nest-redis';
 
 import {
   CDN_CACHE_CONTROL,
