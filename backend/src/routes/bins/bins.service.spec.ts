@@ -1,21 +1,26 @@
 import { createMock } from '@golevelup/ts-jest';
+import { InternalServerErrorException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
 import { Redis } from 'ioredis';
 import { Model, Query } from 'mongoose';
 import { RedisService } from 'nestjs-redis';
+import { of, throwError } from 'rxjs';
 
-import { mockDocument } from '../../../test/utils';
+import { mockDocument, mockObject } from '../../../test/utils';
+import { CodeService } from '../../libs/code';
 import { GCloudStorageService } from '../../libs/gcloud-storage';
 import { Bin, BinDocument } from '../../schemas/bin.schema';
 import { User } from '../../schemas/user.schema';
 import { BinsService } from './bins.service';
+import { FileDto } from './dto/create-bin.dto';
 
 type BinQuery = Query<BinDocument, BinDocument>;
 
 describe('BinsService', () => {
   let binsService: BinsService;
   let binModel: Model<BinDocument>;
+  let codeService: CodeService;
   let redisService: RedisService;
   let gcloudStorage: GCloudStorageService;
 
@@ -29,6 +34,16 @@ describe('BinsService', () => {
             create: jest.fn(),
             findOne: jest.fn(),
             updateOne: jest.fn(),
+          },
+        },
+        {
+          provide: CodeService,
+          useValue: {
+            detectLanguages: jest
+              .fn()
+              .mockImplementation((contents: string[]) =>
+                of(contents.map((_, i) => i)),
+              ),
           },
         },
         {
@@ -48,6 +63,7 @@ describe('BinsService', () => {
 
     binsService = module.get(BinsService);
     binModel = module.get(getModelToken(Bin.name));
+    codeService = module.get(CodeService);
     redisService = module.get(RedisService);
     gcloudStorage = module.get(GCloudStorageService);
   });
@@ -91,6 +107,30 @@ describe('BinsService', () => {
 
       expect(binMock.hits).toBe(0);
       expect(binModel.updateOne).not.toBeCalled();
+    });
+  });
+
+  describe('classifyFiles', () => {
+    it('should set the correct languageId', async () => {
+      jest
+        .spyOn(codeService, 'detectLanguages')
+        .mockReturnValueOnce(of([1, 2]));
+
+      const files = [mockObject(FileDto, {}), mockObject(FileDto, {})];
+      await binsService.classifyFiles(files);
+
+      expect(files[0].languageId).toBe(1);
+      expect(files[1].languageId).toBe(2);
+    });
+
+    it('should throw internal server error if language detection fails', async () => {
+      jest
+        .spyOn(codeService, 'detectLanguages')
+        .mockReturnValueOnce(throwError(new Error()));
+
+      await expect(binsService.classifyFiles([])).rejects.toThrow(
+        new InternalServerErrorException('Failed to classify languages'),
+      );
     });
   });
 

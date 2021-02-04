@@ -4,7 +4,6 @@ import {
   Delete,
   ForbiddenException,
   Get,
-  InternalServerErrorException,
   Ip,
   NotFoundException,
   Param,
@@ -13,7 +12,6 @@ import {
 } from '@nestjs/common';
 
 import { CurrentUser } from '../../decorators/current-user.decorator';
-import { CodeService } from '../../libs/code';
 import { RateLimit } from '../../libs/rate-limiter';
 import { Plan, User } from '../../schemas/user.schema';
 import { hours, minutes, seconds } from '../../utils/time.util';
@@ -27,10 +25,7 @@ const KEY_PATTERN = '[0-9a-zA-Z]{10}';
 
 @Controller('bins')
 export class BinsController {
-  constructor(
-    private readonly binsService: BinsService,
-    private readonly codeService: CodeService,
-  ) {}
+  constructor(private readonly binsService: BinsService) {}
 
   @Get(`:key(${KEY_PATTERN})`)
   @RateLimit({ every: seconds(10) })
@@ -59,21 +54,9 @@ export class BinsController {
       throw new ForbiddenException('Only Pro users can save multibins');
     }
 
-    try {
-      const unclassified = createBinDto.files.filter(
-        (file) => file.languageId === undefined,
-      );
-
-      const languages = await this.codeService
-        .detectLanguages(unclassified.map((file) => file.content))
-        .toPromise();
-
-      for (let i = 0; i < unclassified.length; i++) {
-        unclassified[i].languageId = languages[i];
-      }
-    } catch {
-      throw new InternalServerErrorException('Failed to classify languages');
-    }
+    await this.binsService.classifyFiles(
+      createBinDto.files.filter((file) => file.languageId === undefined),
+    );
 
     const bin = await this.binsService.createBin(createBinDto, user);
     return BinCreatedResponseDto.fromDocument(bin);

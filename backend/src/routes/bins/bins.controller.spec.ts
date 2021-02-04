@@ -1,13 +1,7 @@
-import {
-  ForbiddenException,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { of, throwError } from 'rxjs';
 
 import { mockDocument } from '../../../test/utils';
-import { CodeService } from '../../libs/code';
 import { Bin } from '../../schemas/bin.schema';
 import { Plan, User } from '../../schemas/user.schema';
 import { BinsController } from './bins.controller';
@@ -19,7 +13,6 @@ import { CreateBinDto } from './dto/create-bin.dto';
 describe('BinsController', () => {
   let binsController: BinsController;
   let binsService: BinsService;
-  let codeService: CodeService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -30,6 +23,7 @@ describe('BinsController', () => {
           useValue: {
             generateKey: jest.fn().mockResolvedValue('123'),
             countHit: jest.fn(),
+            classifyFiles: jest.fn(),
             findOne: jest
               .fn()
               .mockImplementation((key: string) =>
@@ -46,22 +40,11 @@ describe('BinsController', () => {
             disownBin: jest.fn().mockResolvedValue(true),
           },
         },
-        {
-          provide: CodeService,
-          useValue: {
-            detectLanguages: jest
-              .fn()
-              .mockImplementation((contents: string[]) =>
-                of(contents.map((_, i) => i)),
-              ),
-          },
-        },
       ],
     }).compile();
 
     binsController = module.get(BinsController);
     binsService = module.get(BinsService);
-    codeService = module.get(CodeService);
   });
 
   it('should be defined', () => {
@@ -120,6 +103,8 @@ describe('BinsController', () => {
 
   describe('create', () => {
     it('should create a bin if languages are provided', async () => {
+      jest.spyOn(binsService, 'classifyFiles').mockResolvedValueOnce();
+
       await expect(
         binsController.create({
           files: [{ content: 'one', languageId: 42 }],
@@ -151,6 +136,12 @@ describe('BinsController', () => {
     });
 
     it('should create a bin and detect languages if languages are not provided', async () => {
+      jest
+        .spyOn(binsService, 'classifyFiles')
+        .mockImplementation((files) =>
+          Promise.resolve(files.forEach((file, i) => (file.languageId = i))),
+        );
+
       await expect(
         binsController.create({
           files: [{ content: 'one' }],
@@ -175,16 +166,6 @@ describe('BinsController', () => {
             files: [{ languageId: 0 }, { languageId: 1 }],
           }),
         ),
-      );
-    });
-
-    it('should throw internal server error if language detection fails', async () => {
-      jest
-        .spyOn(codeService, 'detectLanguages')
-        .mockReturnValueOnce(throwError(new Error()));
-
-      await expect(binsController.create({ files: [] })).rejects.toThrow(
-        new InternalServerErrorException('Failed to classify languages'),
       );
     });
 
