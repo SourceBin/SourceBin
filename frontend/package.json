@@ -26,7 +26,7 @@
     "fuse.js": "^3.6.1",
     "highlight.js": "^10.5.0",
     "lodash-es": "^4.17.20",
-    "marked": "^0.8.2",
+    "marked": "^4.0.10",
     "mdi-vue": "^1.8.1",
     "mousetrap": "^1.6.4",
     "normalize.css": "^8.0.1",
