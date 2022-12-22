@@ -29,7 +29,7 @@
     "crypto-random-string": "^3.3.0",
     "helmet": "^4.2.0",
     "ioredis": "^4.19.4",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.11.8",
     "nest-redis": "^1.4.1",
     "passport": "^0.4.1",
