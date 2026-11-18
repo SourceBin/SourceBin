@@ -104,7 +104,17 @@ export class AuthService {
       const { redirect } = JSON.parse(Buffer.from(state, 'base64').toString());
 
       if (redirect) {
-        return url.parse(redirect).path;
+        const path = url.parse(redirect).path;
+
+        // Reject absolute, protocol-relative, and backslash-prefixed
+        // targets so redirects stay on this origin.
+        if (path && path.charCodeAt(0) === 47) {
+          const next = path.charCodeAt(1);
+
+          if (next !== 47 && next !== 92) {
+            return path;
+          }
+        }
       }
 
       return null;
